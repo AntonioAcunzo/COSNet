@@ -48,7 +48,7 @@ class PairwiseImg(Dataset):
 
     def __init__(self, train=True,
                  inputRes=None,
-                 db_root_dir='/DAVIS-2016',
+                 db_root_dir='/data/aacunzo/DAVIS-2016',
                  transform=None,
                  meanval=(104.00699, 116.66877, 122.67892),
                  seq_name=None, sample_range=10):
@@ -66,7 +66,7 @@ class PairwiseImg(Dataset):
         if self.train:
             fname = 'train_seqs'
         else:
-            fname = 'val_seqs'
+            fname = 'val_seqs1'
 
         if self.seq_name is None: #所有的数据集都参与训练
             with open(os.path.join(db_root_dir, fname + '.txt')) as f:
