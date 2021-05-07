@@ -70,8 +70,8 @@ def configure_dataset_model(args):
     elif args.dataset == 'davis': 
         args.batch_size = 1# 1 card: 5, 2 cards: 10 Number of images sent to the network in one step, 16 on paper
         args.maxEpoches = 15 # 1 card: 15, 2 cards: 15 epoches, equal to 30k iterations, max iterations= maxEpoches*len(train_aug)/batch_size_per_gpu'),
-        args.data_dir = '/home/aacunzo/COSNet/DAVIS-2016'   # 37572 image pairs
-        args.data_list = '/DAVIS-2016/val_seqs.txt'  # Path to the file listing the images in the dataset
+        args.data_dir = '/data/aacunzo/DAVIS-2016'   # 37572 image pairs
+        args.data_list = '/DAVIS-2016/val_seqs1.txt'  # Path to the file listing the images in the dataset
         args.ignore_label = 255     #The index of the label to ignore during the training
         args.input_size = '473,473' #Comma-separated string with height and width of images
         args.num_classes = 2      #Number of classes to predict (including background)
