@@ -97,8 +97,8 @@ def configure_dataset_init_model(args):
     elif args.dataset == 'davis': 
         args.batch_size = 16# 1 card: 5, 2 cards: 10 Number of images sent to the network in one step, 16 on paper
         args.maxEpoches = 60 # 1 card: 15, 2 cards: 15 epoches, equal to 30k iterations, max iterations= maxEpoches*len(train_aug)/batch_size_per_gpu'),
-        args.data_dir = '/home/ubuntu/xiankai/dataset/DAVIS-2016'   # 37572 image pairs
-        args.img_dir = '/home/ubuntu/xiankai/dataset/images'
+        args.data_dir = '/data/aacunzo/DAVIS-2016'   # 37572 image pairs
+        args.img_dir = '/data/aacunzo/images'
         args.data_list = './dataset/list/VOC2012/train_aug.txt'  # Path to the file listing the images in the dataset
         args.ignore_label = 255     #The index of the label to ignore during the training
         args.input_size = '473,473' #Comma-separated string with height and width of images

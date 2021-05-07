@@ -68,7 +68,7 @@ def configure_dataset_model(args):
         args.corp_size =(505, 505)
         
     elif args.dataset == 'davis': 
-        args.batch_size = 1# 1 card: 5, 2 cards: 10 Number of images sent to the network in one step, 16 on paper
+        args.batch_size = 16 # 1 card: 5, 2 cards: 10 Number of images sent to the network in one step, 16 on paper
         args.maxEpoches = 15 # 1 card: 15, 2 cards: 15 epoches, equal to 30k iterations, max iterations= maxEpoches*len(train_aug)/batch_size_per_gpu'),
         args.data_dir = '/data/aacunzo/DAVIS-2016'   # 37572 image pairs
         args.data_list = '/DAVIS-2016/val_seqs1.txt'  # Path to the file listing the images in the dataset
