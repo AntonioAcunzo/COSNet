@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Sep 17 17:53:20 2018
-
-@author: carri
-"""
-
 import argparse
 import torch
 import torch.nn as nn
@@ -40,6 +33,7 @@ def get_arguments():
     Returns:
       A list of parsed arguments.
     """
+
     parser = argparse.ArgumentParser(description="PSPnet")
     parser.add_argument("--dataset", type=str, default='cityscapes',
                         help="voc12, cityscapes, or pascal-context")
@@ -106,7 +100,7 @@ def convert_state_dict(state_dict):
     return state_dict_new
 
 def sigmoid(inX): 
-    return 1.0/(1+np.exp(-inX))#定义一个sigmoid方法，其本质就是1/(1+e^-x)
+    return 1.0/(1+np.exp(-inX))  #Definisci un metodo sigmoideo, la sua essenza è 1 / (1 + e ^ -x)
 
 def main():
     args = get_arguments()
@@ -118,7 +112,7 @@ def main():
     saved_state_dict = torch.load(args.restore_from, map_location=lambda storage, loc: storage)
     #print(saved_state_dict.keys())
     #model.load_state_dict({k.replace('pspmodule.',''):v for k,v in torch.load(args.restore_from)['state_dict'].items()})
-    model.load_state_dict( convert_state_dict(saved_state_dict["model"]) ) #convert_state_dict(saved_state_dict["model"])
+    model.load_state_dict(convert_state_dict(saved_state_dict["model"])) #convert_state_dict(saved_state_dict["model"])
 
     model.eval()
     model.cuda()
@@ -130,7 +124,7 @@ def main():
         
     elif args.dataset == 'davis':  #for davis 2016
         db_test = db.PairwiseImg(train=False, inputRes=(473,473), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range) #db_root_dir() --> '/path/to/DAVIS-2016' train path
-        testloader = data.DataLoader(db_test, batch_size= 1, shuffle=False, num_workers=0)
+        testloader = data.DataLoader(db_test, batch_size=16, shuffle=False, num_workers=0)
         #voc_colorize = VOCColorize()
     else:
         print("dataset error")

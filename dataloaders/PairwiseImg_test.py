@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Sep 12 11:39:54 2018
-
-@author: carri
-"""
-# for testing case
 from __future__ import division
 
 import os
@@ -24,11 +17,11 @@ def flip(I,flip_p):
         return I
 
 def scale_im(img_temp,scale):
-    new_dims = (  int(img_temp.shape[0]*scale),  int(img_temp.shape[1]*scale)   )
+    new_dims = (int(img_temp.shape[0]*scale),  int(img_temp.shape[1]*scale))
     return cv2.resize(img_temp,new_dims).astype(float)
 
 def scale_gt(img_temp,scale):
-    new_dims = (  int(img_temp.shape[0]*scale),  int(img_temp.shape[1]*scale)   )
+    new_dims = (int(img_temp.shape[0]*scale),  int(img_temp.shape[1]*scale))
     return cv2.resize(img_temp,new_dims,interpolation = cv2.INTER_NEAREST).astype(float)
 
 def my_crop(img,gt):
@@ -68,7 +61,7 @@ class PairwiseImg(Dataset):
         else:
             fname = 'val_seqs1'
 
-        if self.seq_name is None: #所有的数据集都参与训练
+        if self.seq_name is None: #Tutti i set di dati partecipano alla formazione
             with open(os.path.join(db_root_dir, fname + '.txt')) as f:
                 seqs = f.readlines()
                 img_list = []
@@ -84,14 +77,14 @@ class PairwiseImg(Dataset):
                     lab = np.sort(os.listdir(os.path.join(db_root_dir, 'Annotations/480p/', seq.strip('\n'))))
                     lab_path = list(map(lambda x: os.path.join('Annotations/480p/', seq.strip(), x), lab))
                     labels.extend(lab_path)
-        else: #针对所有的训练样本， img_list存放的是图片的路径
+        else: #Per tutti gli esempi di addestramento, img_list memorizza il percorso dell'immagine
 
             # Initialize the per sequence images for online training
             names_img = np.sort(os.listdir(os.path.join(db_root_dir, str(seq_name))))
             img_list = list(map(lambda x: os.path.join(( str(seq_name)), x), names_img))
             #name_label = np.sort(os.listdir(os.path.join(db_root_dir,  str(seq_name))))
             labels = [os.path.join( (str(seq_name)+'/saliencymaps'), names_img[0])]
-            labels.extend([None]*(len(names_img)-1)) #在labels这个列表后面添加元素None
+            labels.extend([None]*(len(names_img)-1)) #Aggiungi l'elemento Nessuno dopo l'elenco delle etichette
             if self.train:
                 img_list = [img_list[0]]
                 labels = [labels[0]]
@@ -107,9 +100,9 @@ class PairwiseImg(Dataset):
         return len(self.img_list)
 
     def __getitem__(self, idx):
-        target, target_gt,sequence_name = self.make_img_gt_pair(idx) #测试时候要分割的帧
+        target, target_gt,sequence_name = self.make_img_gt_pair(idx) #Telai da dividere durante il test
         target_id = idx
-        seq_name1 = self.img_list[target_id].split('/')[-2] #获取视频名称
+        seq_name1 = self.img_list[target_id].split('/')[-2] #Ottieni il nome del video
         sample = {'target': target, 'target_gt': target_gt, 'seq_name': sequence_name, 'search_0': None}
         if self.range>=1:
             my_index = self.Index[seq_name1]
@@ -136,9 +129,9 @@ class PairwiseImg(Dataset):
                 fname = os.path.join(self.seq_name, "%05d" % idx)
                 sample['fname'] = fname
 
-        return sample  #这个类最后的输出
+        return sample  #Il risultato finale di questa classe
 
-    def make_img_gt_pair(self, idx): #这个函数存在的意义是为了getitem函数服务的
+    def make_img_gt_pair(self, idx): #Il significato di questa funzione è servire la funzione getitem
         """
         Make the image-ground-truth pair
         """
@@ -149,7 +142,7 @@ class PairwiseImg(Dataset):
         else:
             gt = np.zeros(img.shape[:-1], dtype=np.uint8)
             
-         ## 已经读取了image以及对应的ground truth可以进行data augmentation了
+         ## L'immagine e la corrispondente verità fondamentale sono state lette e può essere eseguito l'aumento dei dati.
         if self.train:  #scaling, cropping and flipping
              img, label = my_crop(img,label)
              scale = random.uniform(0.7, 1.3)
