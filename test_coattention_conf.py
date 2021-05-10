@@ -191,7 +191,7 @@ def main():
             if args.save_segimage:
                 my_index1 = str(my_index).zfill(5)
                 seg_filename = os.path.join(save_dir_res, '{}.png'.format(my_index1))
-                color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
+                #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 mask.save(seg_filename)
                 np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
                 save_image(output1 * 0.8 + target.data, args.vis_save_dir, normalize=True)
@@ -205,7 +205,7 @@ def main():
             if args.save_segimage:   
                 my_index1 = str(my_index).zfill(5)
                 seg_filename = os.path.join(save_dir_res, '{}.png'.format(my_index1))
-                color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
+                #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 mask.save(seg_filename)
                 np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
                 save_image(output1 * 0.8 + target.data, args.vis_save_dir, normalize=True)
