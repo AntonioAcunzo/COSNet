@@ -156,7 +156,7 @@ def main():
             #print(search_im.size())
             output = model(Variable(target, volatile=True).cuda(),Variable(search_im, volatile=True).cuda())
             #print(output[0]) # output有两个
-            output_sum = output_sum + output[0].data[0,0].cpu().numpy() #分割那个分支的结果
+            output_sum = output_sum + output[0].data[0,0].cpu().numpy() #Il risultato della divisione di quel ramo
             #np.save('infer'+str(i)+'.npy',output1)
             #output2 = output[1].data[0, 0].cpu().numpy() #interp'
         
@@ -194,7 +194,7 @@ def main():
                 #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 mask.save(seg_filename)
                 #np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
-                #save_image(output1 * 0.8 + target.data, args.vis_save_dir, normalize=True)
+                save_image(output1 * 0.8 + target.data, args.vis_save_dir, normalize=True)
         else:
             print("dataset error")
     
