@@ -182,7 +182,7 @@ def main():
                 color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 color_file.save(seg_filename)
 
-        if args.dataset == 'davis':
+        if args.dataset == 'imagenet':
 
             save_dir_res = os.path.join(args.seg_save_dir, 'Results-Imagenet', args.seq_name)
             old_temp = args.seq_name
