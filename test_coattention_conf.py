@@ -161,6 +161,8 @@ def main():
     print("======> test set size:", len(testloader))
     my_index = 0
     old_temp=''
+
+    '''
     for index, batch in enumerate(testloader):
         print('%d processd'%(index))
         target = batch['target']
@@ -235,6 +237,7 @@ def main():
                 #save_image(output1 * 0.8 + target.data, args.vis_save_dir, normalize=True)
         else:
             print("dataset error")
+    '''
     
 
 if __name__ == '__main__':
