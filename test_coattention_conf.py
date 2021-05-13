@@ -178,7 +178,7 @@ def main():
         else:
             my_index = 0
 
-        print("index : ",my_index)
+        print("my_index : ",my_index)
 
         output_sum = 0
 

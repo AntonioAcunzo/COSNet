@@ -41,8 +41,8 @@ class PairwiseImg(Dataset):
 
     def __init__(self, train=True,
                  inputRes=None,
-                 #+++        db_root_dir='/data/aacunzo/DAVIS-2016',
-                 db_root_dir='/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC',
+                 db_root_dir='/data/aacunzo/DAVIS-2016',
+                 #db_root_dir='/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC',
                  transform=None,
                  meanval=(104.00699, 116.66877, 122.67892),
                  seq_name=None,
@@ -61,33 +61,32 @@ class PairwiseImg(Dataset):
         if self.train:
             fname = 'train_seqs'
         else:
-            fname = 'val_seqs2'
+            fname = 'val_seqs1'
 
         if self.seq_name is None: #Tutti i set di dati partecipano alla formazione
-            #+++     with open(os.path.join(db_root_dir, fname + '.txt')) as f:
-            #+++     with open("home/aacunzo/COSNet/val_seqs2.txt") as f:
-            with open(os.path.join("/home/aacunzo/COSNet", fname + '.txt')) as f:
+            with open(os.path.join(db_root_dir, fname + '.txt')) as f:
+            #with open(os.path.join("/home/aacunzo/COSNet", fname + '.txt')) as f:
                 seqs = f.readlines()
                 img_list = []
                 labels = []
                 Index = {}
                 for seq in seqs:
 
-                    #+++     images = np.sort(os.listdir(os.path.join(db_root_dir, 'JPEGImages/480p/', seq.strip('\n'))))
-                    #+++     images_path = list(map(lambda x: os.path.join('JPEGImages/480p/', seq.strip(), x), images))
+                    images = np.sort(os.listdir(os.path.join(db_root_dir, 'JPEGImages/480p/', seq.strip('\n'))))
+                    images_path = list(map(lambda x: os.path.join('JPEGImages/480p/', seq.strip(), x), images))
 
-                    images = np.sort(os.listdir(os.path.join(db_root_dir, 'Data/VID/val/', seq.strip('\n'))))
-                    images_path = list(map(lambda x: os.path.join('Data/VID/val/', seq.strip(), x), images))
+                    #images = np.sort(os.listdir(os.path.join(db_root_dir, 'Data/VID/val/', seq.strip('\n'))))
+                    #images_path = list(map(lambda x: os.path.join('Data/VID/val/', seq.strip(), x), images))
                     start_num = len(img_list)
                     img_list.extend(images_path)
                     end_num = len(img_list)
                     Index[seq.strip('\n')]= np.array([start_num, end_num])
 
-                    #+++     lab = np.sort(os.listdir(os.path.join(db_root_dir, 'Annotations/480p/', seq.strip('\n'))))
-                    #+++     lab_path = list(map(lambda x: os.path.join('Annotations/480p/', seq.strip(), x), lab))
+                    lab = np.sort(os.listdir(os.path.join(db_root_dir, 'Annotations/480p/', seq.strip('\n'))))
+                    lab_path = list(map(lambda x: os.path.join('Annotations/480p/', seq.strip(), x), lab))
 
-                    lab = np.sort(os.listdir(os.path.join(db_root_dir, 'Annotations/VID/val/', seq.strip('\n'))))
-                    lab_path = list(map(lambda x: os.path.join('Annotations/VID/val/', seq.strip(), x), lab))
+                    #lab = np.sort(os.listdir(os.path.join(db_root_dir, 'Annotations/VID/val/', seq.strip('\n'))))
+                    #lab_path = list(map(lambda x: os.path.join('Annotations/VID/val/', seq.strip(), x), lab))
                     labels.extend(lab_path)
         else: #Per tutti gli esempi di addestramento, img_list memorizza il percorso dell'immagine
 
@@ -173,7 +172,7 @@ class PairwiseImg(Dataset):
         if self.inputRes is not None:
             img = imresize(img, self.inputRes)
             print('ok1')
-            #+++     scipy.misc.imsave('label.png',label)
+            scipy.misc.imsave('label.png',label)
             scipy.misc.imsave('img.png',img)
             if self.labels[idx] is not None and self.train:
                 label = imresize(label, self.inputRes, interp='nearest')
