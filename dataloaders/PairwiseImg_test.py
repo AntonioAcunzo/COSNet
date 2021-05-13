@@ -172,7 +172,7 @@ class PairwiseImg(Dataset):
         if self.inputRes is not None:
             img = imresize(img, self.inputRes)
             print('ok1')
-            scipy.misc.imsave('label.png',label)
+            #scipy.misc.imsave('label.png',label)
             scipy.misc.imsave('img.png',img)
             if self.labels[idx] is not None and self.train:
                 label = imresize(label, self.inputRes, interp='nearest')

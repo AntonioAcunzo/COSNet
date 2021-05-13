@@ -182,7 +182,7 @@ def main():
 
         output_sum = 0
 
-        '''
+
         for i in range(0,args.sample_range):  
             search = batch['search'+'_'+str(i)]
             search_im = search
@@ -248,7 +248,7 @@ def main():
         else:
             print("dataset error")
             
-        '''
+
 
     
 
