@@ -66,7 +66,7 @@ class PairwiseImg(Dataset):
         if self.seq_name is None: #Tutti i set di dati partecipano alla formazione
             #+++     with open(os.path.join(db_root_dir, fname + '.txt')) as f:
             #+++     with open("home/aacunzo/COSNet/val_seqs2.txt") as f:
-            with open(os.path.join("home/aacunzo/COSNet", fname + '.txt')) as f:
+            with open(os.path.join("/home/aacunzo/COSNet", fname + '.txt')) as f:
                 seqs = f.readlines()
                 img_list = []
                 labels = []
