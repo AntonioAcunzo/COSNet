@@ -158,23 +158,31 @@ def main():
         if not os.path.exists(args.seg_save_dir) and not os.path.exists(args.vis_save_dir):
             os.makedirs(args.seg_save_dir)
             os.makedirs(args.vis_save_dir)
+
     print("======> test set size:", len(testloader))
     my_index = 0
     old_temp=''
 
-    '''
+
     for index, batch in enumerate(testloader):
-        print('%d processd'%(index))
+        print("FOR")
+        print("processed index: ", '%d processd'%(index))
         target = batch['target']
         #search = batch['search']
         temp = batch['seq_name']
+        print("tempo : ", temp)
         args.seq_name=temp[0]
-        print(args.seq_name)
+        print("Seq_name : " , args.seq_name)
         if old_temp==args.seq_name:
             my_index = my_index+1
         else:
             my_index = 0
-        output_sum = 0   
+
+        print("index : ",my_index)
+
+        output_sum = 0
+
+        '''
         for i in range(0,args.sample_range):  
             search = batch['search'+'_'+str(i)]
             search_im = search
@@ -194,6 +202,8 @@ def main():
         mask = (output1*255).astype(np.uint8)
         #print(mask.shape[0])
         mask = Image.fromarray(mask)
+        
+        
         
 
         if args.dataset == 'voc12':
@@ -237,7 +247,9 @@ def main():
                 #save_image(output1 * 0.8 + target.data, args.vis_save_dir, normalize=True)
         else:
             print("dataset error")
-    '''
+            
+        '''
+
     
 
 if __name__ == '__main__':
