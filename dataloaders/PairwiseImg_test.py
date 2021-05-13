@@ -112,7 +112,6 @@ class PairwiseImg(Dataset):
         return len(self.img_list)
 
     def __getitem__(self, idx):
-        print("self.labels[idx] : ", self.labels[idx])
         target, target_gt,sequence_name = self.make_img_gt_pair(idx) #Telai da dividere durante il test
         target_id = idx
         seq_name1 = self.img_list[target_id].split('/')[-2] #Ottieni il nome del video
@@ -150,6 +149,7 @@ class PairwiseImg(Dataset):
         """
         img = cv2.imread(os.path.join(self.db_root_dir, self.img_list[idx]), cv2.IMREAD_COLOR)
         print("self.labels[idx] : " , self.labels[idx])
+        print("self.train : ", self.train)
         if self.labels[idx] is not None and self.train:
             label = cv2.imread(os.path.join(self.db_root_dir, self.labels[idx]), cv2.IMREAD_GRAYSCALE)
             #print(os.path.join(self.db_root_dir, self.labels[idx]))
