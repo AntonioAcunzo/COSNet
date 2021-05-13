@@ -148,9 +148,11 @@ class PairwiseImg(Dataset):
         Make the image-ground-truth pair
         """
         img = cv2.imread(os.path.join(self.db_root_dir, self.img_list[idx]), cv2.IMREAD_COLOR)
+        print("self.labels[idx] : " , self.labels[idx])
         if self.labels[idx] is not None and self.train:
             label = cv2.imread(os.path.join(self.db_root_dir, self.labels[idx]), cv2.IMREAD_GRAYSCALE)
             #print(os.path.join(self.db_root_dir, self.labels[idx]))
+            print("qui")
         else:
             gt = np.zeros(img.shape[:-1], dtype=np.uint8)
             
