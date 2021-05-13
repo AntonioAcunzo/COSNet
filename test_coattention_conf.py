@@ -122,7 +122,7 @@ def main():
     args = get_arguments()
     print("=====> Configure dataset and model")
     configure_dataset_model(args)
-    print(args)
+    #print(args)
     model = CoattentionNet(num_classes=args.num_classes)
     
     saved_state_dict = torch.load(args.restore_from, map_location=lambda storage, loc: storage)
