@@ -55,7 +55,7 @@ class PairwiseImg(Dataset):
         self.inputRes = inputRes
         self.db_root_dir = db_root_dir
         print("db_root_dir : ", db_root_dir)
-        if db_root_dir == "/data/aacunzo/DAVIS-2016" or db_root_dir == '/home/aacunzo/COSNet/DAVIS-2016': davis = True
+        if db_root_dir == "/data/aacunzo/DAVIS-2016" or db_root_dir == '/home/aacunzo/DAVIS-2016': davis = True
         if db_root_dir == "/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC" : davis = False
         print("davis bool : ", davis)
         self.transform = transform
