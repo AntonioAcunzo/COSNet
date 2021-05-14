@@ -166,7 +166,7 @@ def main():
 
     for index, batch in enumerate(testloader):
         #print("FOR")
-        #print("processed index: ", '%d processd'%(index))
+        print("processed index: ", '%d processd'%(index))
         target = batch['target']
         #search = batch['search']
         temp = batch['seq_name']
