@@ -165,20 +165,20 @@ def main():
 
 
     for index, batch in enumerate(testloader):
-        print("FOR")
-        print("processed index: ", '%d processd'%(index))
+        #print("FOR")
+        #print("processed index: ", '%d processd'%(index))
         target = batch['target']
         #search = batch['search']
         temp = batch['seq_name']
-        print("tempo : ", temp)
+        #print("tempo : ", temp)
         args.seq_name=temp[0]
-        print("Seq_name : " , args.seq_name)
+        #print("Seq_name : " , args.seq_name)
         if old_temp==args.seq_name:
             my_index = my_index+1
         else:
             my_index = 0
 
-        print("my_index : ",my_index)
+        #print("my_index : ",my_index)
 
         output_sum = 0
 
