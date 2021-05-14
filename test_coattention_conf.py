@@ -194,8 +194,10 @@ def main():
             #output2 = output[1].data[0, 0].cpu().numpy() #interp'
         
         output1 = output_sum/args.sample_range
-     
-        first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
+        if(args.data_dir == '/data/aacunzo/DAVIS-2016'):
+            first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
+        if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
+            first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
         original_shape = first_image.shape 
         output1 = cv2.resize(output1, (original_shape[1],original_shape[0]))
 
