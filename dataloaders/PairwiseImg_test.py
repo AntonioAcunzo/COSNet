@@ -54,6 +54,10 @@ class PairwiseImg(Dataset):
         self.range = sample_range
         self.inputRes = inputRes
         self.db_root_dir = db_root_dir
+        print("db_root_dir : ", db_root_dir)
+        if db_root_dir == "/data/aacunzo/DAVIS-2016" : davis = True
+        if db_root_dir == "/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC" : davis = False
+        print("davis bool : ", davis)
         self.transform = transform
         self.meanval = meanval
         self.seq_name = seq_name
@@ -61,32 +65,37 @@ class PairwiseImg(Dataset):
         if self.train:
             fname = 'train_seqs'
         else:
-            fname = 'val_seqs1'
+            if(davis) : fname = 'val_seqs1'
+            else : fname = 'val_seqs2'
 
         if self.seq_name is None: #Tutti i set di dati partecipano alla formazione
-            with open(os.path.join(db_root_dir, fname + '.txt')) as f:
-            #with open(os.path.join("/home/aacunzo/COSNet", fname + '.txt')) as f:
+            #with open(os.path.join(db_root_dir, fname + '.txt')) as f:
+            with open(os.path.join("/home/aacunzo/COSNet", fname + '.txt')) as f:
                 seqs = f.readlines()
                 img_list = []
                 labels = []
                 Index = {}
                 for seq in seqs:
 
-                    images = np.sort(os.listdir(os.path.join(db_root_dir, 'JPEGImages/480p/', seq.strip('\n'))))
-                    images_path = list(map(lambda x: os.path.join('JPEGImages/480p/', seq.strip(), x), images))
+                    if (davis) :
+                        images = np.sort(os.listdir(os.path.join(db_root_dir, 'JPEGImages/480p/', seq.strip('\n'))))
+                        images_path = list(map(lambda x: os.path.join('JPEGImages/480p/', seq.strip(), x), images))
+                    else :
+                        images = np.sort(os.listdir(os.path.join(db_root_dir, 'Data/VID/val/', seq.strip('\n'))))
+                        images_path = list(map(lambda x: os.path.join('Data/VID/val/', seq.strip(), x), images))
 
-                    #images = np.sort(os.listdir(os.path.join(db_root_dir, 'Data/VID/val/', seq.strip('\n'))))
-                    #images_path = list(map(lambda x: os.path.join('Data/VID/val/', seq.strip(), x), images))
                     start_num = len(img_list)
                     img_list.extend(images_path)
                     end_num = len(img_list)
                     Index[seq.strip('\n')]= np.array([start_num, end_num])
 
-                    lab = np.sort(os.listdir(os.path.join(db_root_dir, 'Annotations/480p/', seq.strip('\n'))))
-                    lab_path = list(map(lambda x: os.path.join('Annotations/480p/', seq.strip(), x), lab))
+                    if (davis):
+                        lab = np.sort(os.listdir(os.path.join(db_root_dir, 'Annotations/480p/', seq.strip('\n'))))
+                        lab_path = list(map(lambda x: os.path.join('Annotations/480p/', seq.strip(), x), lab))
+                    else:
+                        lab = np.sort(os.listdir(os.path.join(db_root_dir, 'Annotations/VID/val/', seq.strip('\n'))))
+                        lab_path = list(map(lambda x: os.path.join('Annotations/VID/val/', seq.strip(), x), lab))
 
-                    #lab = np.sort(os.listdir(os.path.join(db_root_dir, 'Annotations/VID/val/', seq.strip('\n'))))
-                    #lab_path = list(map(lambda x: os.path.join('Annotations/VID/val/', seq.strip(), x), lab))
                     labels.extend(lab_path)
         else: #Per tutti gli esempi di addestramento, img_list memorizza il percorso dell'immagine
 
@@ -147,12 +156,12 @@ class PairwiseImg(Dataset):
         Make the image-ground-truth pair
         """
         img = cv2.imread(os.path.join(self.db_root_dir, self.img_list[idx]), cv2.IMREAD_COLOR)
-        print("self.labels[idx] : " , self.labels[idx])
-        print("self.train : ", self.train)
+        #print("self.labels[idx] : " , self.labels[idx])
+        #print("self.train : ", self.train)
         if self.labels[idx] is not None and self.train:
             label = cv2.imread(os.path.join(self.db_root_dir, self.labels[idx]), cv2.IMREAD_GRAYSCALE)
             #print(os.path.join(self.db_root_dir, self.labels[idx]))
-            print("qui")
+            #print("qui")
         else:
             gt = np.zeros(img.shape[:-1], dtype=np.uint8)
             
