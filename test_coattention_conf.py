@@ -65,7 +65,7 @@ def configure_dataset_model(args):
         args.batch_size = 1 # 1 card: 5, 2 cards: 10 Number of images sent to the network in one step, 16 on paper
         args.maxEpoches = 15 # 1 card: 15, 2 cards: 15 epoches, equal to 30k iterations, max iterations= maxEpoches*len(train_aug)/batch_size_per_gpu'),
         args.data_dir = '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'   # 37572 image pairs
-        args.data_list = '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC//val_seqs1.txt'  # Path to the file listing the images in the dataset
+        args.data_list = '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC/val_seqs1.txt'  # Path to the file listing the images in the dataset
         args.ignore_label = 255     #The index of the label to ignore during the training
         args.input_size = '473,473' #Comma-separated string with height and width of images
         args.num_classes = 2      #Number of classes to predict (including background) ****
@@ -82,6 +82,22 @@ def configure_dataset_model(args):
         args.maxEpoches = 15 # 1 card: 15, 2 cards: 15 epoches, equal to 30k iterations, max iterations= maxEpoches*len(train_aug)/batch_size_per_gpu'),
         args.data_dir = '/data/aacunzo/DAVIS-2016'   # 37572 image pairs
         args.data_list = '/DAVIS-2016/val_seqs1.txt'  # Path to the file listing the images in the dataset
+        args.ignore_label = 255     #The index of the label to ignore during the training
+        args.input_size = '473,473' #Comma-separated string with height and width of images
+        args.num_classes = 2      #Number of classes to predict (including background)
+        args.img_mean = np.array((104.00698793,116.66876762,122.67891434), dtype=np.float32)       # saving model file and log record during the process of training
+        args.restore_from = './co_attention.pth' #resnet50-19c8e357.pth''/home/xiankai/PSPNet_PyTorch/snapshots/davis/psp_davis_0.pth' #
+        args.snapshot_dir = './snapshots/davis_iteration/'          #Where to save snapshots of the model
+        args.save_segimage = True
+        args.seg_save_dir = "./result/test/davis_iteration_conf"
+        args.vis_save_dir = "./result/test/davis_vis"
+        args.corp_size =(473, 473)
+
+    elif args.dataset == 'davis_yoda':
+        args.batch_size = 1 # 1 card: 5, 2 cards: 10 Number of images sent to the network in one step, 16 on paper
+        args.maxEpoches = 15 # 1 card: 15, 2 cards: 15 epoches, equal to 30k iterations, max iterations= maxEpoches*len(train_aug)/batch_size_per_gpu'),
+        args.data_dir = '/home/aacunzo/COSNet/DAVIS-2016'   # 37572 image pairs
+        args.data_list = './val_seqs1.txt'  # Path to the file listing the images in the dataset
         args.ignore_label = 255     #The index of the label to ignore during the training
         args.input_size = '473,473' #Comma-separated string with height and width of images
         args.num_classes = 2      #Number of classes to predict (including background)
@@ -145,10 +161,14 @@ def main():
         testloader = data.DataLoader(db_test, batch_size=1, shuffle=False, num_workers=0)
         #voc_colorize = VOCColorize()
 
-    elif args.dataset == 'davis':  #for davis 2016
+    if  args.dataset == 'davis_yoda':  #for davis 2016
         db_test = db.PairwiseImg(train=False, inputRes=(473,473), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range) #db_root_dir() --> '/path/to/DAVIS-2016' train path
         testloader = data.DataLoader(db_test, batch_size=1, shuffle=False, num_workers=0)
         #voc_colorize = VOCColorize()
+
+    elif args.dataset == 'davis' : #for davis 2016
+        db_test = db.PairwiseImg(train=False, inputRes=(473,473), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range) #db_root_dir() --> '/path/to/DAVIS-2016' train path
+        testloader = data.DataLoader(db_test, batch_size=1, shuffle=False, num_workers=0)
     else:
         print("dataset error")
 
@@ -194,7 +214,7 @@ def main():
             #output2 = output[1].data[0, 0].cpu().numpy() #interp'
         
         output1 = output_sum/args.sample_range
-        if(args.data_dir == '/data/aacunzo/DAVIS-2016'):
+        if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/COSNet/DAVIS-2016'):
             first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
         if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
             first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
@@ -233,7 +253,7 @@ def main():
                 #np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
                 #save_image(output1 * 0.8 + target.data, args.vis_save_dir, normalize=True)
                 
-        elif args.dataset == 'davis':
+        elif args.dataset == 'davis' or args.dataset == 'davis_yoda':
             
             save_dir_res = os.path.join(args.seg_save_dir, 'Results', args.seq_name)
             old_temp=args.seq_name
