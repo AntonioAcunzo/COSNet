@@ -189,8 +189,8 @@ def main():
 
         args.seq_name=temp[0]
 
-        print("Target : ", target) # Matrice
-        print("Target shape: ", target.shape)
+        print("Target : ", target) # Tensor
+        print("Target shape: ", target.shape) # torch.Size([1, 3, 473, 473])
         print("Temp : ", temp) # [blackswan]
         print("Seq_name : ", args.seq_name) # blackswan
 
@@ -218,7 +218,7 @@ def main():
             output_sum = output_sum + output[0].data[0,0].cpu().numpy() #Il risultato della divisione di quel ramo
             #np.save('infer'+str(i)+'.npy',output1)
             #output2 = output[1].data[0, 0].cpu().numpy() #interp'
-
+            '''
             path = "./IMG_PROVA"
             my_index2 = str(i).zfill(5)
             filename = os.path.join(path, 'search_{}.png'.format(my_index2))
@@ -226,7 +226,7 @@ def main():
             img = Image.fromarray(target)
             img = img.convert("L")
             img.save(filename)
-
+            '''
         
         output1 = output_sum/args.sample_range
 
@@ -253,7 +253,8 @@ def main():
         my_index2 = str(my_index).zfill(5)
         filename = os.path.join(path, 'target_{}.png'.format(my_index2))
         print(filename)
-        img = Image.fromarray(target)
+        target1 = target.numpy()[:, :, :, :]
+        img = Image.fromarray(target1)
         img = img.convert("L")
         img.save(filename)
 
@@ -294,6 +295,9 @@ def main():
                 seg_filename = os.path.join(save_dir_res, '{}.png'.format(my_index1))
                 #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 mask.save(seg_filename)
+
+                a = np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)), axis=0)
+                a.save("prova.png")
 
                 #np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
                 #save_image(output1 * 0.8 + target.data, args.vis_save_dir, normalize=True)
