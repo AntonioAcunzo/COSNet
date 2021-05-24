@@ -181,14 +181,13 @@ def main():
 
 
     for index, batch in enumerate(testloader):
-        #print("FOR")
+
         print("processed index: ", '%d processd'%(index))
         target = batch['target']
         #search = batch['search']
         temp = batch['seq_name']
-        #print("tempo : ", temp)
+
         args.seq_name=temp[0]
-        #print("Seq_name : " , args.seq_name)
 
         print("Target : ", target) # Matrice
         print("Temp : ", temp) # [blackswan]
@@ -213,7 +212,7 @@ def main():
             print("Dim search_im : ", search_im.size()) #  torch.Size([1, 3, 473, 473])
             output = model(Variable(target, volatile=True).cuda(),Variable(search_im, volatile=True).cuda())
             #print(output[0]) # output ne ha due
-            print("Output : ", output)
+            #print("Output : ", output)
 
             output_sum = output_sum + output[0].data[0,0].cpu().numpy() #Il risultato della divisione di quel ramo
             #np.save('infer'+str(i)+'.npy',output1)
@@ -222,7 +221,8 @@ def main():
         output1 = output_sum/args.sample_range
 
         print("Output1 : ", output1)
-        print("max value : ",np.max(output1))
+        print("max value in output1 : ",np.max(output1))
+        print("Output1 shape: ".output1.shape)
 
         if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
             first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
