@@ -189,22 +189,33 @@ def main():
         #print("tempo : ", temp)
         args.seq_name=temp[0]
         #print("Seq_name : " , args.seq_name)
+
+        print("Target : ", target)
+        print("Temp : ", temp)
+        print("Seq_name : ", args.seq_name)
+
         if old_temp==args.seq_name:
             my_index = my_index+1
         else:
             my_index = 0
 
-        #print("my_index : ",my_index)
+        print("my_index : ",my_index)
 
         output_sum = 0
 
+        print("Sample_range : ", args.sample_range)
 
         for i in range(0,args.sample_range):  
             search = batch['search'+'_'+str(i)]
             search_im = search
+
+            print("Search = Search_im : ", search)
+
             #print(search_im.size())
             output = model(Variable(target, volatile=True).cuda(),Variable(search_im, volatile=True).cuda())
-            #print(output[0]) # output有两个
+            #print(output[0]) # output ne ha due
+            print("Output : ", output)
+
             output_sum = output_sum + output[0].data[0,0].cpu().numpy() #Il risultato della divisione di quel ramo
             #np.save('infer'+str(i)+'.npy',output1)
             #output2 = output[1].data[0, 0].cpu().numpy() #interp'
@@ -216,7 +227,7 @@ def main():
             first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
 
         original_shape = first_image.shape
-        print("Original shape :", original_shape)
+        print("Original shape :", original_shape) # (480, 854, 3)
         output1 = cv2.resize(output1, (original_shape[1],original_shape[0]))
 
         mask = (output1*255).astype(np.uint8)
