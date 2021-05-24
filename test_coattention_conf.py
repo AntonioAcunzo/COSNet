@@ -297,7 +297,7 @@ def main():
                 mask.save(seg_filename)
 
                 a = np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)), axis=0)
-                a.save("prova.png")
+                a.save("./IMG_PROVA_prova.png")
 
                 #np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
                 #save_image(output1 * 0.8 + target.data, args.vis_save_dir, normalize=True)
