@@ -241,9 +241,9 @@ def main():
 
         path = "./IMG_PROVA"
         my_index2 = str(my_index).zfill(5)
-        filename = os.path.join(path, '{}.png'.format(my_index2))
+        filename = os.path.join(path, 'target_{}.png'.format(my_index2))
         print(filename)
-        img = Image.fromarray(output1)
+        img = Image.fromarray(target)
         img = img.convert("L")
         img.save(filename)
 
