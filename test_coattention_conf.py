@@ -221,7 +221,7 @@ def main():
         
         output1 = output_sum/args.sample_range
 
-        print("Output : ", output1)
+        print("Output1 : ", output1)
 
         if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
             first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
