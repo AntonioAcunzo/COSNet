@@ -222,7 +222,7 @@ def main():
 
         print("Output1 : ", output1)
         print("max value in output1 : ",np.max(output1)) # 0.99999
-        print("Output1 shape: ", output1.shape) # (473,473)
+        print("Output1 shape: ", output1.shape) # (473, 473)
 
         if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
             first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
@@ -232,13 +232,19 @@ def main():
         original_shape = first_image.shape
         print("Original shape :", original_shape) # (480, 854, 3)
         output1 = cv2.resize(output1, (original_shape[1],original_shape[0]))
-        print("Output1 shape after resize : ", output1.shape)
+        print("Output1 shape after resize : ", output1.shape) # (480, 854)
 
         mask = (output1*255).astype(np.uint8)
         print("mask size :", mask.shape)
         mask = Image.fromarray(mask)
 
 
+        path = "./IMG_PROVA"
+        my_index2 = str(my_index).zfill(5)
+        filename = os.path.join(path, '{}.png'.format(my_index2))
+        print(filename)
+        img = Image.fromarray(output1)
+        img.save(filename)
 
 
         if args.dataset == 'voc12':
