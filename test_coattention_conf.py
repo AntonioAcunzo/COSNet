@@ -222,6 +222,7 @@ def main():
         output1 = output_sum/args.sample_range
 
         print("Output1 : ", output1)
+        print("max value : ",np.max(output1))
 
         if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
             first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
@@ -235,10 +236,7 @@ def main():
         mask = (output1*255).astype(np.uint8)
         mask = Image.fromarray(mask)
 
-        print("mask dim : ", mask.shape[0])
-        
-        
-        
+
 
         if args.dataset == 'voc12':
             print(output.shape)
