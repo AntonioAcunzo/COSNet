@@ -181,8 +181,8 @@ def main():
 
 
     for index, batch in enumerate(testloader):
-
-        print("processed index: ", '%d processd'%(index))
+        print("----------------------------------------------------------------------------------------------------------------------")
+        print("processed index: ", '%d processed'%(index))
         target = batch['target']
         #search = batch['search']
         temp = batch['seq_name']
@@ -190,6 +190,7 @@ def main():
         args.seq_name=temp[0]
 
         print("Target : ", target) # Matrice
+        print("Target shape: ", target.shape)
         print("Temp : ", temp) # [blackswan]
         print("Seq_name : ", args.seq_name) # blackswan
 
@@ -217,6 +218,15 @@ def main():
             output_sum = output_sum + output[0].data[0,0].cpu().numpy() #Il risultato della divisione di quel ramo
             #np.save('infer'+str(i)+'.npy',output1)
             #output2 = output[1].data[0, 0].cpu().numpy() #interp'
+
+            path = "./IMG_PROVA"
+            my_index2 = str(i).zfill(5)
+            filename = os.path.join(path, 'search_{}.png'.format(my_index2))
+            print(filename)
+            img = Image.fromarray(target)
+            img = img.convert("L")
+            img.save(filename)
+
         
         output1 = output_sum/args.sample_range
 
@@ -289,6 +299,8 @@ def main():
                 #save_image(output1 * 0.8 + target.data, args.vis_save_dir, normalize=True)
         else:
             print("dataset error")
+
+        break
             
 
 
