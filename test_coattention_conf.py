@@ -234,7 +234,7 @@ def main():
         output1 = cv2.resize(output1, (original_shape[1],original_shape[0]))
 
         mask = (output1*255).astype(np.uint8)
-        print("mask size :", mask.size())
+        print("mask size :", mask.shape)
         mask = Image.fromarray(mask)
 
 
