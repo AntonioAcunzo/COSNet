@@ -100,7 +100,7 @@ def configure_dataset_model(args):
         args.data_list = './val_seqs1.txt'  # Path to the file listing the images in the dataset
         args.ignore_label = 255     #The index of the label to ignore during the training
         args.input_size = '473,473' #Comma-separated string with height and width of images
-        args.num_classes = 3      #Number of classes to predict (including background)
+        args.num_classes = 2      #Number of classes to predict (including background)
         args.img_mean = np.array((104.00698793,116.66876762,122.67891434), dtype=np.float32)       # saving model file and log record during the process of training
         args.restore_from = './co_attention.pth' #resnet50-19c8e357.pth''/home/xiankai/PSPNet_PyTorch/snapshots/davis/psp_davis_0.pth' #
         args.snapshot_dir = './snapshots/davis_iteration/'          #Where to save snapshots of the model
@@ -161,14 +161,10 @@ def main():
         testloader = data.DataLoader(db_test, batch_size=1, shuffle=False, num_workers=0)
         #voc_colorize = VOCColorize()
 
-    if  args.dataset == 'davis_yoda':  #for davis 2016
+    elif args.dataset == 'davis' or  args.dataset == 'davis_yoda': #for davis 2016
         db_test = db.PairwiseImg(train=False, inputRes=(473,473), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range) #db_root_dir() --> '/path/to/DAVIS-2016' train path
         testloader = data.DataLoader(db_test, batch_size=1, shuffle=False, num_workers=0)
-        #voc_colorize = VOCColorize()
-
-    elif args.dataset == 'davis' : #for davis 2016
-        db_test = db.PairwiseImg(train=False, inputRes=(473,473), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range) #db_root_dir() --> '/path/to/DAVIS-2016' train path
-        testloader = data.DataLoader(db_test, batch_size=1, shuffle=False, num_workers=0)
+        # voc_colorize = VOCColorize()
     else:
         print("dataset error")
 
@@ -218,7 +214,9 @@ def main():
             first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
         if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
             first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
-        original_shape = first_image.shape 
+
+        original_shape = first_image.shape
+        print("Original shape :", original_shape)
         output1 = cv2.resize(output1, (original_shape[1],original_shape[0]))
 
         mask = (output1*255).astype(np.uint8)
