@@ -190,28 +190,27 @@ def main():
         args.seq_name=temp[0]
         #print("Seq_name : " , args.seq_name)
 
-        print("Target : ", target)
-        print("Temp : ", temp)
-        print("Seq_name : ", args.seq_name)
+        print("Target : ", target) # Matrice
+        print("Temp : ", temp) # [blackswan]
+        print("Seq_name : ", args.seq_name) # blackswan
 
         if old_temp==args.seq_name:
             my_index = my_index+1
         else:
             my_index = 0
 
-        print("my_index : ",my_index)
+        print("my_index : ",my_index) # 0,1,2...
 
         output_sum = 0
 
-        print("Sample_range : ", args.sample_range)
+        print("Sample_range : ", args.sample_range) # 5
 
         for i in range(0,args.sample_range):  
             search = batch['search'+'_'+str(i)]
             search_im = search
 
-            print("Search = Search_im : ", search)
-
-            #print(search_im.size())
+            print("Search = Search_im : ", search) # Matrice
+            print("Dim search_im : ", search_im.size())
             output = model(Variable(target, volatile=True).cuda(),Variable(search_im, volatile=True).cuda())
             #print(output[0]) # output ne ha due
             print("Output : ", output)
