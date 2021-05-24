@@ -210,7 +210,7 @@ def main():
             search_im = search
 
             print("Search = Search_im : ", search) # Matrice
-            print("Dim search_im : ", search_im.size())
+            print("Dim search_im : ", search_im.size()) #  torch.Size([1, 3, 473, 473])
             output = model(Variable(target, volatile=True).cuda(),Variable(search_im, volatile=True).cuda())
             #print(output[0]) # output ne ha due
             print("Output : ", output)
@@ -220,6 +220,9 @@ def main():
             #output2 = output[1].data[0, 0].cpu().numpy() #interp'
         
         output1 = output_sum/args.sample_range
+
+        print("Output : ", output1)
+
         if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
             first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
         if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
@@ -230,8 +233,9 @@ def main():
         output1 = cv2.resize(output1, (original_shape[1],original_shape[0]))
 
         mask = (output1*255).astype(np.uint8)
-        #print(mask.shape[0])
         mask = Image.fromarray(mask)
+
+        print("mask dim : ", mask.shape[0])
         
         
         
