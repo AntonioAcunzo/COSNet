@@ -201,8 +201,13 @@ def main():
         img_target = target[0]
         #img_target = img_target.numpy()[:,:,:]
         torch.squeeze(img_target,0)
+        print("Img target shape: ", img_target.shape)  # torch.Size([3, 473, 473])
+
+        img_target = np.repeat(img_target.numpy()[:,:,None],3,axis=-1)
         print("Img target shape: ", img_target.shape)
-        img_target = img_target.numpy()[:, :]
+
+
+        #img_target = img_target.numpy()[:, :]
 
         print("max value in target : ", np.max(img_target))  #
 
