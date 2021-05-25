@@ -245,6 +245,7 @@ def main():
         print("Output1 shape after resize : ", output1.shape) # (480, 854)
 
         mask = (output1*255).astype(np.uint8)
+        mask_array = mask
         print("mask size :", mask.shape)
         mask = Image.fromarray(mask)
 
@@ -297,11 +298,13 @@ def main():
                 #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 mask.save(seg_filename)
 
-                mask_a = mask[np.newaxis ,:, :]
-                print("Mask_a shape : ",mask_a.shape)
+                mask_array = mask_array[np.newaxis ,:, :]
+                print("Mask_a shape : ",mask_array.shape)
 
-                a = np.concatenate((torch.zeros(1, 473, 473), mask_a, torch.zeros(1, 512, 512)), axis=0)
-                a.save("./IMG_PROVA_prova.png")
+                mask_img = Image.fromarray(mask_array)
+
+                a = np.concatenate((torch.zeros(1, 473, 473), mask_img, torch.zeros(1, 512, 512)), axis=0)
+                a.save("./IMG_PROVA/prova.png")
 
                 #np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
                 #save_image(output1 * 0.8 + target.data, args.vis_save_dir, normalize=True)
