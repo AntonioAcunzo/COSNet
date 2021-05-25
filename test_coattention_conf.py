@@ -201,7 +201,7 @@ def main():
         img_target = target[0]
         img1 = img_target.numpy()[:,:,:]
         print("IMG1 shape: ", img1.shape)
-        img1 = Image.fromarray(img1)
+        img1 = Image.fromarray((img1 * 255).astype(np.uint8))
         img1.save(filename)
         #save_image(img1,filename)
         #imgs = Image.fromarray(imgs)
