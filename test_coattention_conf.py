@@ -203,8 +203,14 @@ def main():
         torch.squeeze(img_target,0)
         print("Img target shape: ", img_target.shape)
         img_target = img_target.numpy()[:, :]
-        img1 = Image.fromarray((img_target * 255).astype(np.uint8))
-        img1.save(filename)
+
+        print("max value in target : ", np.max(img_target))  #
+
+
+        #img1 = Image.fromarray((img_target * 255).astype(np.uint8))
+        #img1.save(filename)
+
+
         #save_image(img1,filename)
         #imgs = Image.fromarray(imgs)
         #imgs = imgs.convert("L")
