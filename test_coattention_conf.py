@@ -209,8 +209,8 @@ def main():
             search = batch['search'+'_'+str(i)]
             search_im = search
 
-            print("Search = Search_im : ", search) # Matrice
-            print("Dim search_im : ", search_im.size()) #  torch.Size([1, 3, 473, 473])
+            #print("Search = Search_im : ", search) # Matrice
+            #print("Dim search_im : ", search_im.size()) #  torch.Size([1, 3, 473, 473])
             output = model(Variable(target, volatile=True).cuda(),Variable(search_im, volatile=True).cuda())
             #print(output[0]) # output ne ha due
             #print("Output : ", output)
@@ -303,11 +303,12 @@ def main():
 
                 #mask_img = Image.fromarray(mask_array)
 
-                #a = np.concatenate((torch.zeros(1, 473, 473), mask_img, torch.zeros(1, 512, 512)), axis=0)
-                #a.save("./IMG_PROVA/prova.png")
+                a = np.concatenate((torch.zeros(1, 473, 473), mask_array, torch.zeros(1, 512, 512)), axis=0)
+                a = Image.fromarray(a)
+                a.save("./IMG_PROVA/prova.png")
 
                 #np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
-                save_image(output1 * 0.8 + target.data, "./IMG_PROVA/prova.png", normalize=True)
+                #save_image(output1 * 0.8 + target.data, "./IMG_PROVA/prova.png", normalize=True)
         else:
             print("dataset error")
 
