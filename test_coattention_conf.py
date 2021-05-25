@@ -198,9 +198,10 @@ def main():
         path = "./IMG_PROVA"
         filename = os.path.join(path, 'target.png')
         print(filename)
-        img = Image.fromarray(target)
-        img = img.convert("L")
-        img.save(filename)
+        imgs = target.numpy()[:, :, :, :]
+        imgs = Image.fromarray(imgs)
+        imgs = imgs.convert("L")
+        imgs.save(filename)
 
 
 
