@@ -194,6 +194,16 @@ def main():
         print("Temp : ", temp) # [blackswan]
         print("Seq_name : ", args.seq_name) # blackswan
 
+
+        path = "./IMG_PROVA"
+        filename = os.path.join(path, 'target.png')
+        print(filename)
+        img = Image.fromarray(target)
+        img = img.convert("L")
+        img.save(filename)
+
+
+
         if old_temp==args.seq_name:
             my_index = my_index+1
         else:
@@ -298,6 +308,7 @@ def main():
                 #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 mask.save(seg_filename)
 
+                '''
                 mask_array = mask_array[np.newaxis ,:, :]
                 print("Mask_a shape : ",mask_array.shape)
 
@@ -309,6 +320,7 @@ def main():
 
                 #np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
                 #save_image(output1 * 0.8 + target.data, "./IMG_PROVA/prova.png", normalize=True)
+                '''
         else:
             print("dataset error")
 
