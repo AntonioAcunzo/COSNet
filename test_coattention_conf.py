@@ -189,7 +189,7 @@ def main():
 
         args.seq_name=temp[0]
 
-        print("Target : ", target) # Tensor
+        #print("Target : ", target) # Tensor
         print("Target shape: ", target.shape) # torch.Size([1, 3, 473, 473])
         print("Temp : ", temp) # [blackswan]
         print("Seq_name : ", args.seq_name) # blackswan
@@ -203,7 +203,7 @@ def main():
         torch.squeeze(img_target,0)
         print("Img target shape: ", img_target.shape)  # torch.Size([3, 473, 473])
 
-        img_target = np.repeat(img_target.numpy()[:,:,None],3,axis=-1)
+        img_target = np.repeat(img_target.numpy()[None,:,:],3,axis=-1)
         print("Img target shape: ", img_target.shape)
 
 
@@ -259,7 +259,7 @@ def main():
         
         output1 = output_sum/args.sample_range
 
-        print("Output1 : ", output1)
+        #print("Output1 : ", output1)
         print("max value in output1 : ",np.max(output1)) # 0.99999
         print("Output1 shape: ", output1.shape) # (473, 473)
 
