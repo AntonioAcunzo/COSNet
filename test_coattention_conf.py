@@ -297,7 +297,10 @@ def main():
                 #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 mask.save(seg_filename)
 
-                a = np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)), axis=0)
+                mask_a = mask[np.newaxis ,:, :]
+                print("Mask_a shape : ",mask_a.shape)
+
+                a = np.concatenate((torch.zeros(1, 473, 473), mask_a, torch.zeros(1, 512, 512)), axis=0)
                 a.save("./IMG_PROVA_prova.png")
 
                 #np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
