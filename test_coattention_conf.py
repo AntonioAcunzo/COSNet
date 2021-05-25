@@ -301,13 +301,13 @@ def main():
                 mask_array = mask_array[np.newaxis ,:, :]
                 print("Mask_a shape : ",mask_array.shape)
 
-                mask_img = Image.fromarray(mask_array)
+                #mask_img = Image.fromarray(mask_array)
 
-                a = np.concatenate((torch.zeros(1, 473, 473), mask_img, torch.zeros(1, 512, 512)), axis=0)
-                a.save("./IMG_PROVA/prova.png")
+                #a = np.concatenate((torch.zeros(1, 473, 473), mask_img, torch.zeros(1, 512, 512)), axis=0)
+                #a.save("./IMG_PROVA/prova.png")
 
                 #np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
-                #save_image(output1 * 0.8 + target.data, args.vis_save_dir, normalize=True)
+                save_image(output1 * 0.8 + target.data, "./IMG_PROVA/prova.png", normalize=True)
         else:
             print("dataset error")
 
