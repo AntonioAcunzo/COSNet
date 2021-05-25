@@ -197,11 +197,12 @@ def main():
 
         path = "./IMG_PROVA"
         filename = os.path.join(path, 'target.png')
-        print(filename)
+
         img_target = target[0]
-        img1 = img_target.numpy()[:,:,:]
-        print("IMG1 shape: ", img1.shape)
-        img1 = Image.fromarray((img1 * 255).astype(np.uint8))
+        img_target = img_target.numpy()[:,:,:]
+        torch.squeeze(img_target,0)
+        print("Img target shape: ", img_target.shape)
+        img1 = Image.fromarray((img_target * 255).astype(np.uint8))
         img1.save(filename)
         #save_image(img1,filename)
         #imgs = Image.fromarray(imgs)
