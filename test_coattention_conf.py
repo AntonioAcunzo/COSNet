@@ -26,6 +26,7 @@ import torch.nn as nn
 #from pydensecrf.utils import unary_from_softmax, create_pairwise_bilateral, create_pairwise_gaussian
 from deeplab.siamese_model_conf import CoattentionNet
 from torchvision.utils import save_image
+from torchvision import transforms
 
 def get_arguments():
     """Parse all the arguments provided from the CLI.
@@ -199,13 +200,17 @@ def main():
         filename = os.path.join(path, 'target.png')
 
         img_target = target[0]
+
+        PIL_img = transforms.ToPILImage()(img_target)
+        PIL_img.save(filename)
+
+
         #img_target = img_target.numpy()[:,:,:]
         torch.squeeze(img_target,0)
         print("Img target shape: ", img_target.shape)  # torch.Size([3, 473, 473])
 
         #img_target = np.repeat(img_target.numpy()[None,:,:],3,axis=-1)
         #print("Img target shape: ", img_target.shape)
-
 
         img_target = img_target.numpy()[:, :, :]
         img_target = np.squeeze(img_target, axis=0)
