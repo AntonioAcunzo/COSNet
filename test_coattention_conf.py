@@ -202,6 +202,7 @@ def main():
         img_target = target[0]
 
         PIL_img = transforms.ToPILImage()(img_target)
+        PIL_img.convert("RGB")
         PIL_img.save(filename)
 
 
