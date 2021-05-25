@@ -198,10 +198,12 @@ def main():
         path = "./IMG_PROVA"
         filename = os.path.join(path, 'target.png')
         print(filename)
-        imgs = target.numpy()[:, :, :, :]
-        imgs = Image.fromarray(imgs)
-        imgs = imgs.convert("L")
-        imgs.save(filename)
+        img_target = target[0]
+        img1 = img_target.numpy()
+        save_image(img1,filename)
+        #imgs = Image.fromarray(imgs)
+        #imgs = imgs.convert("L")
+        #imgs.save(filename)
 
 
 
@@ -256,7 +258,7 @@ def main():
         print("Output1 shape after resize : ", output1.shape) # (480, 854)
 
         mask = (output1*255).astype(np.uint8)
-        mask_array = mask
+        #mask_array = mask
         print("mask size :", mask.shape)
         mask = Image.fromarray(mask)
 
