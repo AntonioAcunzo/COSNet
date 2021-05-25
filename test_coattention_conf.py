@@ -248,7 +248,7 @@ def main():
         print("mask size :", mask.shape)
         mask = Image.fromarray(mask)
 
-
+        '''
         path = "./IMG_PROVA"
         my_index2 = str(my_index).zfill(5)
         filename = os.path.join(path, 'target_{}.png'.format(my_index2))
@@ -257,6 +257,7 @@ def main():
         img = Image.fromarray(target1)
         img = img.convert("L")
         img.save(filename)
+        '''
 
 
         if args.dataset == 'voc12':
