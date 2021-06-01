@@ -190,14 +190,16 @@ def main():
 
         args.seq_name=temp[0]
 
-        #print("Target : ", target) # Tensor
+        print("Target : ", target) # Tensor
         print("Target shape: ", target.shape) # torch.Size([1, 3, 473, 473])
         print("Temp : ", temp) # [blackswan]
         print("Seq_name : ", args.seq_name) # blackswan
 
+        print("Target max value : ", torch.max(target))
+        print("Target min value : ", torch.min(target))
 
-        path = "./IMG_PROVA"
-        filename = os.path.join(path, 'target.png')
+        path_save_img = "./IMG_PROVA"
+        filename = os.path.join(path_save_img, 'target.png')
 
         img_target = target[0]
 
