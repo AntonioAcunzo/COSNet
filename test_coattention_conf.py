@@ -217,7 +217,7 @@ def main():
         #img_target = np.squeeze(img_target, axis=0)
         #print("Img target shape: ", img_target.shape)
 
-        print("max value in target : ", np.max(img_target))  #
+        #print("max value in target : ", np.max(img_target))  #
 
 
         #img1 = Image.fromarray((img_target * 255).astype(np.uint8))
