@@ -207,6 +207,16 @@ def main():
         #PIL_img.convert("RGB")
         PIL_img.save(filename)
 
+        img1 = Image.open(os.path.join(path_save_img, 'target.png'))
+        x1 = transforms(img1)
+
+        z1 = x1 * torch.tensor(torch.std(x1)).view(3, 1, 1)
+        z1 = z1 + torch.tensor(torch.mean(x1)).view(3, 1, 1)
+
+        img2 = transforms.ToPILImage(mode='RGB')(z1)
+        filename2 = os.path.join(path_save_img, 'target2.png')
+        img2.save(filename2)
+
 
         #img_target = img_target.numpy()[:,:,:]
         torch.squeeze(img_target,0)
