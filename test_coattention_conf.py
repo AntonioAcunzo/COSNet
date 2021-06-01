@@ -208,7 +208,7 @@ def main():
         PIL_img.save(filename)
 
         img1 = Image.open(os.path.join(path_save_img, 'target.png'))
-        x1 = transforms(img1)
+        x1 = img_target
 
         z1 = x1 * torch.tensor(torch.std(x1)).view(3, 1, 1)
         z1 = z1 + torch.tensor(torch.mean(x1)).view(3, 1, 1)
