@@ -218,8 +218,9 @@ def main():
         print("img target G: ", img_target_G)
         print("img target B: ", img_target_B)
 
-
-        #db_test.meanval
+        print(db_test.meanval[0])
+        targe_R = img_target_R.numpy() + db_test.meanval[0]
+        print("target R : ", targe_R)
 
         #x1 = img_target
 
