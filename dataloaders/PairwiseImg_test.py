@@ -188,6 +188,7 @@ class PairwiseImg(Dataset):
 
         img = np.array(img, dtype=np.float32)
         #img = img[:, :, ::-1]
+        print("PairwiseImg - img size: ", img.shape)
         print("PairwiseImg - img : ",img)
         img = np.subtract(img, np.array(self.meanval, dtype=np.float32))
         print("PairwiseImg - sottraggo : ",  np.array(self.meanval, dtype=np.float32))
