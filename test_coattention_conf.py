@@ -202,24 +202,25 @@ def main():
         filename = os.path.join(path_save_img, 'target.png')
 
         img_target = target[0]
+        print("img target: ", img_target)
 
         PIL_img = transforms.ToPILImage()(img_target)
         #PIL_img.convert("RGB")
         PIL_img.save(filename)
 
         img1 = Image.open(os.path.join(path_save_img, 'target.png'))
-        x1 = img_target
+        #x1 = img_target
 
-        z1 = x1 * torch.tensor(torch.std(x1)).view(3, 1, 1)
-        z1 = z1 + torch.tensor(torch.mean(x1)).view(3, 1, 1)
+        #z1 = x1 * torch.tensor(torch.std(x1)).view(3, 1, 1)
+        #z1 = z1 + torch.tensor(torch.mean(x1)).view(3, 1, 1)
 
-        img2 = transforms.ToPILImage(mode='RGB')(z1)
-        filename2 = os.path.join(path_save_img, 'target2.png')
-        img2.save(filename2)
+        #img2 = transforms.ToPILImage(mode='RGB')(z1)
+        #filename2 = os.path.join(path_save_img, 'target2.png')
+        #img2.save(filename2)
 
 
         #img_target = img_target.numpy()[:,:,:]
-        torch.squeeze(img_target,0)
+        #torch.squeeze(img_target,0)
         print("Img target shape: ", img_target.shape)  # torch.Size([3, 473, 473])
 
         #img_target = np.repeat(img_target.numpy()[None,:,:],3,axis=-1)
