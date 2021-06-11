@@ -199,7 +199,7 @@ def main():
         print("Target min value : ", torch.min(target))
 
         path_save_img = "./IMG_PROVA"
-        filename = os.path.join(path_save_img, 'target.png')
+        filename = os.path.join(path_save_img, 'target_t.png')
 
         img_target = target[0] # torch.Size([3, 473, 473])
         print("img target: ", img_target)
@@ -221,6 +221,18 @@ def main():
         print(db_test.meanval[0])
         targe_R = img_target_R.numpy() + db_test.meanval[0]
         print("target R : ", targe_R)
+
+        img_target_numpy = img_target.numpy()
+        print("img target numpy: ", img_target_numpy)
+        img_target_numpy = img_target_numpy.transpose((1, 2, 0))  # CHW --> HWC
+        print("img target numpy after transpose: ", img_target_numpy)
+
+        img_target_numpy = np.sum(img_target_numpy, np.array(db_test.meanval, dtype=np.float32))
+        print("img target numpy denorm: ", img_target_numpy)
+
+        PIL_img_from_numpy = Image.fromarray(img_target_numpy)
+        filename = os.path.join(path_save_img, 'target_n.png')
+        PIL_img.save(filename)
 
         #x1 = img_target
 
