@@ -193,7 +193,7 @@ class PairwiseImg(Dataset):
         img = np.subtract(img, np.array(self.meanval, dtype=np.float32))
         print("PairwiseImg - sottraggo : ",  np.array(self.meanval, dtype=np.float32))
         print("PairwiseImg - img subtract: ", img)
-        img = img.transpose((2, 0, 1))  # NHWC -> NCHW
+        img = img.transpose((2, 0, 1))  # n-HWC -> N-CHW
         print("PairwiseImg - img size: ", img.shape)
         
         if self.labels[idx] is not None and self.train:

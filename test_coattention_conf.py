@@ -201,7 +201,7 @@ def main():
         path_save_img = "./IMG_PROVA"
         filename = os.path.join(path_save_img, 'target.png')
 
-        img_target = target[0]
+        img_target = target[0] # torch.Size([3, 473, 473])
         print("img target: ", img_target)
 
         PIL_img = transforms.ToPILImage()(img_target)
@@ -209,6 +209,18 @@ def main():
         PIL_img.save(filename)
 
         img1 = Image.open(os.path.join(path_save_img, 'target.png'))
+
+        img_target_R = img_target[0]
+        img_target_G = img_target[1]
+        img_target_B = img_target[2]
+
+        print("img target R: ", img_target_R)
+        print("img target G: ", img_target_G)
+        print("img target B: ", img_target_B)
+
+
+        #db_test.meanval
+
         #x1 = img_target
 
         #z1 = x1 * torch.tensor(torch.std(x1)).view(3, 1, 1)
