@@ -210,6 +210,8 @@ def main():
 
         img1 = Image.open(os.path.join(path_save_img, 'target.png'))
 
+        #-----------------------------
+
         img_target_R = img_target[0]
         img_target_G = img_target[1]
         img_target_B = img_target[2]
@@ -222,6 +224,8 @@ def main():
         targe_R = img_target_R.numpy() + db_test.meanval[0]
         print("target R : ", targe_R)
 
+        #-------------------------------
+
         img_target_numpy = img_target.numpy()
         print("img target numpy: ", img_target_numpy)
         img_target_numpy = img_target_numpy.transpose((1, 2, 0))  # CHW --> HWC
@@ -230,9 +234,11 @@ def main():
         img_target_numpy = img_target_numpy + np.array(db_test.meanval)
         print("img target numpy denorm: ", img_target_numpy)
 
-        PIL_img_from_numpy = Image.fromarray(img_target_numpy)
-        filename = os.path.join(path_save_img, 'target_n.png')
-        PIL_img.save(filename)
+        #PIL_img_from_numpy = Image.fromarray(img_target_numpy)
+        #filename = os.path.join(path_save_img, 'target_n.png')
+        #PIL_img.save(filename)
+
+        #-----------------------------------
 
         #x1 = img_target
 
@@ -319,7 +325,9 @@ def main():
         output1 = cv2.resize(output1, (original_shape[1],original_shape[0]))
         print("Output1 shape after resize : ", output1.shape) # (480, 854)
 
+        print("output1 stampa : ", output1)
         mask = (output1*255).astype(np.uint8)
+        print("MASK stampa: ", mask)
         #mask_array = mask
         print("mask size :", mask.shape)
         mask = Image.fromarray(mask)
