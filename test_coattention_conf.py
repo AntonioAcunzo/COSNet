@@ -234,9 +234,9 @@ def main():
         img_target_numpy = img_target_numpy + np.array(db_test.meanval)
         print("img target numpy denorm: ", img_target_numpy)
 
-        img_target_numpy = Image.fromarray(img_target_numpy.astype(np.uint8))
+        PIL_img_from_numpy = Image.fromarray(img_target_numpy.astype(np.uint8))
 
-        PIL_img_from_numpy = Image.fromarray(img_target_numpy)
+        #PIL_img_from_numpy = Image.fromarray(img_target_numpy)
         filename = os.path.join(path_save_img, 'target_n.png')
         PIL_img.save(filename)
 
