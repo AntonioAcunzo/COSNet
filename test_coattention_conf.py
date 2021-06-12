@@ -227,7 +227,7 @@ def main():
         img_target_numpy = img_target_numpy.transpose((1, 2, 0))  # CHW --> HWC
         print("img target numpy after transpose: ", img_target_numpy)
 
-        img_target_numpy = np.sum(img_target_numpy, np.array(db_test.meanval))
+        img_target_numpy = img_target_numpy + np.array(db_test.meanval)
         print("img target numpy denorm: ", img_target_numpy)
 
         PIL_img_from_numpy = Image.fromarray(img_target_numpy)
