@@ -390,8 +390,10 @@ def main():
                 '''
 
                 #drawBoundingBox()
+
                 img = cv2.imread(seg_filename)
                 img1 = cv2.imread(filename_target)
+                img1 = cv2.resize(img1, (original_shape[1], original_shape[0]))
                 result = img.copy()
                 result1 = img1.copy()
                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
