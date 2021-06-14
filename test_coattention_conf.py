@@ -391,7 +391,9 @@ def main():
 
                 #drawBoundingBox()
                 img = cv2.imread(seg_filename)
+                img1 = cv2.imread(filename_target)
                 result = img.copy()
+                result1 = img1.copy()
                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                 thresh = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY)[1]
                 contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -399,10 +401,15 @@ def main():
                 for cntr in contours:
                     x, y, w, h = cv2.boundingRect(cntr)
                     cv2.rectangle(result, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                    cv2.rectangle(result1, (x, y), (x + w, y + h), (0, 0, 255), 2)
                     print("x,y,w,h:", x, y, w, h)
 
+                #x, y, w, h: 163,331,3,1
+                #x, y, w, h: 146,72,363,309
+
                 # save resulting image
-                cv2.imwrite(os.path.join(path_save_img, 'BBox.png'), result)
+                cv2.imwrite(os.path.join(path_save_img, 'BoundingBox_mask.png'), result)
+                cv2.imwrite(os.path.join(path_save_img, 'BoundingBox_originale_img.png'), result1)
 
                 # show thresh and result
                 #cv2.imshow("bounding_box", result)
