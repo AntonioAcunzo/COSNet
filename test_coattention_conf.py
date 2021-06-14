@@ -239,7 +239,8 @@ def main():
         PIL_img_from_numpy = Image.fromarray(img_target_numpy)
 
         filename = os.path.join(path_save_img, 'target_n.png')
-        PIL_img.save(filename)
+        #PIL_img.convert("RGB")
+        PIL_img_from_numpy.save(filename)
 
         #-----------------------------------
 
