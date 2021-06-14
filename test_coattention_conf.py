@@ -195,14 +195,14 @@ def main():
         print("Temp : ", temp) # [blackswan]
         print("Seq_name : ", args.seq_name) # blackswan
 
-        print("Target max value : ", torch.max(target))
-        print("Target min value : ", torch.min(target))
+        #print("Target max value : ", torch.max(target))
+        #print("Target min value : ", torch.min(target))
 
         path_save_img = "./IMG_PROVA"
         filename = os.path.join(path_save_img, 'target_t.png')
 
         img_target = target[0] # torch.Size([3, 473, 473])
-        print("img target: ", img_target)
+        #print("img target: ", img_target)
 
         PIL_img = transforms.ToPILImage()(img_target)
         #PIL_img.convert("RGB")
@@ -210,21 +210,22 @@ def main():
 
         img1 = Image.open(os.path.join(path_save_img, 'target.png'))
 
-        #-----------------------------
+        # Scomposizione img nei 3 canali -----------------------------
+
 
         img_target_R = img_target[0]
         img_target_G = img_target[1]
         img_target_B = img_target[2]
 
-        print("img target R: ", img_target_R)
-        print("img target G: ", img_target_G)
-        print("img target B: ", img_target_B)
+        #print("img target R: ", img_target_R)
+        #print("img target G: ", img_target_G)
+        #print("img target B: ", img_target_B)
 
-        print(db_test.meanval[0])
-        targe_R = img_target_R.numpy() + db_test.meanval[0]
-        print("target R : ", targe_R)
+        #print(db_test.meanval[0])
+        #target_R = img_target_R.numpy() + db_test.meanval[0]
+        #print("target R : ", target_R)
 
-        #-------------------------------
+        #------------------------------------------------------
 
         img_target_numpy = img_target.numpy()
         print("img target numpy: ", img_target_numpy)
@@ -238,24 +239,13 @@ def main():
 
         PIL_img_from_numpy = Image.fromarray(img_target_numpy)
 
-        filename = os.path.join(path_save_img, 'target_n.png')
+        filename_target = os.path.join(path_save_img, 'target_n.png')
         #PIL_img.convert("RGB")
-        PIL_img_from_numpy.save(filename)
+        PIL_img_from_numpy.save(filename_target)
 
         #-----------------------------------
 
-        #x1 = img_target
 
-        #z1 = x1 * torch.tensor(torch.std(x1)).view(3, 1, 1)
-        #z1 = z1 + torch.tensor(torch.mean(x1)).view(3, 1, 1)
-
-        #img2 = transforms.ToPILImage(mode='RGB')(z1)
-        #filename2 = os.path.join(path_save_img, 'target2.png')
-        #img2.save(filename2)
-
-
-        #img_target = img_target.numpy()[:,:,:]
-        #torch.squeeze(img_target,0)
         print("Img target shape: ", img_target.shape)  # torch.Size([3, 473, 473])
 
         #img_target = np.repeat(img_target.numpy()[None,:,:],3,axis=-1)
@@ -398,6 +388,28 @@ def main():
                 #np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
                 #save_image(output1 * 0.8 + target.data, "./IMG_PROVA/prova.png", normalize=True)
                 '''
+
+                #drawBoundingBox()
+                img = cv2.imread(seg_filename)
+                result = img.copy()
+                gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                thresh = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY)[1]
+                contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                contours = contours[0] if len(contours) == 2 else contours[1]
+                for cntr in contours:
+                    x, y, w, h = cv2.boundingRect(cntr)
+                    cv2.rectangle(result, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                    print("x,y,w,h:", x, y, w, h)
+
+                # save resulting image
+                cv2.imwrite(os.path.join(path_save_img, 'BBox.png'), result)
+
+                # show thresh and result
+                #cv2.imshow("bounding_box", result)
+                #cv2.waitKey(0)
+                #cv2.destroyAllWindows()
+
+
         else:
             print("dataset error")
 
