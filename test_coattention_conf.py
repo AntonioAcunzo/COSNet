@@ -362,7 +362,7 @@ def main():
                 os.makedirs(save_dir_res)
             if args.save_segimage:   
                 my_index1 = str(my_index).zfill(5)
-                seg_filename = os.path.join(save_dir_res, '{}.png'.format(my_index1))
+                seg_filename = os.path.join(save_dir_res, 'mask_{}.png'.format(my_index1))
                 #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 mask.save(seg_filename)
 
@@ -382,7 +382,6 @@ def main():
 
                 #draw BoundingBox on mask and on original img
 
-                seg_filename = os.path.join(save_dir_res, '{}.png'.format(my_index1))
                 img_mask = cv2.imread(seg_filename)
                 img_original = cv2.imread(filename_target)
                 img_original = cv2.resize(img_original, (original_shape[1], original_shape[0]))
