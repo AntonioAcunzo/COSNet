@@ -110,8 +110,8 @@ class PairwiseImg(Dataset):
                 labels = [labels[0]]
 
 
-        print(len(labels))
-        print(len(img_list))
+        #print(len(labels))
+        #print(len(img_list))
         assert (len(labels) == len(img_list))
 
         self.img_list = img_list
