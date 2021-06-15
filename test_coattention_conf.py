@@ -390,7 +390,7 @@ def main():
                 gray = cv2.cvtColor(img_mask, cv2.COLOR_BGR2GRAY)
                 thresh = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY)[1]
                 contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-                contours = contours[0] #if len(contours) == 2 else contours[1]
+                contours = contours[0] if len(contours) == 2 else contours[1]
                 for cntr in contours:
                     x, y, w, h = cv2.boundingRect(cntr)
                     cv2.rectangle(result_mask, (x, y), (x + w, y + h), (0, 0, 255), 2)
