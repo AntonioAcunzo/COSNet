@@ -190,16 +190,16 @@ def main():
 
         args.seq_name=temp[0]
 
-        print("Target : ", target) # Tensor
-        print("Target shape: ", target.shape) # torch.Size([1, 3, 473, 473])
+        #print("Target : ", target) # Tensor
+        #print("Target shape: ", target.shape) # torch.Size([1, 3, 473, 473])
         print("Temp : ", temp) # [blackswan]
-        print("Seq_name : ", args.seq_name) # blackswan
+        #print("Seq_name : ", args.seq_name) # blackswan
 
         #print("Target max value : ", torch.max(target))
         #print("Target min value : ", torch.min(target))
 
         path_save_img = "./IMG_PROVA"
-        filename = os.path.join(path_save_img, 'target_t.png')
+        filename = os.path.join(path_save_img, 'target_normalized.png')
 
         img_target = target[0] # torch.Size([3, 473, 473])
         #print("img target: ", img_target)
@@ -208,10 +208,9 @@ def main():
         #PIL_img.convert("RGB")
         PIL_img.save(filename)
 
-        img1 = Image.open(os.path.join(path_save_img, 'target.png'))
-
         # Scomposizione img nei 3 canali -----------------------------
 
+        '''
 
         img_target_R = img_target[0]
         img_target_G = img_target[1]
@@ -224,29 +223,31 @@ def main():
         #print(db_test.meanval[0])
         #target_R = img_target_R.numpy() + db_test.meanval[0]
         #print("target R : ", target_R)
+        
+        '''
 
         #------------------------------------------------------
 
         img_target_numpy = img_target.numpy()
-        print("img target numpy: ", img_target_numpy)
+        #print("img target numpy: ", img_target_numpy)
         img_target_numpy = img_target_numpy.transpose((1, 2, 0))  # CHW --> HWC
-        print("img target numpy after transpose: ", img_target_numpy)
+        #print("img target numpy after transpose: ", img_target_numpy)
 
         img_target_numpy = img_target_numpy + np.array(db_test.meanval)
-        print("img target numpy denorm: ", img_target_numpy)
+        #print("img target numpy denorm: ", img_target_numpy)
         img_target_numpy = img_target_numpy.astype(np.uint8)
-        print("img target numpy : ", img_target_numpy)
+        #print("img target numpy : ", img_target_numpy)
 
         PIL_img_from_numpy = Image.fromarray(img_target_numpy)
 
-        filename_target = os.path.join(path_save_img, 'target_n.png')
+        filename_target = os.path.join(path_save_img, 'target_denormalized.png')
         #PIL_img.convert("RGB")
         PIL_img_from_numpy.save(filename_target)
 
         #-----------------------------------
 
 
-        print("Img target shape: ", img_target.shape)  # torch.Size([3, 473, 473])
+        #print("Img target shape: ", img_target.shape)  # torch.Size([3, 473, 473])
 
         #img_target = np.repeat(img_target.numpy()[None,:,:],3,axis=-1)
         #print("Img target shape: ", img_target.shape)
@@ -306,8 +307,8 @@ def main():
         output1 = output_sum/args.sample_range
 
         #print("Output1 : ", output1)
-        print("max value in output1 : ",np.max(output1)) # 0.99999
-        print("Output1 shape: ", output1.shape) # (473, 473)
+        #print("max value in output1 : ",np.max(output1)) # 0.99999
+        #print("Output1 shape: ", output1.shape) # (473, 473)
 
         if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
             first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
@@ -315,32 +316,21 @@ def main():
             first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
 
         original_shape = first_image.shape
-        print("Original shape :", original_shape) # (480, 854, 3)
+        #print("Original shape :", original_shape) # (480, 854, 3)
         output1 = cv2.resize(output1, (original_shape[1],original_shape[0]))
-        print("Output1 shape after resize : ", output1.shape) # (480, 854)
+        #print("Output1 shape after resize : ", output1.shape) # (480, 854)
 
-        print("output1 stampa : ", output1)
+        #print("output1 stampa : ", output1)
         mask = (output1*255).astype(np.uint8)
-        print("MASK stampa: ", mask)
+        #print("MASK stampa: ", mask)
         #mask_array = mask
-        print("mask size :", mask.shape)
+        #print("mask size :", mask.shape)
         mask = Image.fromarray(mask)
 
         '''
-        path = "./IMG_PROVA"
-        my_index2 = str(my_index).zfill(5)
-        filename = os.path.join(path, 'target_{}.png'.format(my_index2))
-        print(filename)
-        target1 = target.numpy()[:, :, :, :]
-        img = Image.fromarray(target1)
-        img = img.convert("L")
-        img.save(filename)
-        '''
-
-
         if args.dataset == 'voc12':
-            print(output.shape)
-            print(size)
+            #print(output.shape)
+            #print(size)
             output = output[:,:size[0],:size[1]]
             output = output.transpose(1,2,0)
             output = np.asarray(np.argmax(output, axis=2), dtype=np.uint8)
@@ -348,6 +338,7 @@ def main():
                 seg_filename = os.path.join(args.seg_save_dir, '{}.png'.format(name[0]))
                 color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 color_file.save(seg_filename)
+        '''
 
         if args.dataset == 'imagenet':
 
@@ -389,40 +380,33 @@ def main():
                 #save_image(output1 * 0.8 + target.data, "./IMG_PROVA/prova.png", normalize=True)
                 '''
 
-                #drawBoundingBox()
+                #draw BoundingBox on mask and on original img
 
-                img = cv2.imread(seg_filename)
-                img1 = cv2.imread(filename_target)
-                img1 = cv2.resize(img1, (original_shape[1], original_shape[0]))
-                result = img.copy()
-                result1 = img1.copy()
-                gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                seg_filename = os.path.join(save_dir_res, '{}.png'.format(my_index1))
+                img_mask = cv2.imread(seg_filename)
+                img_original = cv2.imread(filename_target)
+                img_original = cv2.resize(img_original, (original_shape[1], original_shape[0]))
+                result_mask = img_mask.copy()
+                result_original = img_original.copy()
+                gray = cv2.cvtColor(img_mask, cv2.COLOR_BGR2GRAY)
                 thresh = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY)[1]
                 contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                 contours = contours[0] if len(contours) == 2 else contours[1]
                 for cntr in contours:
                     x, y, w, h = cv2.boundingRect(cntr)
-                    cv2.rectangle(result, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                    cv2.rectangle(result1, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                    cv2.rectangle(result_mask, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                    cv2.rectangle(result_original, (x, y), (x + w, y + h), (0, 0, 255), 2)
                     print("x,y,w,h:", x, y, w, h)
 
-                #x, y, w, h: 163,331,3,1
-                #x, y, w, h: 146,72,363,309
-
                 # save resulting image
-                cv2.imwrite(os.path.join(path_save_img, 'BoundingBox_mask.png'), result)
-                cv2.imwrite(os.path.join(path_save_img, 'BoundingBox_originale_img.png'), result1)
-
-                # show thresh and result
-                #cv2.imshow("bounding_box", result)
-                #cv2.waitKey(0)
-                #cv2.destroyAllWindows()
+                cv2.imwrite(os.path.join(save_dir_res, 'BoundingBox_mask_{}.png'.format(my_index1)), result_mask)
+                cv2.imwrite(os.path.join(save_dir_res, 'BoundingBox_img_{}.png'.format(my_index1)), result_original)
 
 
         else:
             print("dataset error")
 
-        break
+
             
 
 
