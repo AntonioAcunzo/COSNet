@@ -348,7 +348,7 @@ def main():
                 os.makedirs(save_dir_res)
             if args.save_segimage:
                 my_index1 = str(my_index).zfill(5)
-                seg_filename = os.path.join(save_dir_res, '{}.png'.format(my_index1))
+                seg_filename = os.path.join(save_dir_res, 'mask_{}.png'.format(my_index1))
                 #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 mask.save(seg_filename)
                 #np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
@@ -406,8 +406,8 @@ def main():
                 img_original = cv2.resize(img_original, (original_shape[1], original_shape[0]))
                 result_mask = img_mask.copy()
                 result_original = img_original.copy()
-                gray = cv2.cvtColor(img_mask, cv2.COLOR_BGR2GRAY)
-                thresh = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY)[1]
+                gray = cv2.cvtColor(img_mask, cv2.COLOR_RGB2GRAY)
+                thresh = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY)[1]
                 contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                 contours = contours[0] if len(contours) == 2 else contours[1]
                 for cntr in contours:
@@ -425,7 +425,7 @@ def main():
             print("dataset error")
 
 
-            
+        break
 
 
     
