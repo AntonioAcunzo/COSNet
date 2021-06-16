@@ -77,8 +77,8 @@ def configure_dataset_model(args):
         args.seg_save_dir = "./result/test/imagenet_iteration_conf"
         args.vis_save_dir = "./result/test/imagenet_vis"
         args.corp_size =(473, 473)
-        
-    elif args.dataset == 'davis': 
+
+    elif args.dataset == 'davis':
         args.batch_size = 1 # 1 card: 5, 2 cards: 10 Number of images sent to the network in one step, 16 on paper
         args.maxEpoches = 15 # 1 card: 15, 2 cards: 15 epoches, equal to 30k iterations, max iterations= maxEpoches*len(train_aug)/batch_size_per_gpu'),
         args.data_dir = '/data/aacunzo/DAVIS-2016'   # 37572 image pairs
@@ -403,18 +403,30 @@ def main():
 
                 img_mask = cv2.imread(seg_filename)
                 img_original = cv2.imread(filename_target)
+                img_original = cv2.cvtColor(img_mask, cv2.COLOR_BGR2RGB)
                 img_original = cv2.resize(img_original, (original_shape[1], original_shape[0]))
                 result_mask = img_mask.copy()
                 result_original = img_original.copy()
                 gray = cv2.cvtColor(img_mask, cv2.COLOR_RGB2GRAY)
-                thresh = cv2.threshold(gray, 200, 255, cv2.THRESH_BINARY)[1]
+                thresh = cv2.threshold(gray, 210, 255, cv2.THRESH_BINARY)[1]
                 contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                 contours = contours[0] if len(contours) == 2 else contours[1]
+                best_x1 = 0
+                best_h = 0
+                #best_area = best_h*best_w
                 for cntr in contours:
                     x, y, w, h = cv2.boundingRect(cntr)
                     cv2.rectangle(result_mask, (x, y), (x + w, y + h), (0, 0, 255), 2)
                     cv2.rectangle(result_original, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                    #print("x,y,w,h:", x, y, w, h)
+                    print("x,y,w,h:", x, y, w, h)
+                    '''
+                    x1 = x
+                    x2 = x + w
+                    y1 = y
+                    y2 = y + h
+                    if 
+                    '''
+
 
                 # save resulting image
                 cv2.imwrite(os.path.join(save_dir_res, 'BoundingBox_mask_{}.png'.format(my_index1)), result_mask)
