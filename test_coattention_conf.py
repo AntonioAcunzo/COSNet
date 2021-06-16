@@ -403,12 +403,12 @@ def main():
 
                 img_mask = cv2.imread(seg_filename)
                 img_original = cv2.imread(filename_target)
-                img_original = cv2.cvtColor(img_mask, cv2.COLOR_BGR2RGB)
+                #img_original = cv2.cvtColor(img_mask, cv2.COLOR_BGR2RGB)
                 img_original = cv2.resize(img_original, (original_shape[1], original_shape[0]))
                 result_mask = img_mask.copy()
                 result_original = img_original.copy()
-                gray = cv2.cvtColor(img_mask, cv2.COLOR_RGB2GRAY)
-                thresh = cv2.threshold(gray, 210, 255, cv2.THRESH_BINARY)[1]
+                gray_mask = cv2.cvtColor(img_mask, cv2.COLOR_RGB2GRAY)
+                thresh = cv2.threshold(gray_mask, 210, 255, cv2.THRESH_BINARY)[1]
                 contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                 contours = contours[0] if len(contours) == 2 else contours[1]
                 best_x1 = 0
@@ -430,7 +430,7 @@ def main():
 
                 # save resulting image
                 cv2.imwrite(os.path.join(save_dir_res, 'BoundingBox_mask_{}.png'.format(my_index1)), result_mask)
-                cv2.imwrite(os.path.join(save_dir_res, 'BoundingBox_img_{}.png'.format(my_index1)), result_original)
+                cv2.imwrite(os.path.join(save_dir_res, 'BoundingBox_img_{}.png'.format(my_index1)), cv2.cvtColor(result_original, cv2.COLOR_RGB2BGR))
 
 
         else:
