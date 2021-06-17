@@ -327,6 +327,8 @@ def main():
         #print("mask size :", mask.shape)
         mask = Image.fromarray(mask)
 
+        soglia = 200
+
         '''
         if args.dataset == 'voc12':
             #print(output.shape)
@@ -342,7 +344,7 @@ def main():
 
         if args.dataset == 'imagenet':
 
-            save_dir_res = os.path.join(args.seg_save_dir, 'Results-Imagenet', args.seq_name)
+            save_dir_res = os.path.join(args.seg_save_dir, 'Results-Imagenet'.format(soglia), args.seq_name)
             old_temp = args.seq_name
             if not os.path.exists(save_dir_res):
                 os.makedirs(save_dir_res)
@@ -360,7 +362,7 @@ def main():
                 result_mask = img_mask.copy()
                 result_original = img_original.copy()
                 gray = cv2.cvtColor(img_mask, cv2.COLOR_BGR2GRAY)
-                thresh = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY)[1]
+                thresh = cv2.threshold(gray, soglia, 255, cv2.THRESH_BINARY)[1]
                 contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                 contours = contours[0] if len(contours) == 2 else contours[1]
                 for cntr in contours:
@@ -375,7 +377,7 @@ def main():
                 
         elif args.dataset == 'davis' or args.dataset == 'davis_yoda':
             
-            save_dir_res = os.path.join(args.seg_save_dir, 'Results', args.seq_name)
+            save_dir_res = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia) , args.seq_name)
             old_temp=args.seq_name
             if not os.path.exists(save_dir_res):
                 os.makedirs(save_dir_res)
@@ -408,7 +410,7 @@ def main():
                 result_mask = img_mask.copy()
                 result_original = img_original.copy()
                 gray_mask = cv2.cvtColor(img_mask, cv2.COLOR_RGB2GRAY)
-                thresh = cv2.threshold(gray_mask, 210, 255, cv2.THRESH_BINARY)[1]
+                thresh = cv2.threshold(gray_mask, soglia, 255, cv2.THRESH_BINARY)[1]
                 contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                 contours = contours[0] if len(contours) == 2 else contours[1]
                 best_x1 = 0
