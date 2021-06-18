@@ -473,11 +473,11 @@ def main():
                     x, y, w, h = cv2.boundingRect(cntr)
                     print("Bounding Box img {}".format(my_index1))
                     print("x,y,w,h:", x, y, w, h)
-                    boxes = boxes.append([x,y,w,h,w*h])
+                    boxes.append([x,y,w,h,w*h])
                     print("Boxes :", boxes)
                 print("-------------------------------------------")
 
-                idx_best_area, best_area= max(boxes, key=lambda item: item[1])
+                idx_best_area, best_area = max(boxes, key=lambda item: item[1])
                 print("Boxes :", boxes)
                 print("id e area max :" , idx_best_area , " - " , best_area)
                 best_rect = boxes[idx_best_area]
