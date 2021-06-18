@@ -477,14 +477,16 @@ def main():
                     print("Boxes :", boxes)
                 print("-------------------------------------------")
 
-                best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[1])
+                best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
                 print("Boxes :", boxes)
-                print("id e area max :" , best_x, best_y, best_w, best_h, best_area , " - " , best_area)
+                print("MAX :" , best_x, best_y, best_w, best_h, best_area)
                 best_rect = [best_x,best_y,best_w,best_h,best_area]
                 for i in boxes:
                     if i != best_rect:
+                        print("Non è il max")
                         if i[0] > best_rect[0] and i[0] + i[2] < best_rect[0] + best_rect[2] and i[1] > best_rect[1] and i[1] + i[2] < best_rect[1] + best_rect[3]:
                             # box compresa in quella più grande
+                            print("box compreso")
                             cv2.rectangle(result_mask_full,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (0, 0, 255), 2)
                             cv2.rectangle(result_original_full,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (0, 0, 255), 2)
                         else:
