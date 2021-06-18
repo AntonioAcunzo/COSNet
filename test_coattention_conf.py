@@ -385,7 +385,7 @@ def main():
                 my_index1 = str(my_index).zfill(5)
                 seg_filename = os.path.join(save_dir_res, 'mask_{}.png'.format(my_index1))
                 #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
-                #mask.save(seg_filename)
+                mask.save(seg_filename)
 
                 '''
                 mask_array = mask_array[np.newaxis ,:, :]
