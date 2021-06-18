@@ -499,9 +499,16 @@ def main():
                         cv2.rectangle(result_original_full, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
 
                 save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
+
                 save_dir_bb = os.path.join(save_dir_res, "Bounding_box")
                 save_dir_mf = os.path.join(save_dir_res, "Bounding_mask_full")
                 save_dir_m = os.path.join(save_dir_res, "Bounding_m_full")
+
+                print(save_dir_bbf)
+                print(save_dir_bb)
+                print(save_dir_mf)
+                print(save_dir_m)
+
                 if not os.path.exists(save_dir_bbf):
                     os.makedirs(save_dir_bbf)
                 if not os.path.exists(save_dir_bbf):
