@@ -417,11 +417,15 @@ def main():
                 contours = contours[0] if len(contours) == 2 else contours[1]
 
                 best_rect = [0,0,0,0,0]      # [x,y,w,h,area]
+                boxes = []
                 #best_rect[4] = best_rect[2]*best_rect[3]
+                '''
+                
                 for cntr in contours:
                     x, y, w, h = cv2.boundingRect(cntr)
-                    cv2.rectangle(result_mask, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                    cv2.rectangle(result_original, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                    #cv2.rectangle(result_mask, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                    #cv2.rectangle(result_original, (x, y), (x + w, y + h), (0, 0, 255), 2)
+                    
                     print("x,y,w,h:", x, y, w, h)
 
                     area = w * h
@@ -460,6 +464,54 @@ def main():
                 cv2.imwrite(os.path.join(save_dir_m, 'BoundingBox_mask_{}.png'.format(my_index1)), result_mask)
                 cv2.imwrite(os.path.join(save_dir_bb, 'BoundingBox_img_{}.png'.format(my_index1)), cv2.cvtColor(result_original, cv2.COLOR_RGB2BGR))
 
+                cv2.imwrite(os.path.join(save_dir_mf, 'BoundingBox_mask_full_{}.png'.format(my_index1)), result_mask_full)
+                cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
+                
+                '''
+
+                for cntr in contours:
+                    x, y, w, h = cv2.boundingRect(cntr)
+                    print("Bounding Box img {}".format(my_index1))
+                    print("x,y,w,h:", x, y, w, h)
+                    boxes = boxes.append([x,y,w,h,w*h])
+                    print("Boxes :", boxes)
+                print("-------------------------------------------")
+
+                idx_best_area, best_area= max(boxes, key=lambda item: item[1])
+                print("Boxes :", boxes)
+                print("id e area max :" , idx_best_area , " - " , best_area)
+                best_rect = boxes[idx_best_area]
+                for i in boxes:
+                    if i != best_rect:
+                        if i[0] > best_rect[0] and i[0] + i[2] < best_rect[0] + best_rect[2] and i[1] > best_rect[1] and i[1] + i[2] < best_rect[1] + best_rect[3]:
+                            # box compresa in quella più grande
+                            cv2.rectangle(result_mask_full,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (0, 0, 255), 2)
+                            cv2.rectangle(result_original_full,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (0, 0, 255), 2)
+                        else:
+                            cv2.rectangle(result_mask,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
+                            cv2.rectangle(result_original,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
+                    else:
+                        cv2.rectangle(result_mask, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
+                        cv2.rectangle(result_original, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
+                        cv2.rectangle(result_mask_full, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
+                        cv2.rectangle(result_original_full, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
+
+                save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
+                save_dir_bb = os.path.join(save_dir_res, "Bounding_box")
+                save_dir_mf = os.path.join(save_dir_res, "Bounding_mask_full")
+                save_dir_m = os.path.join(save_dir_res, "Bounding_m_full")
+                if not os.path.exists(save_dir_bbf):
+                    os.makedirs(save_dir_bbf)
+                if not os.path.exists(save_dir_bbf):
+                    os.makedirs(save_dir_bb)
+                if not os.path.exists(save_dir_bbf):
+                    os.makedirs(save_dir_mf)
+                if not os.path.exists(save_dir_bbf):
+                    os.makedirs(save_dir_m)
+
+                # save resulting image
+                cv2.imwrite(os.path.join(save_dir_m, 'BoundingBox_mask_{}.png'.format(my_index1)), result_mask)
+                cv2.imwrite(os.path.join(save_dir_bb, 'BoundingBox_img_{}.png'.format(my_index1)), cv2.cvtColor(result_original, cv2.COLOR_RGB2BGR))
                 cv2.imwrite(os.path.join(save_dir_mf, 'BoundingBox_mask_full_{}.png'.format(my_index1)), result_mask_full)
                 cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
 
