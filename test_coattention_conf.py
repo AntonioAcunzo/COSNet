@@ -477,10 +477,10 @@ def main():
                     print("Boxes :", boxes)
                 print("-------------------------------------------")
 
-                idx_best_area, best_area = max(boxes, key=lambda item: item[1])
+                best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[1])
                 print("Boxes :", boxes)
-                print("id e area max :" , idx_best_area , " - " , best_area)
-                best_rect = boxes[idx_best_area]
+                print("id e area max :" , best_x, best_y, best_w, best_h, best_area , " - " , best_area)
+                best_rect = [best_x,best_y,best_w,best_h,best_area]
                 for i in boxes:
                     if i != best_rect:
                         if i[0] > best_rect[0] and i[0] + i[2] < best_rect[0] + best_rect[2] and i[1] > best_rect[1] and i[1] + i[2] < best_rect[1] + best_rect[3]:
