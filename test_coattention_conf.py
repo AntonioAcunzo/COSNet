@@ -487,27 +487,22 @@ def main():
                         if i[0] > best_rect[0] and i[0] + i[2] < best_rect[0] + best_rect[2] and i[1] > best_rect[1] and i[1] + i[2] < best_rect[1] + best_rect[3]:
                             # box compresa in quella più grande
                             print("box compreso")
-                            cv2.rectangle(result_mask_full,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (0, 0, 255), 2)
+                            cv2.rectangle(result_mask_full,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
                             cv2.rectangle(result_original_full,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (0, 0, 255), 2)
                         else:
-                            cv2.rectangle(result_mask,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
+                            cv2.rectangle(result_mask,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (0, 0, 255), 2)
                             cv2.rectangle(result_original,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
                     else:
-                        cv2.rectangle(result_mask, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
+                        # best box
+                        cv2.rectangle(result_mask, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (0, 0, 255), 2)
                         cv2.rectangle(result_original, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
-                        cv2.rectangle(result_mask_full, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
+                        cv2.rectangle(result_mask_full, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (0, 0, 255), 2)
                         cv2.rectangle(result_original_full, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
 
                 save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
-
                 save_dir_bb = os.path.join(save_dir_res, "Bounding_box")
                 save_dir_mf = os.path.join(save_dir_res, "Bounding_mask_full")
-                save_dir_m = os.path.join(save_dir_res, "Bounding_m_full")
-
-                print(save_dir_bbf)
-                print(save_dir_bb)
-                print(save_dir_mf)
-                print(save_dir_m)
+                save_dir_m = os.path.join(save_dir_res, "Bounding_mask")
 
                 if not os.path.exists(save_dir_bbf):
                     os.makedirs(save_dir_bbf)
