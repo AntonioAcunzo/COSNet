@@ -381,9 +381,12 @@ def main():
             old_temp=args.seq_name
             if not os.path.exists(save_dir_res):
                 os.makedirs(save_dir_res)
+            seg_filename = os.path.join(save_dir_res, 'Mask')
+            if not os.path.exists(seg_filename):
+                os.makedirs(seg_filename)
             if args.save_segimage:   
                 my_index1 = str(my_index).zfill(5)
-                seg_filename = os.path.join(save_dir_res, 'mask_{}.png'.format(my_index1))
+                seg_filename = os.path.join(seg_filename, 'mask_{}.png'.format(my_index1))
                 #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 mask.save(seg_filename)
 
