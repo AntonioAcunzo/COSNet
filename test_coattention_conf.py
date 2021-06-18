@@ -510,12 +510,16 @@ def main():
                 print(save_dir_m)
 
                 if not os.path.exists(save_dir_bbf):
+                    print("non esiste bbf")
                     os.makedirs(save_dir_bbf)
                 if not os.path.exists(save_dir_bbf):
+                    print("non esiste bbf")
                     os.makedirs(save_dir_bb)
                 if not os.path.exists(save_dir_bbf):
+                    print("non esiste bbf")
                     os.makedirs(save_dir_mf)
                 if not os.path.exists(save_dir_bbf):
+                    print("non esiste bbf")
                     os.makedirs(save_dir_m)
 
                 # save resulting image
