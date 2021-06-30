@@ -496,8 +496,8 @@ def main():
                                 #print("box compreso")
                                 cv2.rectangle(result_mask_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                                 cv2.rectangle(result_original_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
-                                f.write(str(i)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-                                print("stringa che salvo nel file txt: [" + str(i)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n ]")
+                                f.write(str(index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                                print("stringa che salvo nel file txt: [" + str(index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+" ]")
 
 
                             else:
@@ -509,8 +509,8 @@ def main():
                             cv2.rectangle(result_original, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                             cv2.rectangle(result_mask_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
                             cv2.rectangle(result_original_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                            f.write(str(i)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-                            print("stringa che salvo nel file txt: [" + str(i)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n]")
+                            f.write(str(index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                            print("stringa che salvo nel file txt: [" + str(index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"]")
 
                     save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
                     save_dir_bb = os.path.join(save_dir_res, "Bounding_box")
