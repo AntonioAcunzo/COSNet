@@ -480,28 +480,37 @@ def main():
                     print("Boxes :", boxes)
                 print("-------------------------------------------")
 
+                box_text_filename = os.path.join(save_dir_res, 'boxes.txt')
+                f = open(box_text_filename, "w")
+
                 if len(boxes) != 0 :
                     best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
                     print("Boxes :", boxes)
                     print("MAX :" , best_x, best_y, best_w, best_h, best_area)
                     best_rect = [best_x,best_y,best_w,best_h,best_area]
-                    for i in boxes:
-                        if i != best_rect:
+                    for j in boxes:
+                        if j != best_rect:
                             #print("Non è il max")
-                            if i[0] > best_rect[0] and i[0] + i[2] < best_rect[0] + best_rect[2] and i[1] > best_rect[1] and i[1] + i[2] < best_rect[1] + best_rect[3]:
+                            if j[0] > best_rect[0] and j[0] + j[2] < best_rect[0] + best_rect[2] and j[1] > best_rect[1] and j[1] + j[2] < best_rect[1] + best_rect[3]:
                                 # box compresa in quella più grande
                                 #print("box compreso")
-                                cv2.rectangle(result_mask_full,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
-                                cv2.rectangle(result_original_full,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (0, 0, 255), 2)
+                                cv2.rectangle(result_mask_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                                cv2.rectangle(result_original_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                                f.write(i+",0,"+j[0]+","+j[1]+","+j[2]+","+j[3]+"\n")
+                                print("stringa che salvo nel file txt: [" + i+",0,"+j[0]+","+j[1]+","+j[2]+","+j[3]+"\n ]")
+
+
                             else:
-                                cv2.rectangle(result_mask,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (0, 0, 255), 2)
-                                cv2.rectangle(result_original,(i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
+                                cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                                cv2.rectangle(result_original,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                         else:
                             # best box
-                            cv2.rectangle(result_mask, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (0, 0, 255), 2)
-                            cv2.rectangle(result_original, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
-                            cv2.rectangle(result_mask_full, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (0, 0, 255), 2)
-                            cv2.rectangle(result_original_full, (i[0], i[1]), (i[0] + i[2], i[1] + i[3]), (255, 0, 0), 2)
+                            cv2.rectangle(result_mask, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                            cv2.rectangle(result_original, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                            cv2.rectangle(result_mask_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                            cv2.rectangle(result_original_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                            f.write(i + ",0," + j[0] + "," + j[1] + "," + j[2] + "," + j[3] + "\n")
+                            print("stringa che salvo nel file txt: [" + i + ",0," + j[0] + "," + j[1] + "," + j[2] + "," +j[3] + "\n ]")
 
                     save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
                     save_dir_bb = os.path.join(save_dir_res, "Bounding_box")
@@ -522,7 +531,8 @@ def main():
                     cv2.imwrite(os.path.join(save_dir_bb, 'BoundingBox_img_{}.png'.format(my_index1)), cv2.cvtColor(result_original, cv2.COLOR_RGB2BGR))
                     cv2.imwrite(os.path.join(save_dir_mf, 'BoundingBox_mask_full_{}.png'.format(my_index1)), result_mask_full)
                     cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
-
+                
+                f.close()
 
 
         else:
