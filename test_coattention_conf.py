@@ -1,3 +1,4 @@
+import datetime
 import argparse
 import torch
 import torch.nn as nn
@@ -136,6 +137,9 @@ def sigmoid(inX):
     return 1.0/(1+np.exp(-inX))  #Definisci un metodo sigmoideo, la sua essenza è 1 / (1 + e ^ -x)
 
 def main():
+
+    date_for_txt = datetime.datetime.now()
+
     args = get_arguments()
     print("=====> Configure dataset and model")
     configure_dataset_model(args)
@@ -480,8 +484,13 @@ def main():
                     print("Boxes :", boxes)
                 print("-------------------------------------------")
 
-                box_text_filename = os.path.join(save_dir_res, 'boxes.txt')
-                f = open(box_text_filename, "w")
+                string_data = date_for_txt.day + "-" + date_for_txt.month + "-" + date_for_txt.year + "-" + date_for_txt.hour + "-" + date_for_txt.minute + "-" + date_for_txt.second
+                text_dir = os.path.join(save_dir_res, 'Txt')
+                box_text_filename = os.path.join(text_dir, 'boxes_' + string_data +'.txt')
+                if os.path.exists(box_text_filename):
+                    f = open(box_text_filename, "a")
+                else:
+                    f = open(box_text_filename, "w")
 
                 if len(boxes) != 0 :
                     best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
