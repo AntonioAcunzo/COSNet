@@ -139,6 +139,7 @@ def sigmoid(inX):
 def main():
 
     date_for_txt = datetime.datetime.now()
+    string_data = str(date_for_txt.day) + "-" + str(date_for_txt.month) + "-" + str(date_for_txt.year) + "-" + str(date_for_txt.hour) + "-" + str(date_for_txt.minute) + "-" + str(date_for_txt.second)
 
     args = get_arguments()
     print("=====> Configure dataset and model")
@@ -484,9 +485,8 @@ def main():
                     print("Boxes :", boxes)
                 print("-------------------------------------------")
 
-                string_data = str(date_for_txt.day) + "-" + str(date_for_txt.month) + "-" + str(date_for_txt.year) + "-" + str(date_for_txt.hour) + "-" + str(date_for_txt.minute) + "-" + str(date_for_txt.second)
                 text_dir = os.path.join(save_dir_res, 'Txt')
-                box_text_filename = os.path.join(text_dir, 'boxes_' + string_data +'.txt')
+                box_text_filename = os.path.join(text_dir, 'boxes_' + string_data + '.txt')
                 if os.path.exists(box_text_filename):
                     f = open(box_text_filename, "a")
                 else:
