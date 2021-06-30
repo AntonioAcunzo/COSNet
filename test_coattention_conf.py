@@ -484,7 +484,7 @@ def main():
                     print("Boxes :", boxes)
                 print("-------------------------------------------")
 
-                string_data = date_for_txt.day + "-" + date_for_txt.month + "-" + date_for_txt.year + "-" + date_for_txt.hour + "-" + date_for_txt.minute + "-" + date_for_txt.second
+                string_data = str(date_for_txt.day) + "-" + str(date_for_txt.month) + "-" + str(date_for_txt.year) + "-" + str(date_for_txt.hour) + "-" + str(date_for_txt.minute) + "-" + str(date_for_txt.second)
                 text_dir = os.path.join(save_dir_res, 'Txt')
                 box_text_filename = os.path.join(text_dir, 'boxes_' + string_data +'.txt')
                 if os.path.exists(box_text_filename):
