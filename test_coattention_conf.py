@@ -486,7 +486,8 @@ def main():
                 print("-------------------------------------------")
 
                 text_dir = os.path.join(save_dir_res, 'Txt')
-                os.makedirs(text_dir)
+                if not os.path.exists(text_dir):
+                    os.makedirs(text_dir)
                 box_text_filename = os.path.join(text_dir, 'boxes_' + string_data + '.txt')
                 if os.path.exists(box_text_filename):
                     f = open(box_text_filename, "a")
