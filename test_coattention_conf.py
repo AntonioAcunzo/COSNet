@@ -422,9 +422,9 @@ def main():
                     os.makedirs(text_dir)
                 box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations_' + string_data + '.txt')
                 if os.path.exists(box_text_annotation_filename):
-                    f_annotation = open(box_text_filename, "a")
+                    f_annotation = open(box_text_annotation_filename, "a")
                 else:
-                    f_annotation = open(box_text_filename, "w")
+                    f_annotation = open(box_text_annotation_filename, "w")
                 # -----------------------------------
 
                 path_annotation = os.path.join(path_annotation, args.seq_name)
