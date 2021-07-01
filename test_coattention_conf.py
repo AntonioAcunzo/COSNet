@@ -429,7 +429,7 @@ def main():
 
                 path_annotation = os.path.join(path_annotation, args.seq_name)
                 print("path annotation : " + path_annotation)
-                path_annotation = path_annotation + "/" + '%05d' % my_index1
+                path_annotation = path_annotation + "/" + '%05d' % int(my_index1)
                 print("path annotation : " + path_annotation)
                 img_annotation = cv2.imread(path_annotation)
                 copy_img_annotation = img_annotation.copy()
