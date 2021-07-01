@@ -316,7 +316,7 @@ def main():
 
         if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
             first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
-            path_annotation = os.path.join(args.data_dir, '/Annotations/480p')
+            path_annotation = os.path.join(args.data_dir, 'Annotations/480p')
             print("path annotation : " + path_annotation)
         if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
             first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
