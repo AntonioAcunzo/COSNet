@@ -448,8 +448,8 @@ def main():
                 if len(boxes) != 0 :
                     for j in boxes:
                         cv2.rectangle(copy_img_annotation,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                        f_annotation.write(str(my_index1)+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-                        print("stringa che salvo nel file txt: [" + str(my_index1)+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3]) + " ]")
+                        f_annotation.write(str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                        print("stringa che salvo nel file txt: [" + str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3]) + " ]")
                 f_annotation.close()
 
                 #draw BoundingBox on mask and on original img
@@ -527,6 +527,7 @@ def main():
                     boxes.append([x,y,w,h,w*h])
                     print("Boxes :", boxes)
                 print("-------------------------------------------")
+                '''
                 if len(boxes) != 0 :
                     best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
                     print("Boxes :", boxes)
@@ -548,7 +549,7 @@ def main():
                                 cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
                                 cv2.rectangle(result_original,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
 
-
+                '''
 
                 # File txt for save bbox detected
                 text_dir = os.path.join(save_dir_res, 'Txt')
