@@ -450,6 +450,11 @@ def main():
                         cv2.rectangle(copy_img_annotation,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                         f_annotation.write(str(my_index+1)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
                         print("stringa che salvo nel file txt: [" + str(my_index+1)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3]) + " ]")
+
+                save_dir_bba = os.path.join(save_dir_res, "Bounding_box_annotations")
+                if not os.path.exists(save_dir_bba):
+                    os.makedirs(save_dir_bba)
+                cv2.imwrite(os.path.join(save_dir_bba, 'BoundingBox_annotation_{}.png'.format(my_index1+1)), copy_img_annotation)
                 f_annotation.close()
 
                 #draw BoundingBox on mask and on original img
