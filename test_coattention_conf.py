@@ -185,8 +185,9 @@ def main():
     my_index = 0
     old_temp=''
 
+    counter = enumerate(testloader)-40
 
-    for index, batch in enumerate(testloader)-40:
+    for index, batch in counter:
         print("----------------------------------------------------------------------------------------------------------------------")
         print("processed index: ", '%d processed'%(index))
         target = batch['target']
