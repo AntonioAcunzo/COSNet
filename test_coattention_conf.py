@@ -441,16 +441,16 @@ def main():
                 boxes = []
                 for cntr in contours_annotation:
                     x, y, w, h = cv2.boundingRect(cntr)
-                    print("Bounding Box img {}".format(my_index1))
+                    print("Bounding Box annotation {}".format(my_index1))
                     print("x,y,w,h:", x, y, w, h)
-                    boxes.append([x,y,w,h,w*h])
+                    boxes.append([x,y,w,h])
                     print("Boxes :", boxes)
                 if len(boxes) != 0 :
                     for j in boxes:
                         cv2.rectangle(copy_img_annotation,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                         f_annotation.write(str(my_index1)+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-
-
+                        print("stringa che salvo nel file txt: [" + str(my_index1)+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3]) + " ]")
+                f_annotation.close()
 
                 #draw BoundingBox on mask and on original img
 
