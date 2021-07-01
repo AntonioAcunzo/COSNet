@@ -246,7 +246,6 @@ def main():
         PIL_img_from_numpy = Image.fromarray(img_target_numpy)
 
         filename_target = os.path.join(path_save_img, 'target_denormalized.png')
-        #PIL_img.convert("RGB")
         PIL_img_from_numpy.save(filename_target)
 
         #-----------------------------------
@@ -317,8 +316,10 @@ def main():
 
         if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
             first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
+            path_annotation = os.path.join(args.data_dir, '/Annotations/480p/')
         if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
             first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
+            #path_annotation = os.path.join(args.data_dir, '/Annotations/480p/')
 
         original_shape = first_image.shape
         #print("Original shape :", original_shape) # (480, 854, 3)
@@ -346,6 +347,9 @@ def main():
                 color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 color_file.save(seg_filename)
         '''
+
+
+
 
         if args.dataset == 'imagenet':
 
@@ -408,6 +412,44 @@ def main():
                 #np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
                 #save_image(output1 * 0.8 + target.data, "./IMG_PROVA/prova.png", normalize=True)
                 '''
+
+                # ***
+                # take BoundingBox on mask annotation for py-motmetrics
+
+                # File txt for save bbox annotations
+                text_dir = os.path.join(save_dir_res, 'Txt')
+                if not os.path.exists(text_dir):
+                    os.makedirs(text_dir)
+                box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations_' + string_data + '.txt')
+                if os.path.exists(box_text_annotation_filename):
+                    f_annotation = open(box_text_filename, "a")
+                else:
+                    f_annotation = open(box_text_filename, "w")
+                # -----------------------------------
+
+                path_annotation = os.path.join(path_annotation, args.seq_name)
+                print("path annotation : " + path_annotation)
+                path_annotation = path_annotation + "/" + '%05d' % my_index1
+                print("path annotation : " + path_annotation)
+                img_annotation = cv2.imread(path_annotation)
+                copy_img_annotation = img_annotation.copy()
+                gray_mask_annotation = cv2.cvtColor(img_annotation, cv2.COLOR_RGB2GRAY)
+                thresh_annotation = cv2.threshold(gray_mask_annotation, soglia, 255, cv2.THRESH_BINARY)[1]
+                contours_annotation = cv2.findContours(thresh_annotation, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                contours_annotation = contours_annotation[0] if len(contours_annotation) == 2 else contours_annotation[1]
+                boxes = []
+                for cntr in contours_annotation:
+                    x, y, w, h = cv2.boundingRect(cntr)
+                    print("Bounding Box img {}".format(my_index1))
+                    print("x,y,w,h:", x, y, w, h)
+                    boxes.append([x,y,w,h,w*h])
+                    print("Boxes :", boxes)
+                if len(boxes) != 0 :
+                    for j in boxes:
+                        cv2.rectangle(copy_img_annotation,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                        f_annotation.write(str(my_index1)+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+
+
 
                 #draw BoundingBox on mask and on original img
 
@@ -484,7 +526,30 @@ def main():
                     boxes.append([x,y,w,h,w*h])
                     print("Boxes :", boxes)
                 print("-------------------------------------------")
+                if len(boxes) != 0 :
+                    best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
+                    print("Boxes :", boxes)
+                    print("MAX :" , best_x, best_y, best_w, best_h, best_area)
+                    best_rect = [best_x,best_y,best_w,best_h,best_area]
+                    for j in boxes:
+                        if j != best_rect:
+                            #print("Non è il max")
+                            if j[0] > best_rect[0] and j[0] + j[2] < best_rect[0] + best_rect[2] and j[1] > best_rect[1] and j[1] + j[2] < best_rect[1] + best_rect[3]:
+                                # box compresa in quella più grande
+                                #print("box compreso")
+                                cv2.rectangle(result_mask_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                                cv2.rectangle(result_original_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                                f.write(str(index+1)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                                print("stringa che salvo nel file txt: [" + str(index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+" ]")
 
+
+                            else:
+                                cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                                cv2.rectangle(result_original,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+
+
+
+                # File txt for save bbox detected
                 text_dir = os.path.join(save_dir_res, 'Txt')
                 if not os.path.exists(text_dir):
                     os.makedirs(text_dir)
@@ -493,6 +558,7 @@ def main():
                     f = open(box_text_filename, "a")
                 else:
                     f = open(box_text_filename, "w")
+                #-----------------------------------
 
                 if len(boxes) != 0 :
                     best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
@@ -507,7 +573,7 @@ def main():
                                 #print("box compreso")
                                 cv2.rectangle(result_mask_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                                 cv2.rectangle(result_original_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
-                                f.write(str(index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                                f.write(str(index+1)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
                                 print("stringa che salvo nel file txt: [" + str(index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+" ]")
 
 
@@ -520,7 +586,7 @@ def main():
                             cv2.rectangle(result_original, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                             cv2.rectangle(result_mask_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
                             cv2.rectangle(result_original_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                            f.write(str(index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                            f.write(str(index+1)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
                             print("stringa che salvo nel file txt: [" + str(index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"]")
 
                     save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
