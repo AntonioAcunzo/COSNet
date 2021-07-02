@@ -206,7 +206,7 @@ def main(img_sequences_name,path_original_img,path_boxes_txt,string_data):
         print("path boxes txt : ", path_boxes_txt)
         path_boxes_txt = os.path.join(path_boxes_txt, "Txt")
         print("path boxes txt : ", path_boxes_txt)
-        path_boxes_txt = os.path.join(path_boxes_txt, "/boxes_"+ string_data + '.txt')
+        path_boxes_txt = os.path.join(path_boxes_txt, "boxes_"+ string_data + '.txt')
         print("path boxes txt : ", path_boxes_txt)
         img_seq_name = i
         path_original_img = path_original_img + "/%5d.jpg"
