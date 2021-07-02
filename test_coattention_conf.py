@@ -29,6 +29,8 @@ from deeplab.siamese_model_conf import CoattentionNet
 from torchvision.utils import save_image
 from torchvision import transforms
 
+from fedebecat-box_tracker import box_tracker
+
 import motmetrics as mm
 
 
