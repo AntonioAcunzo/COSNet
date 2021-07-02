@@ -203,9 +203,9 @@ def main(img_sequences_name,path_original_img,path_boxes_txt,string_data):
     print("avvio tracker")
     for i in img_sequences_name:
         path_boxes_txt = os.path.join(path_boxes_txt, i)
-        print("path boxes txt : ", path_boxes_txt)
+        #print("path boxes txt : ", path_boxes_txt)
         path_boxes_txt = os.path.join(path_boxes_txt, "Txt")
-        print("path boxes txt : ", path_boxes_txt)
+        #print("path boxes txt : ", path_boxes_txt)
         path_boxes_txt = os.path.join(path_boxes_txt, "boxes_"+ string_data + '.txt')
         print("path boxes txt : ", path_boxes_txt)
         img_seq_name = i
@@ -252,8 +252,8 @@ def main(img_sequences_name,path_original_img,path_boxes_txt,string_data):
                 centers = [((b[0]+b[2])//2, b[3]) for b in all_boxes]
                 for c in centers:
                     cv2.circle(frame, c, 2, color=track_color, thickness=2)
-            cv2.imshow('image', frame)
-            cv2.waitKey(10)
+            #cv2.imshow('image', frame)
+            #cv2.waitKey(10)
             index += 1
 
         # tracker ottenuto -----------
