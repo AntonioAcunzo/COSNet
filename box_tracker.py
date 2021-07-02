@@ -206,13 +206,13 @@ def main(img_sequences_name,path_original_img,path_boxes_txt,string_data):
         #print("path boxes txt : ", path_boxes_txt)
         path_boxes_txt = os.path.join(path_boxes_txt, "Txt")
         #print("path boxes txt : ", path_boxes_txt)
-        path_boxes_txt = os.path.join(path_boxes_txt, "boxes_"+ string_data + '.txt')
-        print("path boxes txt : ", path_boxes_txt)
+        path_boxes_txt1 = os.path.join(path_boxes_txt, "boxes_"+ string_data + '.txt')
+        print("path boxes txt : ", path_boxes_txt1)
         img_seq_name = i
         path_original_img = path_original_img + "/%5d.jpg"
         print(path_original_img)
         cap = cv2.VideoCapture(path_original_img)
-        f_tracker = open(path_boxes_txt, 'r')
+        f_tracker = open(path_boxes_txt1, 'r')
         gt = [x.strip() for x in f_tracker.readlines()]
         gt = [x.split(',') for x in gt][:-1]
         gt = np.array(gt).astype(np.int32)
