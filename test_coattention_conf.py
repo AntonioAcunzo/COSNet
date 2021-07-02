@@ -209,7 +209,8 @@ def main():
             print("img seq name non contiene " + args.seq_name)
             img_sequencies_name.append(args.seq_name)
 
-        print("img seq name : " + img_sequencies_name)
+        print("img seq name : " )
+        print(img_sequencies_name)
 
 
 
