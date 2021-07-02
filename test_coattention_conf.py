@@ -454,7 +454,7 @@ def main():
                 save_dir_bba = os.path.join(save_dir_res, "Bounding_box_annotations")
                 if not os.path.exists(save_dir_bba):
                     os.makedirs(save_dir_bba)
-                cv2.imwrite(os.path.join(save_dir_bba, 'BoundingBox_annotation_{}.png'.format(my_index1+1)), copy_img_annotation)
+                cv2.imwrite(os.path.join(save_dir_bba, 'BoundingBox_annotation_{}.png'.format(my_index+1)), copy_img_annotation)
                 f_annotation.close()
 
                 #draw BoundingBox on mask and on original img
