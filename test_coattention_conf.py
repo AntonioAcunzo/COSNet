@@ -147,6 +147,8 @@ def main():
     date_for_txt = datetime.datetime.now()
     string_data = str(date_for_txt.day) + "-" + str(date_for_txt.month) + "-" + str(date_for_txt.year) + "-" + str(date_for_txt.hour) + "-" + str(date_for_txt.minute) + "-" + str(date_for_txt.second)
 
+    #string_data = "2-7-2021-10-16-10"
+
     args = get_arguments()
     print("=====> Configure dataset and model")
     configure_dataset_model(args)
@@ -194,6 +196,7 @@ def main():
     old_temp=''
 
     img_sequencies_name = []
+    soglia = 200
 
     for index, batch in enumerate(testloader):
         print("----------------------------------------------------------------------------------------------------------------------")
@@ -211,7 +214,6 @@ def main():
 
         print("img seq name : " )
         print(img_sequencies_name)
-
 
 
 
@@ -248,31 +250,6 @@ def main():
         filename_target = os.path.join(path_save_img, 'target_denormalized.png')
         PIL_img_from_numpy.save(filename_target)
 
-        #-----------------------------------
-
-
-        #print("Img target shape: ", img_target.shape)  # torch.Size([3, 473, 473])
-
-        #img_target = np.repeat(img_target.numpy()[None,:,:],3,axis=-1)
-        #print("Img target shape: ", img_target.shape)
-
-        #img_target = img_target.numpy()[:, :, :]
-        #img_target = np.squeeze(img_target, axis=0)
-        #print("Img target shape: ", img_target.shape)
-
-        #print("max value in target : ", np.max(img_target))  #
-
-
-        #img1 = Image.fromarray((img_target * 255).astype(np.uint8))
-        #img1.save(filename)
-
-
-        #save_image(img1,filename)
-        #imgs = Image.fromarray(imgs)
-        #imgs = imgs.convert("L")
-        #imgs.save(filename)
-
-
 
         if old_temp==args.seq_name:
             my_index = my_index+1
@@ -298,15 +275,15 @@ def main():
             output_sum = output_sum + output[0].data[0,0].cpu().numpy() #Il risultato della divisione di quel ramo
             #np.save('infer'+str(i)+'.npy',output1)
             #output2 = output[1].data[0, 0].cpu().numpy() #interp'
-            '''
-            path = "./IMG_PROVA"
-            my_index2 = str(i).zfill(5)
-            filename = os.path.join(path, 'search_{}.png'.format(my_index2))
-            print(filename)
-            img = Image.fromarray(target)
-            img = img.convert("L")
-            img.save(filename)
-            '''
+
+            #path = "./IMG_PROVA"
+            #my_index2 = str(i).zfill(5)
+            #filename = os.path.join(path, 'search_{}.png'.format(my_index2))
+            #print(filename)
+            #img = Image.fromarray(target)
+            #img = img.convert("L")
+            #img.save(filename)
+
         
         output1 = output_sum/args.sample_range
 
@@ -322,6 +299,7 @@ def main():
             path_original_img = path_original_img + "/" + args.seq_name
             print("path original img : " + path_original_img)
 
+        '''
 
         if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
             first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
@@ -339,23 +317,10 @@ def main():
         #mask_array = mask
         #print("mask size :", mask.shape)
         mask = Image.fromarray(mask)
-
-        soglia = 200
-
-        '''
-        if args.dataset == 'voc12':
-            #print(output.shape)
-            #print(size)
-            output = output[:,:size[0],:size[1]]
-            output = output.transpose(1,2,0)
-            output = np.asarray(np.argmax(output, axis=2), dtype=np.uint8)
-            if args.save_segimage:
-                seg_filename = os.path.join(args.seg_save_dir, '{}.png'.format(name[0]))
-                color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
-                color_file.save(seg_filename)
+        
         '''
 
-
+        '''
         if args.dataset == 'imagenet':
 
             save_dir_res = os.path.join(args.seg_save_dir, 'Results-Imagenet'.format(soglia), args.seq_name)
@@ -404,19 +369,7 @@ def main():
                 #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 mask.save(seg_filename)
 
-                '''
-                mask_array = mask_array[np.newaxis ,:, :]
-                print("Mask_a shape : ",mask_array.shape)
-
-                #mask_img = Image.fromarray(mask_array)
-
-                a = np.concatenate((torch.zeros(1, 473, 473), mask_array, torch.zeros(1, 512, 512)), axis=0)
-                a = Image.fromarray(a)
-                a.save("./IMG_PROVA/prova.png")
-
-                #np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
-                #save_image(output1 * 0.8 + target.data, "./IMG_PROVA/prova.png", normalize=True)
-                '''
+                
 
                 # ***
                 # take BoundingBox on mask annotation for py-motmetrics
@@ -460,7 +413,7 @@ def main():
                     os.makedirs(save_dir_bba)
                 cv2.imwrite(os.path.join(save_dir_bba, 'BoundingBox_annotation_{}.png'.format(my_index+1)), copy_img_annotation)
                 f_annotation.close()
-
+                
                 #draw BoundingBox on mask and on original img
 
                 img_mask = cv2.imread(seg_filename)
@@ -478,57 +431,8 @@ def main():
 
                 best_rect = [0,0,0,0,0]      # [x,y,w,h,area]
                 boxes = []
-
-                '''
                 
-                for cntr in contours:
-                    x, y, w, h = cv2.boundingRect(cntr)
-                    #cv2.rectangle(result_mask, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                    #cv2.rectangle(result_original, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                    
-                    print("x,y,w,h:", x, y, w, h)
-
-                    area = w * h
-                    if area > best_rect[4]:
-                        #Trovato nuovo rettangolo più grande
-                        best_rect = [x,y,w,h,area]
-                        cv2.rectangle(result_mask, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                        cv2.rectangle(result_original, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                        cv2.rectangle(result_mask_full, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                        cv2.rectangle(result_original_full, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                    elif w <= best_rect[2] and h <= best_rect[3]:
-                        if x > best_rect[0] and x+w < best_rect[0]+best_rect[2] and y > best_rect[1] and y+h < best_rect[1]+best_rect[3]:
-                            #La bounding box è compresa in quella più grande
-                            print("Bounding box non rilevata")
-                            cv2.rectangle(result_mask_full, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                            cv2.rectangle(result_original_full, (x, y), (x + w, y + h), (255, 0, 0), 2)
-                        else:
-                            cv2.rectangle(result_mask, (x, y), (x + w, y + h), (0, 0, 255), 2)
-                            cv2.rectangle(result_original, (x, y), (x + w, y + h), (0, 0, 255), 2)
-
-                save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
-                save_dir_bb = os.path.join(save_dir_res, "Bounding_box")
-                save_dir_mf = os.path.join(save_dir_res, "Bounding_mask_full")
-                save_dir_m = os.path.join(save_dir_res, "Bounding_m_full")
-                if not os.path.exists(save_dir_bbf):
-                    os.makedirs(save_dir_bbf)
-                if not os.path.exists(save_dir_bbf):
-                    os.makedirs(save_dir_bb)
-                if not os.path.exists(save_dir_bbf):
-                    os.makedirs(save_dir_mf)
-                if not os.path.exists(save_dir_bbf):
-                    os.makedirs(save_dir_m)
-
-
-                # save resulting image
-                cv2.imwrite(os.path.join(save_dir_m, 'BoundingBox_mask_{}.png'.format(my_index1)), result_mask)
-                cv2.imwrite(os.path.join(save_dir_bb, 'BoundingBox_img_{}.png'.format(my_index1)), cv2.cvtColor(result_original, cv2.COLOR_RGB2BGR))
-
-                cv2.imwrite(os.path.join(save_dir_mf, 'BoundingBox_mask_full_{}.png'.format(my_index1)), result_mask_full)
-                cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
                 
-                '''
-
                 for cntr in contours:
                     x, y, w, h = cv2.boundingRect(cntr)
                     print("Bounding Box img {}".format(my_index1))
@@ -537,7 +441,7 @@ def main():
                     print("Boxes :", boxes)
                 print("-------------------------------------------")
 
-
+                
                 # File txt for save bbox detected
                 text_dir = os.path.join(save_dir_res, 'Txt')
                 if not os.path.exists(text_dir):
@@ -549,6 +453,7 @@ def main():
                     f = open(box_text_filename, "w")
                 #-----------------------------------
 
+                
                 if len(boxes) != 0 :
                     best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
                     print("Boxes :", boxes)
@@ -599,11 +504,14 @@ def main():
                     cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
                 
                 f.close()
-
-
+                     
         else:
             print("dataset error")
+            
+        '''
 
+
+    string_data = "2-7-2021-10-16-10"
     path_boxes_txt = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia))
     box_tracker.main(img_sequencies_name,path_original_img,path_boxes_txt,string_data)
 
