@@ -29,6 +29,10 @@ from deeplab.siamese_model_conf import CoattentionNet
 from torchvision.utils import save_image
 from torchvision import transforms
 
+import motmetrics as mm
+
+
+
 def get_arguments():
     """Parse all the arguments provided from the CLI.
     
@@ -155,11 +159,13 @@ def main():
     model.eval()
     model.cuda()
 
+    '''
     if args.dataset == 'voc12':
         testloader = data.DataLoader(VOCDataTestSet(args.data_dir, args.data_list, crop_size=(505, 505),mean= args.img_mean), 
                                     batch_size=1, shuffle=False, pin_memory=True)
         interp = nn.Upsample(size=(505, 505), mode='bilinear')
         voc_colorize = VOCColorize()
+    '''
 
     if args.dataset == 'imagenet':  #for imagenet
         db_test = db.PairwiseImg(train=False, inputRes=(473,473), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range) #db_root_dir() --> '/path/to/DAVIS-2016' train path
@@ -599,8 +605,23 @@ def main():
 
         else:
             print("dataset error")
+'''
+    acc = mm.MOTAccumulator(auto_id=True)
+
+    for index, batch in enumerate(testloader):
+
+        
 
 
+        acc.update(
+        [1],  # Ground truth objects in this frame
+        [1, 2, 3],  # Detector hypotheses in this frame
+        [
+            [0.1, np.nan, 0.3],  # Distances from object 1 to hypotheses 1, 2, 3
+        ]
+        )
+
+'''
 
 
     
