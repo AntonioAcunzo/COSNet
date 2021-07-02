@@ -29,7 +29,7 @@ from deeplab.siamese_model_conf import CoattentionNet
 from torchvision.utils import save_image
 from torchvision import transforms
 
-from fedebecat-box_tracker import box_tracker
+import box_tracker
 
 import motmetrics as mm
 
@@ -193,6 +193,7 @@ def main():
     my_index = 0
     old_temp=''
 
+    img_sequencies_name = []
 
     for index, batch in enumerate(testloader):
         print("----------------------------------------------------------------------------------------------------------------------")
@@ -202,6 +203,16 @@ def main():
         temp = batch['seq_name']
 
         args.seq_name=temp[0]
+
+        # Creo lista di seq name
+        if not img_sequencies_name.__contains__(args.seq_name):
+            print("img seq name non contiene " + args.seq_name)
+            img_sequencies_name.append(args.seq_name)
+
+        print("img seq name : " + img_sequencies_name)
+
+
+
 
         #print("Target : ", target) # Tensor
         #print("Target shape: ", target.shape) # torch.Size([1, 3, 473, 473])
@@ -220,26 +231,6 @@ def main():
         PIL_img = transforms.ToPILImage()(img_target)
         #PIL_img.convert("RGB")
         PIL_img.save(filename)
-
-        # Scomposizione img nei 3 canali -----------------------------
-
-        '''
-
-        img_target_R = img_target[0]
-        img_target_G = img_target[1]
-        img_target_B = img_target[2]
-
-        #print("img target R: ", img_target_R)
-        #print("img target G: ", img_target_G)
-        #print("img target B: ", img_target_B)
-
-        #print(db_test.meanval[0])
-        #target_R = img_target_R.numpy() + db_test.meanval[0]
-        #print("target R : ", target_R)
-        
-        '''
-
-        #------------------------------------------------------
 
         img_target_numpy = img_target.numpy()
         #print("img target numpy: ", img_target_numpy)
@@ -326,9 +317,15 @@ def main():
             first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
             path_annotation = os.path.join(args.data_dir, 'Annotations/480p')
             print("path annotation : " + path_annotation)
+            path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
+            path_original_img = path_original_img + "/" + args.seq_name
+            print("path original img : " + path_original_img)
+
+
         if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
             first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
             #path_annotation = os.path.join(args.data_dir, '/Annotations/480p/')
+
 
         original_shape = first_image.shape
         #print("Original shape :", original_shape) # (480, 854, 3)
@@ -356,8 +353,6 @@ def main():
                 color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 color_file.save(seg_filename)
         '''
-
-
 
 
         if args.dataset == 'imagenet':
@@ -607,6 +602,11 @@ def main():
 
         else:
             print("dataset error")
+
+    path_boxes_txt = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia))
+    box_tracker.main(img_sequencies_name,path_original_img,path_boxes_txt,string_data)
+
+
 '''
     acc = mm.MOTAccumulator(auto_id=True)
 

@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 import numpy as np
+import os
 from glob import glob
 import cv2
 import matplotlib.pylab as plt
@@ -198,85 +199,99 @@ def main():
 
 '''
 
-def main():
+def main(img_sequences_name,path_original_img,path_boxes_txt,string_data):
 
-    img_seq_name = "blackswan"
-    path = "./data/" + img_seq_name + "/%5d.jpg"
-    cap = cv2.VideoCapture(path)
-    f = open('./data/' + img_seq_name + '/boxes_blackswan.txt', 'r')
-    gt = [x.strip() for x in f.readlines()]
-    gt = [x.split(',') for x in gt][:-1]
-    gt = np.array(gt).astype(np.int32)
-    frame_ids = gt[:, 0] - 1
-    boxes = gt[:, 2:6]
-    boxes[:, 2:4] += boxes[:, :2]
+    for i in img_sequences_name:
+        path_boxes_txt = os.path.join(path_boxes_txt, i)
+        path_boxes_txt = os.path.join(path_boxes_txt, "Txt")
+        path_boxes_txt = os.path.join(path_boxes_txt, "/boxes_"+ string_data + '.txt')
+        print("path boxes txt : ", path_boxes_txt)
+        img_seq_name = i
+        path_original_img = path_original_img + "/%5d.jpg"
+        print(path_original_img)
+        cap = cv2.VideoCapture(path_original_img)
+        f_tracker = open(path_boxes_txt, 'r')
+        gt = [x.strip() for x in f_tracker.readlines()]
+        gt = [x.split(',') for x in gt][:-1]
+        gt = np.array(gt).astype(np.int32)
+        frame_ids = gt[:, 0] - 1
+        boxes = gt[:, 2:6]
+        boxes[:, 2:4] += boxes[:, :2]
 
 
-    tracker = Tracker()
-    ret = 1
-    index = 0
-    use_optical_flow = True
+        tracker = Tracker()
+        ret = 1
+        index = 0
+        use_optical_flow = True
 
 
-    while ret:
-        ret, frame = cap.read()
-        #print(frame_ids)
-        if not ret:
-            break
-        cur_gts = np.where(frame_ids == index)[0]
-        cur_boxes = boxes[cur_gts, :]
+        while ret:
+            ret, frame = cap.read()
+            #print(frame_ids)
+            if not ret:
+                break
+            cur_gts = np.where(frame_ids == index)[0]
+            cur_boxes = boxes[cur_gts, :]
 
-        t = time.time()
-        if use_optical_flow:
-            tracker.track_boxes(cur_boxes, frame)
-        else:
-            tracker.track_boxes(cur_boxes)
-        tt = time.time() - t
-        #print(1/tt)
+            t = time.time()
+            if use_optical_flow:
+                tracker.track_boxes(cur_boxes, frame)
+            else:
+                tracker.track_boxes(cur_boxes)
+            tt = time.time() - t
+            #print(1/tt)
 
-        for t in tracker.active_tracks_ids:
-            all_boxes = tracker.tracks[t].boxes
-            box = all_boxes[-1]
-            track_color = tracker.tracks[t].color
-            cv2.rectangle(frame, (box[0], box[1]), (box[2], box[3]), track_color, 2)
-            cv2.putText(frame, str(t), (box[0], box[1]), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2)
-            centers = [((b[0]+b[2])//2, b[3]) for b in all_boxes]
-            for c in centers:
-                cv2.circle(frame, c, 2, color=track_color, thickness=2)
-        cv2.imshow('image', frame)
-        cv2.waitKey(10)
-        index += 1
-    return tracker
+            for t in tracker.active_tracks_ids:
+                all_boxes = tracker.tracks[t].boxes
+                box = all_boxes[-1]
+                track_color = tracker.tracks[t].color
+                cv2.rectangle(frame, (box[0], box[1]), (box[2], box[3]), track_color, 2)
+                cv2.putText(frame, str(t), (box[0], box[1]), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), 2)
+                centers = [((b[0]+b[2])//2, b[3]) for b in all_boxes]
+                for c in centers:
+                    cv2.circle(frame, c, 2, color=track_color, thickness=2)
+            cv2.imshow('image', frame)
+            cv2.waitKey(10)
+            index += 1
+
+        # tracker ottenuto -----------
+        # get good boxes
+        #img_seq_name = "blackswan"
+        f_good = open(path_boxes_txt + '/boxes_good_' + img_seq_name + '.txt', 'w')
+
+        list_tracks = []
+        print("Tracks : " + str(tracker.tracks.__len__()))
+        for i in tracker.tracks:
+            print("----------------------------")
+            print("id : " + str(i.id))
+            print("bbox : " + str(i.boxes))
+            print("start frame : " + str(i.start_frame))
+            print("track_length : " + str(i.track_length))
+            if i.track_length >= 3:
+                print("Da salvare")
+                list_tracks.append(i)
+                for z in range(0, i.track_length):
+                    box = i.boxes[z]
+                    f_good.write(str(i.id) + "," + str(z + i.start_frame) + "," + str(box[0]) + "," + str(box[1]) + "," + str(
+                        box[2] - box[0]) + "," + str(box[3] - box[1]) + "\n")
+                    print(str(i.id) + "," + str(z + i.start_frame) + "," + str(box[0]) + "," + str(box[1]) + "," + str(
+                        box[2] - box[0]) + "," + str(box[3] - box[1]))
+        print(list_tracks.__len__())
+        for j in list_tracks:
+            print("DA SALVARE ----------------------------")
+            print("id : " + str(j.id))
+            print("bbox : " + str(j.boxes))
+            print("start frame : " + str(j.start_frame))
+            print("track_length : " + str(j.track_length))
+
+
+
 
 
 
 if __name__ == "__main__":
+    print("Eseguo")
     tracker = main()
-    img_seq_name = "blackswan"
-    f = open('./data/' + img_seq_name + '/boxes_good_' + img_seq_name + '.txt', 'w')
-
-    list_tracks = []
-    print("Tracks : " + str(tracker.tracks.__len__()))
-    for i in tracker.tracks:
-        print("----------------------------")
-        print("id : " + str(i.id))
-        print("bbox : " + str(i.boxes))
-        print("start frame : " + str(i.start_frame))
-        print("track_length : " + str(i.track_length))
-        if i.track_length >= 3:
-            print("Da salvare")
-            list_tracks.append(i)
-            for z in range(0,i.track_length):
-                box = i.boxes[z]
-                f.write(str(i.id) + "," + str(z+i.start_frame) + "," + str(box[0]) + "," + str(box[1]) + "," + str(box[2]-box[0])+ "," + str(box[3]-box[1]) +"\n")
-                print(str(i.id) + "," + str(z+i.start_frame) + "," + str(box[0]) + "," + str(box[1]) + "," + str(box[2]-box[0])+ "," + str(box[3]-box[1]))
-    print(list_tracks.__len__())
-    for j in list_tracks:
-        print("DA SALVARE ----------------------------")
-        print("id : " + str(j.id))
-        print("bbox : " + str(j.boxes))
-        print("start frame : " + str(j.start_frame))
-        print("track_length : " + str(j.track_length))
 
 
 
