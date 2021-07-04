@@ -524,7 +524,8 @@ def main():
     for x in f.readlines():
         x.strip()
         print(x)
-        all_boxes.append(x)
+        print(list(x))
+        all_boxes.append(list(x))
     print(all_boxes)
 
     acc = mm.MOTAccumulator(auto_id=True)
