@@ -521,11 +521,17 @@ def main():
 
     f = open(box_text_filename, "r")
     all_boxes = []
+    '''
     for x in f.readlines():
         x.strip()
         print(x)
         print(list(x))
         all_boxes.append(list(x))
+    print(all_boxes)
+    '''
+    all_boxes = [x.strip() for x in f.readlines()]
+    print(all_boxes)
+    all_boxes = [x.split(',') for x in all_boxes]
     print(all_boxes)
 
     acc = mm.MOTAccumulator(auto_id=True)
