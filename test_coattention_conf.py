@@ -523,6 +523,7 @@ def main():
     all_boxes = []
     for x in f.readlines():
         x.strip()
+        print(x)
         all_boxes.append(x)
     print(all_boxes)
 
