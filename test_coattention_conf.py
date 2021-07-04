@@ -520,28 +520,45 @@ def main():
     box_tracker.main(img_sequencies_name,path_original_img,path_boxes_txt,string_data)
 
     f = open(box_text_filename, "r")
-    all_boxes = []
-    '''
-    for x in f.readlines():
-        x.strip()
-        print(x)
-        print(list(x))
-        all_boxes.append(list(x))
-    print(all_boxes)
-    '''
     all_boxes = [x.strip() for x in f.readlines()]
-    print(all_boxes)
     all_boxes = [x.split(',') for x in all_boxes]
     print(all_boxes)
-    print(all_boxes[0])
-    print(all_boxes[0][0])
+    print(all_boxes[0]) # bbox specifico
+    print(all_boxes[0][0]) # primo el bbox
+
+    my_index = 0
+    old_temp = ''
+
+    hypotheses = []
+    box_in_frame = []
 
     acc = mm.MOTAccumulator(auto_id=True)
 
-    '''
+
     # Scorro ogni frame
     for index, batch in enumerate(testloader):
-        
+
+        temp = batch['seq_name']
+        args.seq_name = temp[0]
+        if old_temp == args.seq_name:
+            my_index = my_index + 1
+        else:
+            my_index = 0
+
+        hypotheses = []
+        box_in_frame = []
+
+        for i in all_boxes:
+            if int(i[0]) == my_index:
+                box_in_frame.append(i)
+
+        print("box nel frame " + str(my_index) + " : ")
+        print(box_in_frame)
+
+        for j in len(box_in_frame):
+            hypotheses.append(j+1)
+
+        print(hypotheses)
 
         acc.update(
         [1],  # Ground truth objects in this frame
@@ -551,7 +568,9 @@ def main():
         ]
         )
 
-    '''
+        old_temp = args.seq_name
+
+
 
 
     
