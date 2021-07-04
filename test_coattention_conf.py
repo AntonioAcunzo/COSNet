@@ -531,6 +531,7 @@ def main():
 
     hypotheses = []
     box_in_frame = []
+    distances = []
 
     acc = mm.MOTAccumulator(auto_id=True)
 
@@ -547,10 +548,15 @@ def main():
 
         hypotheses = []
         box_in_frame = []
+        distances = []
 
         for i in all_boxes:
             if int(i[0]) == my_index:
                 box_in_frame.append(i)
+
+        for z in box_in_frame:
+            z.remove(z[1])
+            z.remove(z[0])
 
         print("box nel frame " + str(my_index) + " : ")
         print(box_in_frame)
@@ -560,9 +566,17 @@ def main():
 
         print(hypotheses)
 
+
+        objs = []
+        hyps = np.array(hypotheses)
+        print(objs)
+        print(hyps)
+
+        distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
+
         acc.update(
         [1],  # Ground truth objects in this frame
-        [1, 2, 3],  # Detector hypotheses in this frame
+        hypotheses,  # Detector hypotheses in this frame
         [
             [0.1, np.nan, 0.3],  # Distances from object 1 to hypotheses 1, 2, 3
         ]
