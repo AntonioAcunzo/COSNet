@@ -533,6 +533,8 @@ def main():
     print(all_boxes)
     all_boxes = [x.split(',') for x in all_boxes]
     print(all_boxes)
+    print(all_boxes[0])
+    print(all_boxes[0][0])
 
     acc = mm.MOTAccumulator(auto_id=True)
 
