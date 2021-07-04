@@ -522,13 +522,13 @@ def main():
 
     f = open(box_text_filename, "r")
     f_annotation = open(box_annotation_text_filename, "r")
-    all_annotations = [x.strip() for x in f.readlines()]
+    all_annotations = [x.strip() for x in f_annotation.readlines()]
     all_annotations = [x.split(',') for x in all_annotations]
     print(all_annotations)
     all_boxes = [x.strip() for x in f.readlines()]
     all_boxes = [x.split(',') for x in all_boxes]
     print(all_boxes)
-    print(all_boxes[0]) # bbox specifico
+    print(all_boxes[0]) # bbox specific
     print(all_boxes[0][0]) # primo el bbox
 
     my_index = 0
