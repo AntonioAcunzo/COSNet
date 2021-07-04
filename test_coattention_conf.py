@@ -520,7 +520,10 @@ def main():
     box_tracker.main(img_sequencies_name,path_original_img,path_boxes_txt,string_data)
 
     f = open(box_text_filename, "r")
-    all_boxes = f.readlines()
+    all_boxes = []
+    for x in f.readlines():
+        x.strip()
+        all_boxes.append(x)
     print(all_boxes)
 
     acc = mm.MOTAccumulator(auto_id=True)
