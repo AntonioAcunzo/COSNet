@@ -259,7 +259,7 @@ def main(img_sequences_name,path_original_img,path_boxes_txt,string_data):
         # tracker ottenuto -----------
         # get good boxes
         #img_seq_name = "blackswan"
-        f_good = open(path_boxes_txt + '/boxes_good_' + img_seq_name + '.txt', 'w')
+        f_good = open(path_boxes_txt + '/boxes_good_' + string_data + '.txt', 'w')
 
         list_tracks = []
         print("Tracks : " + str(tracker.tracks.__len__()))
@@ -278,6 +278,7 @@ def main(img_sequences_name,path_original_img,path_boxes_txt,string_data):
                         box[2] - box[0]) + "," + str(box[3] - box[1]) + "\n")
                     print(str(i.id) + "," + str(z + i.start_frame) + "," + str(box[0]) + "," + str(box[1]) + "," + str(
                         box[2] - box[0]) + "," + str(box[3] - box[1]))
+        '''
         print(list_tracks.__len__())
         for j in list_tracks:
             print("DA SALVARE ----------------------------")
@@ -285,6 +286,7 @@ def main(img_sequences_name,path_original_img,path_boxes_txt,string_data):
             print("bbox : " + str(j.boxes))
             print("start frame : " + str(j.start_frame))
             print("track_length : " + str(j.track_length))
+        '''
 
 
 

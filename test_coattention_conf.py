@@ -514,17 +514,21 @@ def main():
 
 
     string_data = "2-7-2021-10-16-10"
+    text_dir = "./result/test/davis_iteration_conf/Results_200/blackswan/Txt"
+    box_text_filename = os.path.join(text_dir, 'boxes_' + string_data + '.txt')
     path_boxes_txt = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia))
     box_tracker.main(img_sequencies_name,path_original_img,path_boxes_txt,string_data)
 
+    f = open(box_text_filename, "r")
+    all_boxes = [x.strip() for x in f.readlines()]
+    print(all_boxes)
 
-'''
     acc = mm.MOTAccumulator(auto_id=True)
 
+    '''
+    # Scorro ogni frame
     for index, batch in enumerate(testloader):
-
         
-
 
         acc.update(
         [1],  # Ground truth objects in this frame
@@ -534,7 +538,7 @@ def main():
         ]
         )
 
-'''
+    '''
 
 
     
