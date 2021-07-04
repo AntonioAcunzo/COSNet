@@ -513,7 +513,7 @@ def main():
         '''
 
 
-    string_data = "2-7-2021-10-16-10"
+    string_data = "30-6-2021-20-21-14"
     text_dir = "./result/test/davis_iteration_conf/Results_200/blackswan/Txt"
     box_text_filename = os.path.join(text_dir, 'boxes_' + string_data + '.txt')
     path_boxes_txt = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia))
