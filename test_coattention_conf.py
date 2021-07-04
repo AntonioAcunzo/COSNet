@@ -555,8 +555,8 @@ def main():
         print("box nel frame " + str(my_index) + " : ")
         print(box_in_frame)
 
-        for j in len(box_in_frame):
-            hypotheses.append(j+1)
+        for j in range(1,len(box_in_frame)+1):
+            hypotheses.append(j)
 
         print(hypotheses)
 
