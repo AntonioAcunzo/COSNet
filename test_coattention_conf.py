@@ -599,11 +599,13 @@ def main():
             ]
         )
 
-        print(acc.events)
 
-        print(acc.mot_events)
 
         old_temp = args.seq_name
+
+    print(acc.events)
+
+    print(acc.mot_events)
 
     f.close()
     f_annotation.close()
