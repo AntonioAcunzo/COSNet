@@ -568,8 +568,8 @@ def main():
             z.remove(z[1])
             z.remove(z[0])
 
-        print("box nel frame " + str(my_index) + " : ")
-        print(box_in_frame)
+        print("box nel frame " + str(my_index) + " : " , box_in_frame)
+        #print(box_in_frame)
 
         for j in range(1,len(box_in_frame)+1):
             hypotheses.append(j)
@@ -578,12 +578,11 @@ def main():
         print(hypotheses)
 
 
-
-
         objs = all_annotations[my_index]
         hyps = np.array(hypotheses)
-        print(objs)
-        print(hyps)
+        print("Compute IOU")
+        print("Objects : ",objs)
+        print("Hypothesis : ", hyps)
 
         '''
         distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
