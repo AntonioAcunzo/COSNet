@@ -197,7 +197,7 @@ def main():
     old_temp=''
 
     img_sequencies_name = []
-    soglia = 200
+    soglia = 127
 
     for index, batch in enumerate(testloader):
         print("----------------------------------------------------------------------------------------------------------------------")
@@ -216,7 +216,7 @@ def main():
         print("img seq name : " )
         print(img_sequencies_name)
 
-        '''
+        #'''
 
         #print("Target : ", target) # Tensor
         #print("Target shape: ", target.shape) # torch.Size([1, 3, 473, 473])
@@ -292,7 +292,7 @@ def main():
         #print("max value in output1 : ",np.max(output1)) # 0.99999
         #print("Output1 shape: ", output1.shape) # (473, 473)
         
-        '''
+        #'''
 
         if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
             first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
@@ -302,7 +302,7 @@ def main():
             path_original_img = path_original_img + "/" + args.seq_name
             print("path original img : " + path_original_img)
 
-        '''
+        #'''
 
         if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
             first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
@@ -321,9 +321,9 @@ def main():
         #print("mask size :", mask.shape)
         mask = Image.fromarray(mask)
         
-        '''
 
-        '''
+
+
         if args.dataset == 'imagenet':
 
             save_dir_res = os.path.join(args.seg_save_dir, 'Results-Imagenet'.format(soglia), args.seq_name)
@@ -511,9 +511,9 @@ def main():
         else:
             print("dataset error")
             
-        '''
+        #'''
 
-
+    '''
     string_data = "30-6-2021-20-21-14"
     text_dir = "./result/test/davis_iteration_conf/Results_200/blackswan/Txt"
     box_text_filename = os.path.join(text_dir, 'boxes_' + string_data + '.txt')
@@ -569,32 +569,30 @@ def main():
             z.remove(z[0])
 
         print("box nel frame " + str(my_index) + " : " , box_in_frame)
-        #print(box_in_frame)
 
         for j in range(1,len(box_in_frame)+1):
             hypotheses.append(j)
 
-        print("ipotesi nel frame " + str(my_index) + " : ")
-        print(hypotheses)
+        print("ipotesi nel frame " + str(my_index) + " : ", hypotheses)
 
 
         objs = all_annotations[my_index]
         hyps = np.array(hypotheses)
         print("Compute IOU")
-        print("Objects : ",objs)
+        print("Objects : ", objs)
         print("Hypothesis : ", hyps)
 
-        '''
-        distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
+   
+        #distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
         
-        acc.update(
-        [1],  # Ground truth objects in this frame
-        hypotheses,  # Detector hypotheses in this frame
-        [
-            distances,  # Distances from object 1 to hypotheses 1, 2, 3
-        ]
-        )
-        '''
+        #acc.update(
+        #[1],  # Ground truth objects in this frame
+        #hypotheses,  # Detector hypotheses in this frame
+        #[
+        #    distances,  # Distances from object 1 to hypotheses 1, 2, 3
+        #]
+        #)
+      
         acc.update(
             [1],  # Ground truth objects in this frame
             [1,2],  # Detector hypotheses in this frame
@@ -613,7 +611,8 @@ def main():
 
     f.close()
     f_annotation.close()
-
+    
+    '''
 
     
 
