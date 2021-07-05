@@ -525,12 +525,16 @@ def main():
     f_annotation = open(box_annotation_text_filename, "r")
     all_annotations = [x.strip() for x in f_annotation.readlines()]
     all_annotations = [x.split(',') for x in all_annotations]
-    print(all_annotations)
+
+    for i in all_annotations:
+        i.remove(i[0])
+
+    #print(all_annotations)
     all_boxes = [x.strip() for x in f.readlines()]
     all_boxes = [x.split(',') for x in all_boxes]
-    print(all_boxes)
-    print(all_boxes[0]) # bbox specific
-    print(all_boxes[0][0]) # primo el bbox
+    #print(all_boxes)
+    #print(all_boxes[0]) # bbox specific
+    #print(all_boxes[0][0]) # primo el bbox
 
     my_index = 0
     old_temp = ''
@@ -570,10 +574,11 @@ def main():
         for j in range(1,len(box_in_frame)+1):
             hypotheses.append(j)
 
+        print("ipotesi nel frame " + str(my_index) + " : ")
         print(hypotheses)
 
-        for i in all_annotations:
-            i.remove(i[0])
+
+
 
         objs = all_annotations[my_index]
         hyps = np.array(hypotheses)
