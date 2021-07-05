@@ -580,9 +580,9 @@ def main():
         print(objs)
         print(hyps)
 
-        #distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
-        distances = iou_matrix(objs, hyps, max_iou=0.5)
-
+        '''
+        distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
+        
         acc.update(
         [1],  # Ground truth objects in this frame
         hypotheses,  # Detector hypotheses in this frame
@@ -590,6 +590,18 @@ def main():
             distances,  # Distances from object 1 to hypotheses 1, 2, 3
         ]
         )
+        '''
+        acc.update(
+            [1],  # Ground truth objects in this frame
+            [1,2],  # Detector hypotheses in this frame
+            [
+                [0.7,0.3]  # Distances from object 1 to hypotheses 1, 2, 3
+            ]
+        )
+
+        print(acc.events)
+
+        print(acc.mot_events)
 
         old_temp = args.seq_name
 
@@ -597,15 +609,6 @@ def main():
     f_annotation.close()
 
 
-def iou_matrix(objs, hyps, max_iou=1.):
-    if np.size(objs) == 0 or np.size(hyps) == 0:
-        return np.empty((0, 0))
-
-    objs = np.asfarray(objs)
-    hyps = np.asfarray(hyps)
-    iou = distances.boxiou(objs[:, None], hyps[None, :])
-    dist = 1 - iou
-    return np.where(dist > max_iou, np.nan, dist)
     
 
 if __name__ == '__main__':
