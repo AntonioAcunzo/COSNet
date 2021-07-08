@@ -565,7 +565,7 @@ def main():
         #print(objs.shape)
         # objs.shape - ---> (4,)
         # objs.shape - ---> (1, 4)
-        hyps = box_in_frame[my_index]
+        hyps = box_in_frame
         print(hyps)
         hyps = np.array(hyps)
         hyps = np.expand_dims(hyps, 0)
