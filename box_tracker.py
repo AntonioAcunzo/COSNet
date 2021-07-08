@@ -18,7 +18,7 @@ class Track:
         self.is_active = True
         self.track_length = 1
         self.color = np.random.random(3,)*255
-        print('new track: ' + str(track_id) + " at frame " + str(start_frame))
+        #print('new track: ' + str(track_id) + " at frame " + str(start_frame))
 
     def add_box(self, cur_box):
         self.track_length += 1
@@ -275,7 +275,7 @@ def main(img_sequences_name,path_original_img,path_boxes_txt):
                     box = i.boxes[z]
                     f_good.write(str(i.id) + "," + str(z + i.start_frame) + "," + str(box[0]) + "," + str(box[1]) + "," + str(box[2] - box[0]) + "," + str(box[3] - box[1]) + "\n")
                     #print(str(i.id) + "," + str(z + i.start_frame) + "," + str(box[0]) + "," + str(box[1]) + "," + str(box[2] - box[0]) + "," + str(box[3] - box[1]))
-        print("Fine tracce di " + x)
+        #print("Fine tracce di " + x)
         print("------------------------")
         f_good.close()
         f_tracker.close()
