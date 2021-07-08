@@ -359,6 +359,7 @@ def main():
                     os.makedirs(text_dir)
                 #box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations_' + string_data + '.txt')
                 box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations.txt')
+                '''
                 if os.path.exists(box_text_annotation_filename):
                     f_annotation = open(box_text_annotation_filename, "a")
                 else:
@@ -392,6 +393,8 @@ def main():
                     os.makedirs(save_dir_bba)
                 cv2.imwrite(os.path.join(save_dir_bba, 'BoundingBox_annotation_{}.png'.format(my_index+1)), copy_img_annotation)
                 f_annotation.close()
+                '''
+
                 
                 #draw BoundingBox on mask and on original img
 
@@ -441,7 +444,7 @@ def main():
                             if j[0] > best_rect[0] and j[0] + j[2] < best_rect[0] + best_rect[2] and j[1] > best_rect[1] and j[1] + j[2] < best_rect[1] + best_rect[3]:
                                 cv2.rectangle(result_mask_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                                 cv2.rectangle(result_original_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
-                                f.write(str(my_index+1)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                                f.write(str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
                                 #print("stringa che salvo nel file txt: [" + str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+" ]")
                             else:
                                 cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
@@ -452,7 +455,7 @@ def main():
                             cv2.rectangle(result_original, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                             cv2.rectangle(result_mask_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
                             cv2.rectangle(result_original_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                            f.write(str(my_index+1)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                            f.write(str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
                             #print("stringa che salvo nel file txt: [" + str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"]")
 
                     if my_index==0:
