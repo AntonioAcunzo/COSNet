@@ -192,19 +192,12 @@ def main():
     soglia = 200
 
     acc = mm.MOTAccumulator(auto_id=True)
-    #string_data = "30-6-2021-20-21-14"
-    #text_dir = "./result/test/davis_iteration_conf/Results_200/blackswan/Txt"
-    #box_text_filename = os.path.join(text_dir, 'boxes_' + string_data + '.txt')
-    #box_annotation_text_filename = os.path.join(text_dir, 'boxes_annotations_' + string_data + '.txt')
-    #path_boxes_txt = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia))
-    #box_tracker.main(img_sequencies_name, path_original_img, path_boxes_txt, string_data)
 
     f_val_seq = open("./val_seqs1.txt", "r")
     img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
     print(img_sequencies_name)
-    img_sequencies_name = []
 
-
+    '''
     for index, batch in enumerate(testloader):
         print("----------------------------------------------------------------------------------------------------------------------")
         print("processed index: ", '%d processed'%(index))
@@ -220,7 +213,7 @@ def main():
             print("img seq name : " )
             print(img_sequencies_name)
 
-        '''
+        
 
         #print("Target : ", target) # Tensor
         #print("Target shape: ", target.shape) # torch.Size([1, 3, 473, 473])
