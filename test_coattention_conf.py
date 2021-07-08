@@ -557,6 +557,7 @@ def main():
         print("ipotesi nel frame " + str(my_index) + " : ", hypotheses)
 
         objs = all_annotations[my_index]
+        print(objs)
         objs = np.array(objs)
         #print(objs.shape)
         # aggiungere asse objs
