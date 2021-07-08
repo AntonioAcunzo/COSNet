@@ -215,7 +215,7 @@ def main():
             print("img seq name : " )
             print(img_sequencies_name)
 
-        #'''
+        '''
 
         #print("Target : ", target) # Tensor
         #print("Target shape: ", target.shape) # torch.Size([1, 3, 473, 473])
@@ -255,6 +255,8 @@ def main():
         output_sum = 0
 
         #print("Sample_range : ", args.sample_range) # 5
+        
+        
 
         for i in range(0,args.sample_range):  
             search = batch['search'+'_'+str(i)]
@@ -272,7 +274,7 @@ def main():
         
         output1 = output_sum/args.sample_range
         
-        #'''
+        
         if(my_index==0):
             if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
                 first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
@@ -282,7 +284,7 @@ def main():
                 path_original_img = path_original_img + "/" + args.seq_name
                 print("path original img : " + path_original_img)
 
-        '''
+        
 
             if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
                 first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
@@ -492,8 +494,10 @@ def main():
     my_index = 0
     old_temp = ''
 
+    print("INIZIO SECONDO STEP")
     # STEP 2, aggiorno frame per frame l'accumulatore
     for index, batch in enumerate(testloader):
+
         temp = batch['seq_name']
         args.seq_name = temp[0]
         if old_temp == args.seq_name:
