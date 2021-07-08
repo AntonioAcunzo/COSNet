@@ -200,15 +200,15 @@ def main():
 '''
 
 def main(img_sequences_name,path_original_img,path_boxes_txt):
-    for i in img_sequences_name:
-        print(i)
-        path_boxes_txt1 = os.path.join(path_boxes_txt, i)
+    for x in img_sequences_name:
+        print(x)
+        path_boxes_txt1 = os.path.join(path_boxes_txt, x)
         print("path boxes txt1 : ", path_boxes_txt1)
         path_boxes_txt1 = os.path.join(path_boxes_txt1, "Txt")
         print("path boxes txt : ", path_boxes_txt1)
         path_boxes_txt1 = os.path.join(path_boxes_txt1, "boxes.txt")
         print("path boxes txt : ", path_boxes_txt1)
-        path_original_img1 = path_original_img+ "/" + i + "/%5d.jpg"
+        path_original_img1 = path_original_img+ "/" + x + "/%5d.jpg"
         print(path_original_img1)
         cap = cv2.VideoCapture(path_original_img1)
         f_tracker = open(path_boxes_txt1, 'r')
@@ -263,19 +263,22 @@ def main(img_sequences_name,path_original_img,path_boxes_txt):
         list_tracks = []
         print("Tracks : " + str(tracker.tracks.__len__()))
         for i in tracker.tracks:
-            print("----------------------------")
-            print("id : " + str(i.id))
+            #print("----------------------------")
+            #print("id : " + str(i.id))
             #print("bbox : " + str(i.boxes))
-            print("start frame : " + str(i.start_frame))
-            print("track_length : " + str(i.track_length))
+            #print("start frame : " + str(i.start_frame))
+            #print("track_length : " + str(i.track_length))
             if i.track_length >= 3:
-                print("Da salvare")
+                #print("Da salvare")
                 list_tracks.append(i)
                 for z in range(0, i.track_length):
                     box = i.boxes[z]
                     f_good.write(str(i.id) + "," + str(z + i.start_frame) + "," + str(box[0]) + "," + str(box[1]) + "," + str(box[2] - box[0]) + "," + str(box[3] - box[1]) + "\n")
                     #print(str(i.id) + "," + str(z + i.start_frame) + "," + str(box[0]) + "," + str(box[1]) + "," + str(box[2] - box[0]) + "," + str(box[3] - box[1]))
-        print("Fine tracce di " , i)
+        print("Fine tracce di " + x)
+        print("------------------------")
+        f_good.close()
+        f_tracker.close()
         '''
         print(list_tracks.__len__())
         for j in list_tracks:
