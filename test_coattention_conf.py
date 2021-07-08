@@ -197,7 +197,7 @@ def main():
     img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
     print(img_sequencies_name)
 
-    '''
+    #'''
     for index, batch in enumerate(testloader):
         print("----------------------------------------------------------------------------------------------------------------------")
         print("processed index: ", '%d processed'%(index))
@@ -480,7 +480,7 @@ def main():
         else:
             print("dataset error")
             
-        '''
+    '''
 
     # Avvio tracker
     path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
@@ -524,16 +524,7 @@ def main():
             all_boxes = [x.split(',') for x in all_boxes]
             value_correct = int(all_boxes[0][0])
             print(value_correct)
-            '''
-            
-            for i in all_boxes:
-                for j in i:
-                    i[int(j)][0] = int(i[int(j)][0]) - value_correct
-
-            print(all_boxes)
-            #print(all_boxes[0]) # bbox specific
-            #print(all_boxes[0][0]) # primo el bbox
-            '''
+        
 
             f.close()
             f_annotation.close()
@@ -648,6 +639,8 @@ def main():
         namemap=mm.io.motchallenge_metric_names
     )
     print(strsummary)
+    
+    '''
 
     '''
     string_data = "30-6-2021-20-21-14"
