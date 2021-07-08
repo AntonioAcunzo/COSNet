@@ -568,7 +568,7 @@ def main():
         hyps = box_in_frame[my_index]
         print(hyps)
         hyps = np.array(hyps)
-        hyps = np.expand_dims(objs, 0)
+        hyps = np.expand_dims(hyps, 0)
         print("Compute IOU")
         print("Objects : ", objs)
         print("Hypothesis : ", hyps)
