@@ -504,6 +504,7 @@ def main():
             my_index = 0
 
         if my_index==0:
+            print("Primo frame della sequenza " , args.seq_name)
             save_dir_res = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia), args.seq_name)
             text_dir = os.path.join(save_dir_res, 'Txt')
             box_text_filename = os.path.join(text_dir, 'boxes.txt')
@@ -515,16 +516,18 @@ def main():
             all_annotations = []
             all_annotations = [x.strip() for x in f_annotation.readlines()]
             all_annotations = [x.split(',') for x in all_annotations]
+            print(all_annotations)
 
             for i in all_annotations:
                 i.remove(i[0])
 
-             # print(all_annotations)
+            print(all_annotations)
+
             all_boxes = [x.strip() for x in f.readlines()]
             all_boxes = [x.split(',') for x in all_boxes]
-            # print(all_boxes)
-            # print(all_boxes[0]) # bbox specific
-            # print(all_boxes[0][0]) # primo el bbox
+            print(all_boxes)
+            print(all_boxes[0]) # bbox specific
+            print(all_boxes[0][0]) # primo el bbox
 
             f.close()
             f_annotation.close()
@@ -537,9 +540,13 @@ def main():
             if int(i[0]) == my_index:
                 box_in_frame.append(i)
 
+        print(box_in_frame)
+
         for z in box_in_frame:
             z.remove(z[1])
             z.remove(z[0])
+
+        print(box_in_frame)
 
         print("box nel frame " + str(my_index) + " : ", box_in_frame)
 
@@ -550,10 +557,10 @@ def main():
 
         objs = all_annotations[my_index]
         objs = np.array(objs)
-        print(objs.shape)
+        #print(objs.shape)
         # aggiungere asse objs
         objs = np.expand_dims(objs, 0)
-        print(objs.shape)
+        #print(objs.shape)
         # objs.shape - ---> (4,)
         # objs.shape - ---> (1, 4)
         hyps = np.array(hypotheses)
