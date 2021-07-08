@@ -544,9 +544,9 @@ def main():
         hyps = []
 
         for i in all_boxes:
-            print("i in all_boxes")
-            print(i)
             if int(i[0])-value_correct == my_index:
+                print("i in all_boxes")
+                print(i)
                 box_in_frame.append(i)
 
         #print(box_in_frame)
