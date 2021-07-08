@@ -164,14 +164,6 @@ def main():
     model.eval()
     model.cuda()
 
-    '''
-    if args.dataset == 'voc12':
-        testloader = data.DataLoader(VOCDataTestSet(args.data_dir, args.data_list, crop_size=(505, 505),mean= args.img_mean), 
-                                    batch_size=1, shuffle=False, pin_memory=True)
-        interp = nn.Upsample(size=(505, 505), mode='bilinear')
-        voc_colorize = VOCColorize()
-    '''
-
     if args.dataset == 'imagenet':  #for imagenet
         db_test = db.PairwiseImg(train=False, inputRes=(473,473), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range) #db_root_dir() --> '/path/to/DAVIS-2016' train path
         #db_test = db.PairwiseImg(train=False, inputRes=None, db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range) #db_root_dir() --> '/path/to/DAVIS-2016' train path
@@ -199,11 +191,19 @@ def main():
     img_sequencies_name = []
     soglia = 200
 
+    acc = mm.MOTAccumulator(auto_id=True)
+    #string_data = "30-6-2021-20-21-14"
+    #text_dir = "./result/test/davis_iteration_conf/Results_200/blackswan/Txt"
+    #box_text_filename = os.path.join(text_dir, 'boxes_' + string_data + '.txt')
+    #box_annotation_text_filename = os.path.join(text_dir, 'boxes_annotations_' + string_data + '.txt')
+    #path_boxes_txt = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia))
+    #box_tracker.main(img_sequencies_name, path_original_img, path_boxes_txt, string_data)
+
+
     for index, batch in enumerate(testloader):
         print("----------------------------------------------------------------------------------------------------------------------")
         print("processed index: ", '%d processed'%(index))
         target = batch['target']
-        #search = batch['search']
         temp = batch['seq_name']
 
         args.seq_name=temp[0]
@@ -212,9 +212,7 @@ def main():
         if not img_sequencies_name.__contains__(args.seq_name):
             print("img seq name non contiene " + args.seq_name)
             img_sequencies_name.append(args.seq_name)
-
-        print("img seq name : " )
-        print(img_sequencies_name)
+            print("img seq name : " + img_sequencies_name)
 
         #'''
 
@@ -223,23 +221,17 @@ def main():
         print("Temp : ", temp) # [blackswan]
         #print("Seq_name : ", args.seq_name) # blackswan
 
-        #print("Target max value : ", torch.max(target))
-        #print("Target min value : ", torch.min(target))
-
         path_save_img = "./IMG_PROVA"
         filename = os.path.join(path_save_img, 'target_normalized.png')
 
         img_target = target[0] # torch.Size([3, 473, 473])
-        #print("img target: ", img_target)
 
         PIL_img = transforms.ToPILImage()(img_target)
         #PIL_img.convert("RGB")
         PIL_img.save(filename)
 
         img_target_numpy = img_target.numpy()
-        #print("img target numpy: ", img_target_numpy)
         img_target_numpy = img_target_numpy.transpose((1, 2, 0))  # CHW --> HWC
-        #print("img target numpy after transpose: ", img_target_numpy)
 
         img_target_numpy = img_target_numpy + np.array(db_test.meanval)
         #print("img target numpy denorm: ", img_target_numpy)
@@ -251,17 +243,17 @@ def main():
         filename_target = os.path.join(path_save_img, 'target_denormalized.png')
         PIL_img_from_numpy.save(filename_target)
 
-
+        # my_index è l'indice nella seq_name
         if old_temp==args.seq_name:
             my_index = my_index+1
         else:
             my_index = 0
 
-        print("my_index : ",my_index) # 0,1,2...
+        print("my_index : ",my_index)
 
         output_sum = 0
 
-        print("Sample_range : ", args.sample_range) # 5
+        #print("Sample_range : ", args.sample_range) # 5
 
         for i in range(0,args.sample_range):  
             search = batch['search'+'_'+str(i)]
@@ -276,52 +268,35 @@ def main():
             output_sum = output_sum + output[0].data[0,0].cpu().numpy() #Il risultato della divisione di quel ramo
             #np.save('infer'+str(i)+'.npy',output1)
             #output2 = output[1].data[0, 0].cpu().numpy() #interp'
-
-            #path = "./IMG_PROVA"
-            #my_index2 = str(i).zfill(5)
-            #filename = os.path.join(path, 'search_{}.png'.format(my_index2))
-            #print(filename)
-            #img = Image.fromarray(target)
-            #img = img.convert("L")
-            #img.save(filename)
-
         
         output1 = output_sum/args.sample_range
-
-        #print("Output1 : ", output1)
-        #print("max value in output1 : ",np.max(output1)) # 0.99999
-        #print("Output1 shape: ", output1.shape) # (473, 473)
         
         #'''
-
-        if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
-            first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
-            path_annotation = os.path.join(args.data_dir, 'Annotations/480p')
-            print("path annotation : " + path_annotation)
-            path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
-            path_original_img = path_original_img + "/" + args.seq_name
-            print("path original img : " + path_original_img)
+        if(my_index==0):
+            if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
+                first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
+                path_annotation = os.path.join(args.data_dir, 'Annotations/480p')
+                print("path annotation : " + path_annotation)
+                path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
+                path_original_img = path_original_img + "/" + args.seq_name
+                print("path original img : " + path_original_img)
 
         #'''
 
-        if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
-            first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
-            #path_annotation = os.path.join(args.data_dir, '/Annotations/480p/')
+            if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
+                first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
+                #path_annotation = os.path.join(args.data_dir, 'Annotations/480p')
+                #print("path annotation : " + path_annotation)
+                #path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
+                #path_original_img = path_original_img + "/" + args.seq_name
+                #print("path original img : " + path_original_img)
 
 
-        original_shape = first_image.shape
-        #print("Original shape :", original_shape) # (480, 854, 3)
-        output1 = cv2.resize(output1, (original_shape[1],original_shape[0]))
-        #print("Output1 shape after resize : ", output1.shape) # (480, 854)
+        original_shape = first_image.shape # (480, 854, 3)
+        output1 = cv2.resize(output1, (original_shape[1],original_shape[0])) # shape:(480, 854)
 
-        #print("output1 stampa : ", output1)
         mask = (output1*255).astype(np.uint8)
-        #print("MASK stampa: ", mask)
-        #mask_array = mask
-        #print("mask size :", mask.shape)
         mask = Image.fromarray(mask)
-        
-
 
 
         if args.dataset == 'imagenet':
@@ -360,6 +335,8 @@ def main():
         elif args.dataset == 'davis' or args.dataset == 'davis_yoda':
             
             save_dir_res = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia) , args.seq_name)
+
+
             old_temp=args.seq_name
             if not os.path.exists(save_dir_res):
                 os.makedirs(save_dir_res)
@@ -372,12 +349,10 @@ def main():
                 #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                 mask.save(seg_filename)
 
-                
-
                 # ***
                 # take BoundingBox on mask annotation for py-motmetrics
-
                 # File txt for save bbox annotations
+
                 text_dir = os.path.join(save_dir_res, 'Txt')
                 if not os.path.exists(text_dir):
                     os.makedirs(text_dir)
@@ -387,7 +362,6 @@ def main():
                     f_annotation = open(box_text_annotation_filename, "a")
                 else:
                     f_annotation = open(box_text_annotation_filename, "w")
-                # -----------------------------------
 
                 path_annotation = os.path.join(path_annotation, args.seq_name)
                 print("path annotation : " + path_annotation)
@@ -402,15 +376,15 @@ def main():
                 boxes = []
                 for cntr in contours_annotation:
                     x, y, w, h = cv2.boundingRect(cntr)
-                    print("Bounding Box annotation {}".format(my_index1))
-                    print("x,y,w,h:", x, y, w, h)
+                    #print("Bounding Box annotation {}".format(my_index1))
+                    #print("x,y,w,h:", x, y, w, h)
                     boxes.append([x,y,w,h])
-                    print("Boxes :", boxes)
+                    #print("Boxes :", boxes)
                 if len(boxes) != 0 :
                     for j in boxes:
                         cv2.rectangle(copy_img_annotation,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                         f_annotation.write(str(my_index+1)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-                        print("stringa che salvo nel file txt: [" + str(my_index+1)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3]) + " ]")
+                        #print("stringa che salvo nel file txt: [" + str(my_index+1)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3]) + " ]")
 
                 save_dir_bba = os.path.join(save_dir_res, "Bounding_box_annotations")
                 if not os.path.exists(save_dir_bba):
@@ -435,29 +409,26 @@ def main():
 
                 best_rect = [0,0,0,0,0]      # [x,y,w,h,area]
                 boxes = []
-                
-                
+
                 for cntr in contours:
                     x, y, w, h = cv2.boundingRect(cntr)
-                    print("Bounding Box img {}".format(my_index1))
-                    print("x,y,w,h:", x, y, w, h)
+                    #print("Bounding Box img {}".format(my_index1))
+                    #print("x,y,w,h:", x, y, w, h)
                     boxes.append([x,y,w,h,w*h])
-                    print("Boxes :", boxes)
-                print("-------------------------------------------")
-
+                    #print("Boxes :", boxes)
                 
                 # File txt for save bbox detected
-                text_dir = os.path.join(save_dir_res, 'Txt')
-                if not os.path.exists(text_dir):
-                    os.makedirs(text_dir)
+
+                #text_dir = os.path.join(save_dir_res, 'Txt')
+                #if not os.path.exists(text_dir):
+                #    os.makedirs(text_dir)
+
                 #box_text_filename = os.path.join(text_dir, 'boxes_' + string_data + '.txt')
                 box_text_filename = os.path.join(text_dir, 'boxes.txt')
                 if os.path.exists(box_text_filename):
                     f = open(box_text_filename, "a")
                 else:
                     f = open(box_text_filename, "w")
-                #-----------------------------------
-
                 
                 if len(boxes) != 0 :
                     best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
@@ -466,16 +437,11 @@ def main():
                     best_rect = [best_x,best_y,best_w,best_h,best_area]
                     for j in boxes:
                         if j != best_rect:
-                            #print("Non è il max")
                             if j[0] > best_rect[0] and j[0] + j[2] < best_rect[0] + best_rect[2] and j[1] > best_rect[1] and j[1] + j[2] < best_rect[1] + best_rect[3]:
-                                # box compresa in quella più grande
-                                #print("box compreso")
                                 cv2.rectangle(result_mask_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                                 cv2.rectangle(result_original_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
                                 f.write(str(index+1)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-                                print("stringa che salvo nel file txt: [" + str(index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+" ]")
-
-
+                                #print("stringa che salvo nel file txt: [" + str(index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+" ]")
                             else:
                                 cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
                                 cv2.rectangle(result_original,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
@@ -486,21 +452,21 @@ def main():
                             cv2.rectangle(result_mask_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
                             cv2.rectangle(result_original_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                             f.write(str(index+1)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-                            print("stringa che salvo nel file txt: [" + str(index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"]")
+                            #print("stringa che salvo nel file txt: [" + str(index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"]")
 
-                    save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
-                    save_dir_bb = os.path.join(save_dir_res, "Bounding_box")
-                    save_dir_mf = os.path.join(save_dir_res, "Bounding_mask_full")
-                    save_dir_m = os.path.join(save_dir_res, "Bounding_mask")
-
-                    if not os.path.exists(save_dir_bbf):
-                        os.makedirs(save_dir_bbf)
-                    if not os.path.exists(save_dir_bb):
-                        os.makedirs(save_dir_bb)
-                    if not os.path.exists(save_dir_mf):
-                        os.makedirs(save_dir_mf)
-                    if not os.path.exists(save_dir_m):
-                        os.makedirs(save_dir_m)
+                    if my_index==0:
+                        save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
+                        save_dir_bb = os.path.join(save_dir_res, "Bounding_box")
+                        save_dir_mf = os.path.join(save_dir_res, "Bounding_mask_full")
+                        save_dir_m = os.path.join(save_dir_res, "Bounding_mask")
+                        if not os.path.exists(save_dir_bbf):
+                            os.makedirs(save_dir_bbf)
+                        if not os.path.exists(save_dir_bb):
+                            os.makedirs(save_dir_bb)
+                        if not os.path.exists(save_dir_mf):
+                            os.makedirs(save_dir_mf)
+                        if not os.path.exists(save_dir_m):
+                            os.makedirs(save_dir_m)
 
                     # save resulting image
                     cv2.imwrite(os.path.join(save_dir_m, 'BoundingBox_mask_{}.png'.format(my_index1)), result_mask)
@@ -509,12 +475,113 @@ def main():
                     cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
                 
                 f.close()
-                #distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
                      
         else:
             print("dataset error")
             
         #'''
+
+    # Avvio tracker
+    path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
+    print("Avvio tracker su " + path_original_img)
+    path_boxes_txt = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia))
+    box_tracker.main(img_sequencies_name, path_original_img, path_boxes_txt)
+
+    # Ho ottenuto tutte le bbox da prendere in considerzione per tutte le img
+    my_index = 0
+    old_temp = ''
+
+    # STEP 2, aggiorno frame per frame l'accumulatore
+    for index, batch in enumerate(testloader):
+        temp = batch['seq_name']
+        args.seq_name = temp[0]
+        if old_temp == args.seq_name:
+            my_index = my_index + 1
+        else:
+            my_index = 0
+
+        if my_index==0:
+            save_dir_res = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia), args.seq_name)
+            text_dir = os.path.join(save_dir_res, 'Txt')
+            box_text_filename = os.path.join(text_dir, 'boxes.txt')
+
+            f = open(box_text_filename, "r")
+            f_annotation = open(box_text_annotation_filename, "r")
+
+            all_annotations = []
+            all_annotations = [x.strip() for x in f_annotation.readlines()]
+            all_annotations = [x.split(',') for x in all_annotations]
+
+            for i in all_annotations:
+                i.remove(i[0])
+
+             # print(all_annotations)
+            all_boxes = [x.strip() for x in f.readlines()]
+            all_boxes = [x.split(',') for x in all_boxes]
+            # print(all_boxes)
+            # print(all_boxes[0]) # bbox specific
+            # print(all_boxes[0][0]) # primo el bbox
+
+            f.close()
+            f_annotation.close()
+
+        hypotheses = []
+        box_in_frame = []
+        distances = []
+
+        for i in all_boxes:
+            if int(i[0]) == my_index:
+                box_in_frame.append(i)
+
+        for z in box_in_frame:
+            z.remove(z[1])
+            z.remove(z[0])
+
+        print("box nel frame " + str(my_index) + " : ", box_in_frame)
+
+        for j in range(1, len(box_in_frame) + 1):
+            hypotheses.append(j)
+
+        print("ipotesi nel frame " + str(my_index) + " : ", hypotheses)
+
+        objs = all_annotations[my_index]
+        print(objs.shape)
+        # aggiungere asse objs
+        objs = np.expand_dims(objs, 0)
+        print(objs.shape)
+        # objs.shape - ---> (4,)
+        # objs.shape - ---> (1, 4)
+        hyps = np.array(hypotheses)
+        print("Compute IOU")
+        print("Objects : ", objs)
+        print("Hypothesis : ", hyps)
+
+        distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
+        print(distances)
+
+        acc.update(
+            [1],  # Ground truth objects in this frame
+            hypotheses,  # Detector hypotheses in this frame
+            [
+                distances,  # Distances from object 1 to hypotheses 1, 2, 3
+            ]
+        )
+        '''
+        acc.update(
+            [1],  # Ground truth objects in this frame
+            [1, 2],  # Detector hypotheses in this frame
+            [
+                [0.7, 0.3]  # Distances from object 1 to hypotheses 1, 2, 3
+            ]
+        )
+        '''
+
+
+
+    print(acc.events)
+
+    print(acc.mot_events)
+
 
     '''
     string_data = "30-6-2021-20-21-14"

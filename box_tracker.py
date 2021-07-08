@@ -199,16 +199,16 @@ def main():
 
 '''
 
-def main(img_sequences_name,path_original_img,path_boxes_txt,string_data):
+def main(img_sequences_name,path_original_img,path_boxes_txt):
     print("avvio tracker")
     for i in img_sequences_name:
+        print(i)
         path_boxes_txt = os.path.join(path_boxes_txt, i)
-        #print("path boxes txt : ", path_boxes_txt)
+        print("path boxes txt : ", path_boxes_txt)
         path_boxes_txt = os.path.join(path_boxes_txt, "Txt")
-        #print("path boxes txt : ", path_boxes_txt)
-        path_boxes_txt1 = os.path.join(path_boxes_txt, "boxes_"+ string_data + '.txt')
+        print("path boxes txt : ", path_boxes_txt)
+        path_boxes_txt1 = os.path.join(path_boxes_txt, "boxes_.txt")
         print("path boxes txt : ", path_boxes_txt1)
-        img_seq_name = i
         path_original_img = path_original_img + "/%5d.jpg"
         print(path_original_img)
         cap = cv2.VideoCapture(path_original_img)
@@ -259,7 +259,7 @@ def main(img_sequences_name,path_original_img,path_boxes_txt,string_data):
         # tracker ottenuto -----------
         # get good boxes
         #img_seq_name = "blackswan"
-        f_good = open(path_boxes_txt + '/boxes_good_' + string_data + '.txt', 'w')
+        f_good = open(path_boxes_txt + '/boxes_good.txt', 'w')
 
         list_tracks = []
         print("Tracks : " + str(tracker.tracks.__len__()))
