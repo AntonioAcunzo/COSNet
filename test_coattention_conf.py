@@ -588,7 +588,7 @@ def main():
         )
         '''
 
-        old_temp == args.seq_name
+        old_temp = args.seq_name
 
     print(acc.events)
 
