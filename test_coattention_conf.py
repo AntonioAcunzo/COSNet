@@ -535,6 +535,8 @@ def main():
         hypotheses = []
         box_in_frame = []
         distances = []
+        objs = []
+        hyps = []
 
         for i in all_boxes:
             if int(i[0])-value_correct == my_index:
