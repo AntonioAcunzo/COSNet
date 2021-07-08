@@ -551,8 +551,8 @@ def main():
         print("box nel frame " + str(my_index) + " : ", box_in_frame)
 
         for j in range(0, len(box_in_frame)):
-            print(box_in_frame[j])
-            hypotheses.append(box_in_frame[j])
+            #print(box_in_frame[j])
+            hypotheses.append(j+1)
 
         print("ipotesi nel frame " + str(my_index) + " : ", hypotheses)
 
@@ -564,7 +564,7 @@ def main():
         #print(objs.shape)
         # objs.shape - ---> (4,)
         # objs.shape - ---> (1, 4)
-        hyps = np.array(hypotheses)
+        hyps = np.array(box_in_frame[my_index])
         print("Compute IOU")
         print("Objects : ", objs)
         print("Hypothesis : ", hyps)
