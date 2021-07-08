@@ -199,6 +199,10 @@ def main():
     #path_boxes_txt = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia))
     #box_tracker.main(img_sequencies_name, path_original_img, path_boxes_txt, string_data)
 
+    f_val_seq = open("./val_seqs1.txt", "r")
+    for i in f_val_seq.readlines():
+        print(i)
+
 
     for index, batch in enumerate(testloader):
         #print("----------------------------------------------------------------------------------------------------------------------")
@@ -551,6 +555,7 @@ def main():
         print("ipotesi nel frame " + str(my_index) + " : ", hypotheses)
 
         objs = all_annotations[my_index]
+        objs = np.array(objs)
         print(objs.shape)
         # aggiungere asse objs
         objs = np.expand_dims(objs, 0)
