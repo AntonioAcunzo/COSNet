@@ -540,7 +540,7 @@ def main():
             if int(i[0])-value_correct == my_index:
                 box_in_frame.append(i)
 
-        print(box_in_frame)
+        #print(box_in_frame)
 
         for z in box_in_frame:
             z.remove(z[1])
@@ -557,7 +557,7 @@ def main():
         print("ipotesi nel frame " + str(my_index) + " : ", hypotheses)
 
         objs = all_annotations[my_index]
-        print(objs)
+        #print(objs)
         objs = np.array(objs)
         #print(objs.shape)
         # aggiungere asse objs
@@ -565,8 +565,9 @@ def main():
         #print(objs.shape)
         # objs.shape - ---> (4,)
         # objs.shape - ---> (1, 4)
-        hyps = box_in_frame
-        print(hyps)
+        for x in box_in_frame:
+            hyps = hyps.append(x)
+        #print(hyps)
         hyps = np.array(hyps)
         hyps = np.expand_dims(hyps, 0)
         print("Compute IOU")
