@@ -575,6 +575,7 @@ def main():
 
         distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
         print(distances)
+        print("---------------------------")
 
         acc.update(
             [1],  # Ground truth objects in this frame
