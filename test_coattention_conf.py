@@ -570,7 +570,7 @@ def main():
         for a in box_in_frame:
             print(a)
             hyps.append(a)
-        #print(hyps)
+        print(hyps)
         hyps = np.array(hyps)
         hyps = np.expand_dims(hyps, 0)
         print("Compute IOU")
