@@ -597,15 +597,7 @@ def main():
                 distances,  # Distances from object 1 to hypotheses 1, 2, 3
             ]
         )
-        '''
-        acc.update(
-            [1],  # Ground truth objects in this frame
-            [1, 2],  # Detector hypotheses in this frame
-            [
-                [0.7, 0.3]  # Distances from object 1 to hypotheses 1, 2, 3
-            ]
-        )
-        '''
+
 
         old_temp = args.seq_name
 
@@ -613,6 +605,48 @@ def main():
 
     print(acc.mot_events)
 
+    mh = mm.metrics.create()
+    summary = mh.compute(acc, metrics=['num_frames', 'mota', 'motp'], name='acc')
+    print(summary)
+
+    summary = mh.compute_many(
+        [acc, acc.events.loc[0:1]],
+        metrics=['num_frames', 'mota', 'motp'],
+        names=['full', 'part'])
+    print(summary)
+
+    strsummary = mm.io.render_summary(
+        summary,
+        formatters={'mota': '{:.2%}'.format},
+        namemap={'mota': 'MOTA', 'motp': 'MOTP'}
+    )
+    print(strsummary)
+
+    summary = mh.compute_many(
+        [acc, acc.events.loc[0:1]],
+        metrics=mm.metrics.motchallenge_metrics,
+        names=['full', 'part'])
+
+    strsummary = mm.io.render_summary(
+        summary,
+        formatters=mh.formatters,
+        namemap=mm.io.motchallenge_metric_names
+    )
+    print(strsummary)
+
+    summary = mh.compute_many(
+        [acc, acc.events.loc[0:1]],
+        metrics=mm.metrics.motchallenge_metrics,
+        names=['full', 'part'],
+        generate_overall=True
+    )
+
+    strsummary = mm.io.render_summary(
+        summary,
+        formatters=mh.formatters,
+        namemap=mm.io.motchallenge_metric_names
+    )
+    print(strsummary)
 
     '''
     string_data = "30-6-2021-20-21-14"
