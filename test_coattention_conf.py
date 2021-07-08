@@ -509,7 +509,7 @@ def main():
                     cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
                 
                 f.close()
-                distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
+                #distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
                      
         else:
             print("dataset error")
