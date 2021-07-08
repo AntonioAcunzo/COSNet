@@ -212,7 +212,8 @@ def main():
         if not img_sequencies_name.__contains__(args.seq_name):
             print("img seq name non contiene " + args.seq_name)
             img_sequencies_name.append(args.seq_name)
-            print("img seq name : " + img_sequencies_name)
+            print("img seq name : " )
+            print(img_sequencies_name)
 
         #'''
 
@@ -504,6 +505,7 @@ def main():
             save_dir_res = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia), args.seq_name)
             text_dir = os.path.join(save_dir_res, 'Txt')
             box_text_filename = os.path.join(text_dir, 'boxes.txt')
+            box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations.txt')
 
             f = open(box_text_filename, "r")
             f_annotation = open(box_text_annotation_filename, "r")
