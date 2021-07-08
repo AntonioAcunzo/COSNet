@@ -523,8 +523,9 @@ def main():
             all_boxes = [x.strip() for x in f.readlines()]
             all_boxes = [x.split(',') for x in all_boxes]
             value_correct = int(all_boxes[0][0])
-            '''
             print(value_correct)
+            '''
+            
             for i in all_boxes:
                 for j in i:
                     i[int(j)][0] = int(i[int(j)][0]) - value_correct
@@ -547,7 +548,8 @@ def main():
             if int(i[0])-value_correct == my_index:
                 print("i in all_boxes")
                 print(i)
-                box_in_frame.append(i)
+                if(i.__len__()==6):
+                    box_in_frame.append(i)
 
         #print(box_in_frame)
 
