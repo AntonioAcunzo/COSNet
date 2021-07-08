@@ -191,7 +191,7 @@ def main():
     img_sequencies_name = []
     soglia = 200
 
-    acc = mm.MOTAccumulator(auto_id=True)
+
 
     f_val_seq = open("./val_seqs1.txt", "r")
     img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
@@ -359,6 +359,8 @@ def main():
                     os.makedirs(text_dir)
                 #box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations_' + string_data + '.txt')
                 box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations.txt')
+
+                #Bounding box di tutte le annotazioni
                 '''
                 if os.path.exists(box_text_annotation_filename):
                     f_annotation = open(box_text_annotation_filename, "a")
@@ -404,8 +406,8 @@ def main():
                 img_original = cv2.resize(img_original, (original_shape[1], original_shape[0]))
                 result_mask = img_mask.copy()
                 result_original = img_original.copy()
-                result_mask_full = img_mask.copy()
-                result_original_full = img_original.copy()
+                #result_mask_full = img_mask.copy()
+                #result_original_full = img_original.copy()
                 gray_mask = cv2.cvtColor(img_mask, cv2.COLOR_RGB2GRAY)
                 thresh = cv2.threshold(gray_mask, soglia, 255, cv2.THRESH_BINARY)[1]
                 contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -441,42 +443,45 @@ def main():
                     best_rect = [best_x,best_y,best_w,best_h,best_area]
                     for j in boxes:
                         if j != best_rect:
+                            '''
                             if j[0] > best_rect[0] and j[0] + j[2] < best_rect[0] + best_rect[2] and j[1] > best_rect[1] and j[1] + j[2] < best_rect[1] + best_rect[3]:
                                 cv2.rectangle(result_mask_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                                 cv2.rectangle(result_original_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
-                                f.write(str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                                #f.write(str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
                                 #print("stringa che salvo nel file txt: [" + str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+" ]")
                             else:
-                                cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
-                                cv2.rectangle(result_original,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                            '''
+                            cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                            cv2.rectangle(result_original,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                            f.write(str(my_index) + ",0," + str(j[0]) + "," + str(j[1]) + "," + str(j[2]) + "," + str(j[3]) + "\n")
                         else:
                             # best box
                             cv2.rectangle(result_mask, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
                             cv2.rectangle(result_original, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                            cv2.rectangle(result_mask_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
-                            cv2.rectangle(result_original_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                            #cv2.rectangle(result_mask_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                            #cv2.rectangle(result_original_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                             f.write(str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
                             #print("stringa che salvo nel file txt: [" + str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"]")
 
                     if my_index==0:
-                        save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
+                        #save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
                         save_dir_bb = os.path.join(save_dir_res, "Bounding_box")
-                        save_dir_mf = os.path.join(save_dir_res, "Bounding_mask_full")
+                        #save_dir_mf = os.path.join(save_dir_res, "Bounding_mask_full")
                         save_dir_m = os.path.join(save_dir_res, "Bounding_mask")
-                        if not os.path.exists(save_dir_bbf):
-                            os.makedirs(save_dir_bbf)
+                        #if not os.path.exists(save_dir_bbf):
+                        #    os.makedirs(save_dir_bbf)
                         if not os.path.exists(save_dir_bb):
                             os.makedirs(save_dir_bb)
-                        if not os.path.exists(save_dir_mf):
-                            os.makedirs(save_dir_mf)
+                        #if not os.path.exists(save_dir_mf):
+                        #    os.makedirs(save_dir_mf)
                         if not os.path.exists(save_dir_m):
                             os.makedirs(save_dir_m)
 
                     # save resulting image
                     cv2.imwrite(os.path.join(save_dir_m, 'BoundingBox_mask_{}.png'.format(my_index1)), result_mask)
                     cv2.imwrite(os.path.join(save_dir_bb, 'BoundingBox_img_{}.png'.format(my_index1)), cv2.cvtColor(result_original, cv2.COLOR_RGB2BGR))
-                    cv2.imwrite(os.path.join(save_dir_mf, 'BoundingBox_mask_full_{}.png'.format(my_index1)), result_mask_full)
-                    cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
+                    #cv2.imwrite(os.path.join(save_dir_mf, 'BoundingBox_mask_full_{}.png'.format(my_index1)), result_mask_full)
+                    #cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
                 
                 f.close()
                      
@@ -484,7 +489,7 @@ def main():
             print("dataset error")
             
     '''
-
+    acc = mm.MOTAccumulator(auto_id=True)
     # Avvio tracker
     path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
     print("Avvio tracker su " + path_original_img)
