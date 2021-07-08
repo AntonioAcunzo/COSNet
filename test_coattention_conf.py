@@ -567,8 +567,8 @@ def main():
         #print(objs.shape)
         # objs.shape - ---> (4,)
         # objs.shape - ---> (1, 4)
-        for x in box_in_frame:
-            hyps = hyps.append(x)
+        for a in box_in_frame:
+            hyps.append(a)
         #print(hyps)
         hyps = np.array(hyps)
         hyps = np.expand_dims(hyps, 0)
