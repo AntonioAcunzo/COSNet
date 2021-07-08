@@ -393,7 +393,7 @@ def main():
                 cv2.imwrite(os.path.join(save_dir_bba, 'BoundingBox_annotation_{}.png'.format(my_index)), copy_img_annotation)
                 f_annotation.close()
 
-                '''
+
                 
                 #draw BoundingBox on mask and on original img
 
@@ -433,8 +433,7 @@ def main():
                 else:
                     f = open(box_text_filename, "w")
                 
-                '''
-                '''
+
                 
                 if len(boxes) != 0 :
                     best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
@@ -476,7 +475,7 @@ def main():
                     #cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
                 
                 f.close()
-                '''
+
                      
         else:
             print("dataset error")
