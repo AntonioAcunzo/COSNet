@@ -197,7 +197,7 @@ def main():
     old_temp=''
 
     img_sequencies_name = []
-    soglia = 127
+    soglia = 200
 
     for index, batch in enumerate(testloader):
         print("----------------------------------------------------------------------------------------------------------------------")
@@ -381,7 +381,8 @@ def main():
                 text_dir = os.path.join(save_dir_res, 'Txt')
                 if not os.path.exists(text_dir):
                     os.makedirs(text_dir)
-                box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations_' + string_data + '.txt')
+                #box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations_' + string_data + '.txt')
+                box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations.txt')
                 if os.path.exists(box_text_annotation_filename):
                     f_annotation = open(box_text_annotation_filename, "a")
                 else:
@@ -449,7 +450,8 @@ def main():
                 text_dir = os.path.join(save_dir_res, 'Txt')
                 if not os.path.exists(text_dir):
                     os.makedirs(text_dir)
-                box_text_filename = os.path.join(text_dir, 'boxes_' + string_data + '.txt')
+                #box_text_filename = os.path.join(text_dir, 'boxes_' + string_data + '.txt')
+                box_text_filename = os.path.join(text_dir, 'boxes.txt')
                 if os.path.exists(box_text_filename):
                     f = open(box_text_filename, "a")
                 else:
@@ -507,6 +509,7 @@ def main():
                     cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
                 
                 f.close()
+                distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
                      
         else:
             print("dataset error")
@@ -577,6 +580,10 @@ def main():
 
 
         objs = all_annotations[my_index]
+        #aggiungere asse objs
+        objs = np.expand_dims(objs, 0)
+        objs.shape ----> (4, )
+        objs.shape ----> (1,4)
         hyps = np.array(hypotheses)
         print("Compute IOU")
         print("Objects : ", objs)
