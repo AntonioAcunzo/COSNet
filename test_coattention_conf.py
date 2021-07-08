@@ -572,7 +572,7 @@ def main():
             hyps.append(a)
         print(hyps)
         hyps = np.array(hyps)
-        hyps = np.expand_dims(hyps, 0)
+        #hyps = np.expand_dims(hyps, 0)
         print("Compute IOU")
         print("Objects : ", objs)
         print("Hypothesis : ", hyps)
