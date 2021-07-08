@@ -275,7 +275,7 @@ def main(img_sequences_name,path_original_img,path_boxes_txt):
                     box = i.boxes[z]
                     f_good.write(str(i.id) + "," + str(z + i.start_frame) + "," + str(box[0]) + "," + str(box[1]) + "," + str(box[2] - box[0]) + "," + str(box[3] - box[1]) + "\n")
                     #print(str(i.id) + "," + str(z + i.start_frame) + "," + str(box[0]) + "," + str(box[1]) + "," + str(box[2] - box[0]) + "," + str(box[3] - box[1]))
-        print("Fine tracce di " + i)
+        print("Fine tracce di " , i)
         '''
         print(list_tracks.__len__())
         for j in list_tracks:
