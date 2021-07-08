@@ -433,21 +433,16 @@ def main():
                 else:
                     f = open(box_text_filename, "w")
                 
+                '''
+                '''
+                
                 if len(boxes) != 0 :
                     best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
                     print("Boxes :", boxes)
                     print("MAX :" , best_x, best_y, best_w, best_h, best_area)
                     best_rect = [best_x,best_y,best_w,best_h,best_area]
                     for j in boxes:
-                        if j != best_rect:
-                            '''
-                            #if j[0] > best_rect[0] and j[0] + j[2] < best_rect[0] + best_rect[2] and j[1] > best_rect[1] and j[1] + j[2] < best_rect[1] + best_rect[3]:
-                            #    cv2.rectangle(result_mask_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                            #    cv2.rectangle(result_original_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
-                                #f.write(str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-                                #print("stringa che salvo nel file txt: [" + str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+" ]")
-                            #else:
-                            '''
+                        if j != best_rect:                                    
                             cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
                             cv2.rectangle(result_original,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                             f.write(str(my_index) + ",0," + str(j[0]) + "," + str(j[1]) + "," + str(j[2]) + "," + str(j[3]) + "\n")
