@@ -200,13 +200,14 @@ def main():
     #box_tracker.main(img_sequencies_name, path_original_img, path_boxes_txt, string_data)
 
     f_val_seq = open("./val_seqs1.txt", "r")
-    for i in f_val_seq.readlines():
-        print(i)
+    img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
+    print(img_sequencies_name)
+    img_sequencies_name = []
 
 
     for index, batch in enumerate(testloader):
-        #print("----------------------------------------------------------------------------------------------------------------------")
-        #print("processed index: ", '%d processed'%(index))
+        print("----------------------------------------------------------------------------------------------------------------------")
+        print("processed index: ", '%d processed'%(index))
         target = batch['target']
         temp = batch['seq_name']
 
