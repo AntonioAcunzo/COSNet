@@ -565,6 +565,7 @@ def main():
         # objs.shape - ---> (4,)
         # objs.shape - ---> (1, 4)
         hyps = np.array(box_in_frame[my_index])
+        hyps = np.expand_dims(objs, 0)
         print("Compute IOU")
         print("Objects : ", objs)
         print("Hypothesis : ", hyps)
