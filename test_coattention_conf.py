@@ -281,7 +281,7 @@ def main():
                 path_original_img = path_original_img + "/" + args.seq_name
                 print("path original img : " + path_original_img)
 
-        #'''
+        '''
 
             if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
                 first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
@@ -479,7 +479,7 @@ def main():
         else:
             print("dataset error")
             
-        #'''
+        '''
 
     # Avvio tracker
     path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
