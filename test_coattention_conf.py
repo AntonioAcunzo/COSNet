@@ -273,24 +273,24 @@ def main():
         output1 = output_sum/args.sample_range
         
         
-        if(my_index==0):
-            if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
-                first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
-                path_annotation = os.path.join(args.data_dir, 'Annotations/480p')
-                print("path annotation : " + path_annotation)
-                path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
-                path_original_img = path_original_img + "/" + args.seq_name
-                print("path original img : " + path_original_img)
+        #if(my_index==0):
+        if(args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
+            first_image = np.array(Image.open(args.data_dir+'/JPEGImages/480p/blackswan/00000.jpg'))
+            path_annotation = os.path.join(args.data_dir, 'Annotations/480p')
+            print("path annotation : " + path_annotation)
+            path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
+            path_original_img = path_original_img + "/" + args.seq_name
+            print("path original img : " + path_original_img)
 
         
 
-            if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
-                first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
-                #path_annotation = os.path.join(args.data_dir, 'Annotations/480p')
-                #print("path annotation : " + path_annotation)
-                #path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
-                #path_original_img = path_original_img + "/" + args.seq_name
-                #print("path original img : " + path_original_img)
+        if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
+            first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
+            #path_annotation = os.path.join(args.data_dir, 'Annotations/480p')
+            #print("path annotation : " + path_annotation)
+            #path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
+            #path_original_img = path_original_img + "/" + args.seq_name
+            #print("path original img : " + path_original_img)
 
 
         original_shape = first_image.shape # (480, 854, 3)
