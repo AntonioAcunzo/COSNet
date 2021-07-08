@@ -546,8 +546,8 @@ def main():
 
         for i in all_boxes:
             if int(i[0])-value_correct == my_index:
-                print("i in all_boxes")
-                print(i)
+                #print("i in all_boxes")
+                #print(i)
                 if(i.__len__()==6):
                     box_in_frame.append(i)
 
@@ -557,7 +557,7 @@ def main():
             z.remove(z[1])
             z.remove(z[0])
 
-        print(box_in_frame)
+        #print(box_in_frame)
 
         print("box nel frame " + str(my_index) + " : ", box_in_frame)
 
@@ -584,6 +584,7 @@ def main():
         #hyps = np.expand_dims(hyps, 0)
         print("Compute IOU")
         print("Objects : ", objs)
+        print("Num hypothesis :" , hypotheses)
         print("Hypothesis : ", hyps)
 
         distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
