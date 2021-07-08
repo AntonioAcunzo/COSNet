@@ -520,14 +520,17 @@ def main():
             for i in all_annotations:
                 i.remove(i[0])
 
-
             all_boxes = [x.strip() for x in f.readlines()]
             all_boxes = [x.split(',') for x in all_boxes]
-            #print(all_boxes)
+            value_correct = int(all_boxes[0][0])
+            print(value_correct)
+            for i in all_boxes:
+                for j in i:
+                    i[j][0] = int(i[j][0]) - value_correct
+
+            print(all_boxes)
             #print(all_boxes[0]) # bbox specific
             #print(all_boxes[0][0]) # primo el bbox
-
-            value_correct = int(all_boxes[0][0])
 
             f.close()
             f_annotation.close()
