@@ -192,11 +192,6 @@ def main():
     soglia = 200
 
 
-
-    f_val_seq = open("./val_seqs1.txt", "r")
-    img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
-    print(img_sequencies_name)
-
     #'''
     for index, batch in enumerate(testloader):
         print("----------------------------------------------------------------------------------------------------------------------")
@@ -206,12 +201,14 @@ def main():
 
         args.seq_name=temp[0]
 
+        '''
         # Creo lista di seq name
         if not img_sequencies_name.__contains__(args.seq_name):
             print("img seq name non contiene " + args.seq_name)
             img_sequencies_name.append(args.seq_name)
             print("img seq name : " )
             print(img_sequencies_name)
+        '''
 
         
 
@@ -361,7 +358,7 @@ def main():
                 box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations.txt')
 
                 #Bounding box di tutte le annotazioni
-                '''
+
                 if os.path.exists(box_text_annotation_filename):
                     f_annotation = open(box_text_annotation_filename, "a")
                 else:
@@ -387,16 +384,16 @@ def main():
                 if len(boxes) != 0 :
                     for j in boxes:
                         cv2.rectangle(copy_img_annotation,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                        f_annotation.write(str(my_index+1)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-                        #print("stringa che salvo nel file txt: [" + str(my_index+1)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3]) + " ]")
+                        f_annotation.write(str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                        #print("stringa che salvo nel file txt: [" + str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3]) + " ]")
 
                 save_dir_bba = os.path.join(save_dir_res, "Bounding_box_annotations")
                 if not os.path.exists(save_dir_bba):
                     os.makedirs(save_dir_bba)
-                cv2.imwrite(os.path.join(save_dir_bba, 'BoundingBox_annotation_{}.png'.format(my_index+1)), copy_img_annotation)
+                cv2.imwrite(os.path.join(save_dir_bba, 'BoundingBox_annotation_{}.png'.format(my_index)), copy_img_annotation)
                 f_annotation.close()
-                '''
 
+                '''
                 
                 #draw BoundingBox on mask and on original img
 
@@ -444,12 +441,12 @@ def main():
                     for j in boxes:
                         if j != best_rect:
                             '''
-                            if j[0] > best_rect[0] and j[0] + j[2] < best_rect[0] + best_rect[2] and j[1] > best_rect[1] and j[1] + j[2] < best_rect[1] + best_rect[3]:
-                                cv2.rectangle(result_mask_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                                cv2.rectangle(result_original_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                            #if j[0] > best_rect[0] and j[0] + j[2] < best_rect[0] + best_rect[2] and j[1] > best_rect[1] and j[1] + j[2] < best_rect[1] + best_rect[3]:
+                            #    cv2.rectangle(result_mask_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                            #    cv2.rectangle(result_original_full,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
                                 #f.write(str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
                                 #print("stringa che salvo nel file txt: [" + str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+" ]")
-                            else:
+                            #else:
                             '''
                             cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
                             cv2.rectangle(result_original,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
@@ -484,11 +481,15 @@ def main():
                     #cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
                 
                 f.close()
+                '''
                      
         else:
             print("dataset error")
             
     '''
+    f_val_seq = open("./val_seqs1.txt", "r")
+    img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
+    print(img_sequencies_name)
     acc = mm.MOTAccumulator(auto_id=True)
     # Avvio tracker
     path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
