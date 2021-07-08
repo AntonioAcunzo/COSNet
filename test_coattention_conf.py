@@ -526,7 +526,7 @@ def main():
             print(value_correct)
             for i in all_boxes:
                 for j in i:
-                    i[j][0] = int(i[j][0]) - value_correct
+                    i[int(j)][0] = int(i[int(j)][0]) - value_correct
 
             print(all_boxes)
             #print(all_boxes[0]) # bbox specific
