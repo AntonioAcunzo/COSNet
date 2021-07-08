@@ -189,7 +189,7 @@ def main():
     old_temp=''
 
     img_sequencies_name = []
-    soglia = 200
+    soglia = 127
 
 
     #'''
