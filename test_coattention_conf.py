@@ -201,8 +201,8 @@ def main():
 
 
     for index, batch in enumerate(testloader):
-        print("----------------------------------------------------------------------------------------------------------------------")
-        print("processed index: ", '%d processed'%(index))
+        #print("----------------------------------------------------------------------------------------------------------------------")
+        #print("processed index: ", '%d processed'%(index))
         target = batch['target']
         temp = batch['seq_name']
 
