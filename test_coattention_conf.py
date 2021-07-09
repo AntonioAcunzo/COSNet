@@ -603,18 +603,17 @@ def main():
     results_filename = os.path.join(text_dir, 'results.txt')
     f_results = open(results_filename,'w')
 
-    f_results.write(acc.events)
-    f_results.write(acc.mot_events)
+    f_results.write(acc.events.astype("string"))
+    f_results.write(acc.mot_events.astype("string"))
 
     print(acc.events)
-
     print(acc.mot_events)
 
     mh = mm.metrics.create()
     summary = mh.compute(acc, metrics=['num_frames', 'mota', 'motp'], name='acc')
     print(summary)
 
-    f_results.write(summary)
+    f_results.write(summary.astype("string"))
 
     summary = mh.compute_many(
         [acc, acc.events.loc[0:1]],
@@ -622,7 +621,7 @@ def main():
         names=['full', 'part'])
     print(summary)
 
-    f_results.write(summary)
+    f_results.write(summary.astype("string"))
 
     strsummary = mm.io.render_summary(
         summary,
@@ -631,7 +630,7 @@ def main():
     )
     print(strsummary)
 
-    f_results.write(summary)
+    f_results.write(summary.astype("string"))
 
     summary = mh.compute_many(
         [acc, acc.events.loc[0:1]],
@@ -645,7 +644,7 @@ def main():
     )
     print(strsummary)
 
-    f_results.write(summary)
+    f_results.write(summary.astype("string"))
 
     summary = mh.compute_many(
         [acc, acc.events.loc[0:1]],
@@ -661,7 +660,7 @@ def main():
     )
     print(strsummary)
 
-    f_results.write(strsummary)
+    f_results.write(strsummary.astype("string"))
     
     #'''
 
