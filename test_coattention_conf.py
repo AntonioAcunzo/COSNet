@@ -610,7 +610,11 @@ def main():
 
             old_temp = args.seq_name
 
-        results_filename = os.path.join(text_dir, 'results.txt')
+        if args.mode == 'good':
+            results_filename = os.path.join(text_dir, 'results_good.txt')
+        else:
+            results_filename = os.path.join(text_dir, 'results.txt')
+
         f_results = open(results_filename,'w')
 
         f_results.write("\n ACC EVENTS \n")
