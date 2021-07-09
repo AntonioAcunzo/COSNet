@@ -603,10 +603,10 @@ def main():
     results_filename = os.path.join(text_dir, 'results.txt')
     f_results = open(results_filename,'w')
 
-    a = acc.events.applymap(str)
-
-    f_results.write(str(a))
-    f_results.write(acc.mot_events.astype("string"))
+    f_results.write("\n ACC EVENTS \n")
+    f_results.write(str(acc.events))
+    f_results.write("\n ACC MOT EVENTS \n")
+    f_results.write(str(acc.mot_events))
 
     print(acc.events)
     print(acc.mot_events)
@@ -614,16 +614,16 @@ def main():
     mh = mm.metrics.create()
     summary = mh.compute(acc, metrics=['num_frames', 'mota', 'motp'], name='acc')
     print(summary)
-
-    f_results.write(summary.astype("string"))
+    f_results.write("\n ACC SUMMARY \n")
+    f_results.write(str(summary))
 
     summary = mh.compute_many(
         [acc, acc.events.loc[0:1]],
         metrics=['num_frames', 'mota', 'motp'],
         names=['full', 'part'])
     print(summary)
-
-    f_results.write(summary.astype("string"))
+    f_results.write("\n ACC SUMMARY \n")
+    f_results.write(str(summary))
 
     strsummary = mm.io.render_summary(
         summary,
@@ -631,8 +631,8 @@ def main():
         namemap={'mota': 'MOTA', 'motp': 'MOTP'}
     )
     print(strsummary)
-
-    f_results.write(summary.astype("string"))
+    f_results.write("\n ACC SUMMARY \n")
+    f_results.write(str(summary))
 
     summary = mh.compute_many(
         [acc, acc.events.loc[0:1]],
@@ -645,8 +645,8 @@ def main():
         namemap=mm.io.motchallenge_metric_names
     )
     print(strsummary)
-
-    f_results.write(summary.astype("string"))
+    f_results.write("\n ACC SUMMARY \n")
+    f_results.write(str(summary))
 
     summary = mh.compute_many(
         [acc, acc.events.loc[0:1]],
@@ -661,8 +661,8 @@ def main():
         namemap=mm.io.motchallenge_metric_names
     )
     print(strsummary)
-
-    f_results.write(strsummary.astype("string"))
+    f_results.write("\n ACC SUMMARY \n")
+    f_results.write(str(strsummary))
     
     #'''
 
