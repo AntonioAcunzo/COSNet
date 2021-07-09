@@ -205,13 +205,13 @@ def main(img_sequences_name,path_original_img,path_boxes_txt):
         path_boxes_txt1 = os.path.join(path_boxes_txt, x)
         print("path boxes txt1 : ", path_boxes_txt1)
         path_boxes_txt1 = os.path.join(path_boxes_txt1, "Txt")
-        print("path boxes txt : ", path_boxes_txt1)
-        path_boxes_txt1 = os.path.join(path_boxes_txt1, "boxes.txt")
-        print("path boxes txt : ", path_boxes_txt1)
+        print("path boxes txt1 : ", path_boxes_txt1)
+        path_boxes_txt2 = os.path.join(path_boxes_txt1, "boxes.txt")
+        print("path boxes txt2 : ", path_boxes_txt2)
         path_original_img1 = path_original_img+ "/" + x + "/%5d.jpg"
         print(path_original_img1)
         cap = cv2.VideoCapture(path_original_img1)
-        f_tracker = open(path_boxes_txt1, 'r')
+        f_tracker = open(path_boxes_txt2, 'r')
         gt = [x.strip() for x in f_tracker.readlines()]
         gt = [x.split(',') for x in gt][:-1]
         gt = np.array(gt).astype(np.int32)
@@ -258,7 +258,8 @@ def main(img_sequences_name,path_original_img,path_boxes_txt):
         # tracker ottenuto -----------
         # get good boxes
         #img_seq_name = "blackswan"
-        f_good = open(path_boxes_txt + '/boxes_good.txt', 'w')
+        print(path_boxes_txt1 + '/boxes_good.txt')
+        f_good = open(path_boxes_txt1 + '/boxes_good.txt', 'w')
 
         list_tracks = []
         print("Tracks : " + str(tracker.tracks.__len__()))
