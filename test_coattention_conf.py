@@ -191,7 +191,7 @@ def main():
 
     img_sequencies_name = []
     #soglia = 127
-    soglia = args.tresh
+    soglia = int(args.tresh)
     print("soglia: ",soglia)
 
 
