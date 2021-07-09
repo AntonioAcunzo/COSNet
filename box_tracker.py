@@ -274,7 +274,7 @@ def main(img_sequences_name,path_original_img,path_boxes_txt):
                 list_tracks.append(i)
                 for z in range(0, i.track_length):
                     box = i.boxes[z]
-                    f_good.write(str(i.id) + "," + str(z + i.start_frame) + "," + str(box[0]) + "," + str(box[1]) + "," + str(box[2] - box[0]) + "," + str(box[3] - box[1]) + "\n")
+                    f_good.write(str(z + i.start_frame) + "," + str(i.id) + "," + str(box[0]) + "," + str(box[1]) + "," + str(box[2] - box[0]) + "," + str(box[3] - box[1]) + "\n")
                     #print(str(i.id) + "," + str(z + i.start_frame) + "," + str(box[0]) + "," + str(box[1]) + "," + str(box[2] - box[0]) + "," + str(box[3] - box[1]))
         #print("Fine tracce di " + x)
         print("------------------------")
