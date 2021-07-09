@@ -195,7 +195,7 @@ def main():
     print("soglia: ",soglia)
 
 
-    #'''
+    '''
     for index, batch in enumerate(testloader):
         print("----------------------------------------------------------------------------------------------------------------------")
         print("processed index: ", '%d processed'%(index))
@@ -204,14 +204,14 @@ def main():
 
         args.seq_name=temp[0]
 
-        '''
+        
         # Creo lista di seq name
-        if not img_sequencies_name.__contains__(args.seq_name):
-            print("img seq name non contiene " + args.seq_name)
-            img_sequencies_name.append(args.seq_name)
-            print("img seq name : " )
-            print(img_sequencies_name)
-        '''
+        #if not img_sequencies_name.__contains__(args.seq_name):
+        #    print("img seq name non contiene " + args.seq_name)
+        #    img_sequencies_name.append(args.seq_name)
+        #    print("img seq name : " )
+        #    print(img_sequencies_name)
+        
 
         
 
@@ -484,6 +484,7 @@ def main():
             print("dataset error")
             
     '''
+
     f_val_seq = open("./val_seqs1.txt", "r")
     img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
     print(img_sequencies_name)
@@ -599,6 +600,12 @@ def main():
 
         old_temp = args.seq_name
 
+    results_filename = os.path.join(text_dir, 'results.txt')
+    f_results = open(results_filename,'w')
+
+    f_results.write(acc.events)
+    f_results.write(acc.mot_events)
+
     print(acc.events)
 
     print(acc.mot_events)
@@ -607,11 +614,15 @@ def main():
     summary = mh.compute(acc, metrics=['num_frames', 'mota', 'motp'], name='acc')
     print(summary)
 
+    f_results.write(summary)
+
     summary = mh.compute_many(
         [acc, acc.events.loc[0:1]],
         metrics=['num_frames', 'mota', 'motp'],
         names=['full', 'part'])
     print(summary)
+
+    f_results.write(summary)
 
     strsummary = mm.io.render_summary(
         summary,
@@ -619,6 +630,8 @@ def main():
         namemap={'mota': 'MOTA', 'motp': 'MOTP'}
     )
     print(strsummary)
+
+    f_results.write(summary)
 
     summary = mh.compute_many(
         [acc, acc.events.loc[0:1]],
@@ -631,6 +644,8 @@ def main():
         namemap=mm.io.motchallenge_metric_names
     )
     print(strsummary)
+
+    f_results.write(summary)
 
     summary = mh.compute_many(
         [acc, acc.events.loc[0:1]],
@@ -645,8 +660,10 @@ def main():
         namemap=mm.io.motchallenge_metric_names
     )
     print(strsummary)
+
+    f_results.write(strsummary)
     
-    '''
+    #'''
 
     '''
     string_data = "30-6-2021-20-21-14"
