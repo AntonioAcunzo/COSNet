@@ -363,6 +363,7 @@ def main():
                     box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations.txt')
 
                     #Bounding box di tutte le annotazioni
+                    '''
 
                     if os.path.exists(box_text_annotation_filename):
                         f_annotation = open(box_text_annotation_filename, "a")
@@ -398,7 +399,7 @@ def main():
                     cv2.imwrite(os.path.join(save_dir_bba, 'BoundingBox_annotation_{}.png'.format(my_index)), copy_img_annotation)
                     f_annotation.close()
 
-
+                    '''
 
                     #draw BoundingBox on mask and on original img
 
@@ -431,14 +432,11 @@ def main():
                     #if not os.path.exists(text_dir):
                     #    os.makedirs(text_dir)
 
-                    #box_text_filename = os.path.join(text_dir, 'boxes_' + string_data + '.txt')
                     box_text_filename = os.path.join(text_dir, 'boxes.txt')
                     if os.path.exists(box_text_filename):
                         f = open(box_text_filename, "a")
                     else:
                         f = open(box_text_filename, "w")
-
-
 
                     if len(boxes) != 0 :
                         best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
@@ -447,9 +445,13 @@ def main():
                         best_rect = [best_x,best_y,best_w,best_h,best_area]
                         for j in boxes:
                             if j != best_rect:
-                                cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
-                                cv2.rectangle(result_original,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                                f.write(str(my_index) + ",0," + str(j[0]) + "," + str(j[1]) + "," + str(j[2]) + "," + str(j[3]) + "\n")
+                                print(j)
+                                if j[0]>best_x and j[0]<best_x+best_w and j[0]+j[2]>best_x and j[0]+j[2]<best_x+best_w and j[1]>best_y and j[1]<best_y+best_h and j[1]+j[3]>best_y and j[1]+j[3]<best_y+best_h:
+                                    print("bbox compresa")
+                                else:
+                                    cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                                    cv2.rectangle(result_original,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                                    f.write(str(my_index) + ",0," + str(j[0]) + "," + str(j[1]) + "," + str(j[2]) + "," + str(j[3]) + "\n")
                             else:
                                 # best box
                                 cv2.rectangle(result_mask, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
