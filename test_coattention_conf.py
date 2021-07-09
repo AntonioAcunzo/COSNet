@@ -610,10 +610,16 @@ def main():
 
             old_temp = args.seq_name
 
+        text_dir = os.path.join(text_dir, 'TEST')
+        if not os.path.exists(text_dir):
+            os.makedirs(text_dir)
+
+
+
         if args.mode == 'good':
-            results_filename = os.path.join(text_dir, 'results_good.txt')
+            results_filename = os.path.join(text_dir, 'results_good_'+ str(img_sequencies_name.__len__()) + '-' + str(string_data) + '.txt')
         else:
-            results_filename = os.path.join(text_dir, 'results.txt')
+            results_filename = os.path.join(text_dir, 'results_'+ str(img_sequencies_name.__len__())+ '-' + str(string_data) + '.txt')
 
         f_results = open(results_filename,'w')
 
