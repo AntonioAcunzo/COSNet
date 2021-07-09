@@ -259,7 +259,7 @@ def main(img_sequences_name,path_original_img,path_boxes_txt):
         # get good boxes
         #img_seq_name = "blackswan"
         print(path_boxes_txt1 + '/boxes_good.txt')
-        importance = 5
+        importance = 10
         f_good = open(path_boxes_txt1 + '/boxes_good.txt', 'w')
 
         list_tracks = []
