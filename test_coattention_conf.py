@@ -603,7 +603,9 @@ def main():
     results_filename = os.path.join(text_dir, 'results.txt')
     f_results = open(results_filename,'w')
 
-    f_results.write(acc.events.astype("string"))
+    a = acc.events.applymap(str)
+
+    f_results.write(a)
     f_results.write(acc.mot_events.astype("string"))
 
     print(acc.events)
