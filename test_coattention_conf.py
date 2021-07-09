@@ -54,6 +54,7 @@ def get_arguments():
     parser.add_argument("--seq_name", default = 'bmx-bumps')
     parser.add_argument("--use_crf", default = 'True')
     parser.add_argument("--sample_range", default =5)
+    parser.add_argument("--tresh", default=127)
     
     return parser.parse_args()
 
@@ -189,7 +190,9 @@ def main():
     old_temp=''
 
     img_sequencies_name = []
-    soglia = 127
+    #soglia = 127
+    soglia = args.tresh
+    print("soglia: ",soglia)
 
 
     #'''
