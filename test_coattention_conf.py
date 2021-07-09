@@ -605,7 +605,7 @@ def main():
 
     a = acc.events.applymap(str)
 
-    f_results.write(a)
+    f_results.write(str(a))
     f_results.write(acc.mot_events.astype("string"))
 
     print(acc.events)
