@@ -610,7 +610,7 @@ def main():
 
             old_temp = args.seq_name
 
-        text_dir = os.path.join(text_dir, 'TEST')
+        text_dir = os.path.join(path_boxes_txt, 'TEST')
         print(text_dir)
         if not os.path.exists(text_dir):
             os.makedirs(text_dir)
