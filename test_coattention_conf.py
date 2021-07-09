@@ -537,11 +537,12 @@ def main():
 
                 all_boxes = [x.strip() for x in f.readlines()]
                 all_boxes = [x.split(',') for x in all_boxes]
-                value_correct = int(all_boxes[0][0])
-                print(value_correct)
+                #value_correct = int(all_boxes[0][0])
+                #print(value_correct)
 
 
                 f.close()
+
                 f_annotation.close()
 
             hypotheses = []
