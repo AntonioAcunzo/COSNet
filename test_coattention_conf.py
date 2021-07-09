@@ -585,7 +585,7 @@ def main():
             # objs.shape - ---> (4,)
             # objs.shape - ---> (1, 4)
             for a in box_in_frame:
-                print(a)
+                #print(a)
                 hyps.append(a)
             print(hyps)
             hyps = np.array(hyps)
