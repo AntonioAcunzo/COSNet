@@ -204,6 +204,8 @@ def main():
             target = batch['target']
             temp = batch['seq_name']
 
+            print(batch)
+
             args.seq_name=temp[0]
 
 
