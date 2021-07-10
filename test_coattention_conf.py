@@ -271,10 +271,6 @@ def main():
                 my_index = 0
                 cont = cont+1
                 args.seq_name = img_sequencies_name[cont]
-                path_annotation = os.path.join(args.data_dir, 'Annotations/VID/val')
-                path_annotation = os.path.join(path_annotation, args.seq_name)
-                path_annotation = path_annotation + "/" + '%06d' % int(my_index1) + ".xml"
-                root = ET.parse(path_annotation).getroot()
 
             print("my_index : ",my_index)
             print("cont : ",cont)
