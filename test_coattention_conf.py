@@ -33,6 +33,7 @@ from torchvision import transforms
 import box_tracker
 
 import motmetrics as mm
+import xml.etree.ElementTree as ET
 
 
 
@@ -269,6 +270,7 @@ def main():
                 my_index = 0
                 cont = cont+1
                 args.seq_name = img_sequencies_name[cont]
+                root = ET.parse('thefile.xml').getroot()
 
             print("my_index : ",my_index)
             print("cont : ",cont)
@@ -402,35 +404,44 @@ def main():
                 print("path annotation : " + path_annotation)
                 if args.dataset == 'davis' or args.dataset == 'davis_yoda':
                     path_annotation = path_annotation + "/" + '%05d' % int(my_index1) + ".png"
+
+                    #path_annotation = filename_target
+                    print("path annotation : " + path_annotation)
+                    img_annotation = cv2.imread(path_annotation)
+                    copy_img_annotation = img_annotation.copy()
+                    gray_mask_annotation = cv2.cvtColor(img_annotation, cv2.COLOR_RGB2GRAY)
+                    thresh_annotation = cv2.threshold(gray_mask_annotation, soglia, 255, cv2.THRESH_BINARY)[1]
+                    contours_annotation = cv2.findContours(thresh_annotation, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                    contours_annotation = contours_annotation[0] if len(contours_annotation) == 2 else contours_annotation[1]
+                    boxes = []
+                    for cntr in contours_annotation:
+                        x, y, w, h = cv2.boundingRect(cntr)
+                        #print("Bounding Box annotation {}".format(my_index1))
+                        #print("x,y,w,h:", x, y, w, h)
+                        boxes.append([x,y,w,h])
+                        #print("Boxes :", boxes)
+                    if len(boxes) != 0 :
+                        for j in boxes:
+                            cv2.rectangle(copy_img_annotation,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                            f_annotation.write(str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                            #print("stringa che salvo nel file txt: [" + str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3]) + " ]")
+
+                    save_dir_bba = os.path.join(save_dir_res, "Bounding_box_annotations")
+                    if not os.path.exists(save_dir_bba):
+                        os.makedirs(save_dir_bba)
+                    cv2.imwrite(os.path.join(save_dir_bba, 'BoundingBox_annotation_{}.png'.format(my_index)), copy_img_annotation)
+                    f_annotation.close()
+
                 else:
-                    #path_annotation = path_annotation + "/" + '%06d' % int(my_index1) + ".xml"
-                    path_annotation = filename_target
-                print("path annotation : " + path_annotation)
-                img_annotation = cv2.imread(path_annotation)
-                copy_img_annotation = img_annotation.copy()
-                gray_mask_annotation = cv2.cvtColor(img_annotation, cv2.COLOR_RGB2GRAY)
-                thresh_annotation = cv2.threshold(gray_mask_annotation, soglia, 255, cv2.THRESH_BINARY)[1]
-                contours_annotation = cv2.findContours(thresh_annotation, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-                contours_annotation = contours_annotation[0] if len(contours_annotation) == 2 else contours_annotation[1]
-                boxes = []
-                for cntr in contours_annotation:
-                    x, y, w, h = cv2.boundingRect(cntr)
-                    #print("Bounding Box annotation {}".format(my_index1))
-                    #print("x,y,w,h:", x, y, w, h)
-                    boxes.append([x,y,w,h])
-                    #print("Boxes :", boxes)
-                if len(boxes) != 0 :
-                    for j in boxes:
-                        cv2.rectangle(copy_img_annotation,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                        f_annotation.write(str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-                        #print("stringa che salvo nel file txt: [" + str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3]) + " ]")
-
-                save_dir_bba = os.path.join(save_dir_res, "Bounding_box_annotations")
-                if not os.path.exists(save_dir_bba):
-                    os.makedirs(save_dir_bba)
-                cv2.imwrite(os.path.join(save_dir_bba, 'BoundingBox_annotation_{}.png'.format(my_index)), copy_img_annotation)
-                f_annotation.close()
-
+                    path_annotation = path_annotation + "/" + '%06d' % int(my_index1) + ".xml"
+                    root = ET.parse(path_annotation).getroot()
+                    childs = root[4]
+                    child = childs[2]
+                    xmax = child[0].text
+                    xmin = child[1].text
+                    ymax = child[2].text
+                    ymin = child[3].text
+                    f_annotation.write(str(my_index) + "," + str(xmin) + "," + str(ymin) + "," + str(int(xmax)-int(xmin)) + "," + str(int(ymax)-int(ymin)) + "\n")
 
 
                 #draw BoundingBox on mask and on original img
