@@ -82,9 +82,8 @@ def configure_dataset_model(args):
         args.data_dir = '/mnt/ILSVRC2017_VID/ILSVRC'
         args.data_list = '/mnt/ILSVRC2017_VID/ILSVRC/ImageSets/VID/val.txt'  # Path to the file listing the images in the dataset
         args.ignore_label = 255     #The index of the label to ignore during the training
-        #args.input_size = '473,473' #Comma-separated string with height and width of images
+        args.input_size = '473,473' #Comma-separated string with height and width of images
         #args.input_size = '1280,720'  # Comma-separated string with height and width of images
-        args.input_size = '640,360'
         args.num_classes = 2      #Number of classes to predict (including background) ****
         args.img_mean = np.array((104.00698793,116.66876762,122.67891434), dtype=np.float32)       # saving model file and log record during the process of training
         args.restore_from = './co_attention.pth' #resnet50-19c8e357.pth''/home/xiankai/PSPNet_PyTorch/snapshots/davis/psp_davis_0.pth' #
@@ -92,8 +91,8 @@ def configure_dataset_model(args):
         args.save_segimage = True
         args.seg_save_dir = "./result/test/imagenet_iteration_conf"
         args.vis_save_dir = "./result/test/imagenet_vis"
-        #args.corp_size =(473, 473)
-        args.corp_size = (640, 360)
+        args.corp_size =(473, 473)
+        #args.corp_size = (640, 360)
 
     elif args.dataset == 'davis':
         args.batch_size = 1 # 1 card: 5, 2 cards: 10 Number of images sent to the network in one step, 16 on paper
@@ -174,8 +173,8 @@ def main():
     model.cuda()
 
     if args.dataset == 'imagenet':  #for imagenet
-        #db_test = db.PairwiseImg(train=False, inputRes=(473, 473), db_root_dir=args.data_dir, transform=None,seq_name=None, sample_range=args.sample_range)
-        db_test = db.PairwiseImg(train=False, inputRes=(640,360), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range)
+        db_test = db.PairwiseImg(train=False, inputRes=(473, 473), db_root_dir=args.data_dir, transform=None,seq_name=None, sample_range=args.sample_range)
+        #db_test = db.PairwiseImg(train=False, inputRes=(640,360), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range)
         #db_test = db.PairwiseImg(train=False, inputRes=None, db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range) #db_root_dir() --> '/path/to/DAVIS-2016' train path
         testloader = data.DataLoader(db_test, batch_size=1, shuffle=False, num_workers=0)
         #voc_colorize = VOCColorize()
