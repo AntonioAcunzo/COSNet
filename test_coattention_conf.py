@@ -76,10 +76,14 @@ def configure_dataset_model(args):
     elif args.dataset == 'imagenet':
         args.batch_size = 1 # 1 card: 5, 2 cards: 10 Number of images sent to the network in one step, 16 on paper
         args.maxEpoches = 15 # 1 card: 15, 2 cards: 15 epoches, equal to 30k iterations, max iterations= maxEpoches*len(train_aug)/batch_size_per_gpu'),
-        args.data_dir = '/mnt/ILSVRC2017_VID/ILSVRC'   # 37572 image pairs
-        args.data_list = 'ILSVRC2017_VID/ILSVRC/ImageSets/VID/val.txt'  # Path to the file listing the images in the dataset
+        #args.data_dir = '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'  # 37572 image pairs
+        #args.data_list = '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC/val_seqs1.txt'  # Path to the file listing the images in the dataset
+
+        args.data_dir = '/mnt/ILSVRC2017_VID/ILSVRC'
+        args.data_list = '/mnt/ILSVRC2017_VID/ILSVRC/ImageSets/VID/val.txt'  # Path to the file listing the images in the dataset
         args.ignore_label = 255     #The index of the label to ignore during the training
-        args.input_size = '473,473' #Comma-separated string with height and width of images
+        #args.input_size = '473,473' #Comma-separated string with height and width of images
+        args.input_size = '1280,720'  # Comma-separated string with height and width of images
         args.num_classes = 2      #Number of classes to predict (including background) ****
         args.img_mean = np.array((104.00698793,116.66876762,122.67891434), dtype=np.float32)       # saving model file and log record during the process of training
         args.restore_from = './co_attention.pth' #resnet50-19c8e357.pth''/home/xiankai/PSPNet_PyTorch/snapshots/davis/psp_davis_0.pth' #
@@ -87,7 +91,8 @@ def configure_dataset_model(args):
         args.save_segimage = True
         args.seg_save_dir = "./result/test/imagenet_iteration_conf"
         args.vis_save_dir = "./result/test/imagenet_vis"
-        args.corp_size =(473, 473)
+        #args.corp_size =(473, 473)
+        args.corp_size = (1280, 720)
 
     elif args.dataset == 'davis':
         args.batch_size = 1 # 1 card: 5, 2 cards: 10 Number of images sent to the network in one step, 16 on paper
@@ -168,7 +173,8 @@ def main():
     model.cuda()
 
     if args.dataset == 'imagenet':  #for imagenet
-        db_test = db.PairwiseImg(train=False, inputRes=(473,473), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range)
+        #db_test = db.PairwiseImg(train=False, inputRes=(473, 473), db_root_dir=args.data_dir, transform=None,seq_name=None, sample_range=args.sample_range)
+        db_test = db.PairwiseImg(train=False, inputRes=(1280,720), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range)
         #db_test = db.PairwiseImg(train=False, inputRes=None, db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range) #db_root_dir() --> '/path/to/DAVIS-2016' train path
         testloader = data.DataLoader(db_test, batch_size=1, shuffle=False, num_workers=0)
         #voc_colorize = VOCColorize()
@@ -195,6 +201,14 @@ def main():
     #soglia = 127
     soglia = int(args.tresh)
     print("soglia: ",soglia)
+
+    if args.dataset == 'davis' or args.dataset == 'davis_yoda':
+        f_val_seq = open("./val_seqs1.txt", "r")
+    else:
+        f_val_seq = open("./val_seqs2.txt", "r")
+    img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
+    print(img_sequencies_name)
+    cont = -1
 
     if args.step == '1':
         #'''
@@ -251,8 +265,12 @@ def main():
                 my_index = my_index+1
             else:
                 my_index = 0
+                cont = cont+1
+                args.seq_name = img_sequencies_name[cont]
 
             print("my_index : ",my_index)
+            print("cont : ",cont)
+            print("seq name : ",args.seq_name)
 
             output_sum = 0
 
@@ -287,13 +305,13 @@ def main():
                 print("path original img : " + path_original_img)
 
 
-
+            #if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
             if (args.data_dir == '/mnt/ILSVRC2017_VID/ILSVRC'):
                 first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
                 path_annotation = os.path.join(args.data_dir, 'Annotations/VID/val')
                 print("path annotation : " + path_annotation)
                 path_original_img = os.path.join(args.data_dir, 'Data/VID/val')
-                path_original_img = path_original_img + "/" + args.seq_name
+                path_original_img = path_original_img + "/" + img_sequencies_name[cont]
                 print("path original img : " + path_original_img)
 
 
@@ -499,12 +517,7 @@ def main():
 
     if args.step == '2':
 
-        if args.dataset == 'davis' or args.dataset == 'davis_yoda':
-            f_val_seq = open("./val_seqs1.txt", "r")
-        else:
-            f_val_seq = open("./val_seqs2.txt", "r")
-        img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
-        print(img_sequencies_name)
+
         acc = mm.MOTAccumulator(auto_id=True)
         # Avvio tracker
         path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
