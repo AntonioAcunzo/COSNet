@@ -76,7 +76,7 @@ def configure_dataset_model(args):
     elif args.dataset == 'imagenet':
         args.batch_size = 1 # 1 card: 5, 2 cards: 10 Number of images sent to the network in one step, 16 on paper
         args.maxEpoches = 15 # 1 card: 15, 2 cards: 15 epoches, equal to 30k iterations, max iterations= maxEpoches*len(train_aug)/batch_size_per_gpu'),
-        args.data_dir = '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'   # 37572 image pairs
+        args.data_dir = '/mnt/ILSVRC2017_VID/ILSVRC'   # 37572 image pairs
         args.data_list = '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC/val_seqs1.txt'  # Path to the file listing the images in the dataset
         args.ignore_label = 255     #The index of the label to ignore during the training
         args.input_size = '473,473' #Comma-separated string with height and width of images
@@ -168,7 +168,7 @@ def main():
     model.cuda()
 
     if args.dataset == 'imagenet':  #for imagenet
-        db_test = db.PairwiseImg(train=False, inputRes=(473,473), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range) #db_root_dir() --> '/path/to/DAVIS-2016' train path
+        db_test = db.PairwiseImg(train=False, inputRes=(473,473), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range)
         #db_test = db.PairwiseImg(train=False, inputRes=None, db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range) #db_root_dir() --> '/path/to/DAVIS-2016' train path
         testloader = data.DataLoader(db_test, batch_size=1, shuffle=False, num_workers=0)
         #voc_colorize = VOCColorize()
@@ -286,13 +286,13 @@ def main():
 
 
 
-            if (args.data_dir == '/thecube/students/lpisaneschi/ILSVRC2017_VID/ILSVRC'):
+            if (args.data_dir == '/mnt/ILSVRC2017_VID/ILSVRC'):
                 first_image = np.array(Image.open(args.data_dir + '/Data/VID/val/ILSVRC2015_val_00000000/000000.JPEG'))
-                #path_annotation = os.path.join(args.data_dir, 'Annotations/480p')
-                #print("path annotation : " + path_annotation)
-                #path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
-                #path_original_img = path_original_img + "/" + args.seq_name
-                #print("path original img : " + path_original_img)
+                path_annotation = os.path.join(args.data_dir, 'Annotations/VID/val')
+                print("path annotation : " + path_annotation)
+                path_original_img = os.path.join(args.data_dir, 'Data/VID/val')
+                path_original_img = path_original_img + "/" + args.seq_name
+                print("path original img : " + path_original_img)
 
 
             original_shape = first_image.shape # (480, 854, 3)
@@ -301,21 +301,27 @@ def main():
             mask = (output1*255).astype(np.uint8)
             mask = Image.fromarray(mask)
 
-
+            '''
             if args.dataset == 'imagenet':
 
                 save_dir_res = os.path.join(args.seg_save_dir, 'Results-Imagenet'.format(soglia), args.seq_name)
                 old_temp = args.seq_name
                 if not os.path.exists(save_dir_res):
                     os.makedirs(save_dir_res)
+                seg_filename = os.path.join(save_dir_res, 'Mask')
+                if not os.path.exists(seg_filename):
+                    os.makedirs(seg_filename)
                 if args.save_segimage:
-                    my_index1 = str(my_index).zfill(5)
+                    my_index1 = str(my_index).zfill(6)
                     seg_filename = os.path.join(save_dir_res, 'mask_{}.png'.format(my_index1))
-                    #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
                     mask.save(seg_filename)
-                    #np.concatenate((torch.zeros(1, 473, 473), mask, torch.zeros(1, 512, 512)),axis = 0)
-                    #save_image(output1 * 0.8 + target.data, args.vis_save_dir, normalize=True)
 
+                    text_dir = os.path.join(save_dir_res, 'Txt')
+                    if not os.path.exists(text_dir):
+                        os.makedirs(text_dir)
+
+                    box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations.txt')
+                    
                     img_mask = cv2.imread(seg_filename)
                     img_original = cv2.imread(filename_target)
                     img_original = cv2.resize(img_original, (original_shape[1], original_shape[0]))
@@ -333,155 +339,155 @@ def main():
 
                     # save resulting image
                     cv2.imwrite(os.path.join(save_dir_res, 'BoundingBox_mask_{}.png'.format(my_index1)), result_mask)
-                    cv2.imwrite(os.path.join(save_dir_res, 'BoundingBox_img_{}.png'.format(my_index1)), result_original)
+                    cv2.imwrite(os.path.join(save_dir_res, 'BoundingBox_img_{}.png'.format(my_index1)), result_original) 
+            '''
 
-            elif args.dataset == 'davis' or args.dataset == 'davis_yoda':
-
-                save_dir_res = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia) , args.seq_name)
-
-
-                old_temp=args.seq_name
-                if not os.path.exists(save_dir_res):
-                    os.makedirs(save_dir_res)
-                seg_filename = os.path.join(save_dir_res, 'Mask')
-                if not os.path.exists(seg_filename):
-                    os.makedirs(seg_filename)
-                if args.save_segimage:
+            save_dir_res = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia) , args.seq_name)
+            old_temp=args.seq_name
+            if not os.path.exists(save_dir_res):
+                os.makedirs(save_dir_res)
+            seg_filename = os.path.join(save_dir_res, 'Mask')
+            if not os.path.exists(seg_filename):
+                os.makedirs(seg_filename)
+            if args.save_segimage:
+                if args.dataset == 'davis' or args.dataset == 'davis_yoda':
                     my_index1 = str(my_index).zfill(5)
-                    seg_filename = os.path.join(seg_filename, 'mask_{}.png'.format(my_index1))
-                    #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
-                    mask.save(seg_filename)
+                else:
+                    my_index1 = str(my_index).zfill(6)
+                seg_filename = os.path.join(seg_filename, 'mask_{}.png'.format(my_index1))
+                #color_file = Image.fromarray(voc_colorize(output).transpose(1, 2, 0), 'RGB')
+                mask.save(seg_filename)
 
-                    # ***
-                    # take BoundingBox on mask annotation for py-motmetrics
-                    # File txt for save bbox annotations
+                # ***
+                # take BoundingBox on mask annotation for py-motmetrics
+                # File txt for save bbox annotations
 
-                    text_dir = os.path.join(save_dir_res, 'Txt')
-                    if not os.path.exists(text_dir):
-                        os.makedirs(text_dir)
-                    #box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations_' + string_data + '.txt')
-                    box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations.txt')
+                text_dir = os.path.join(save_dir_res, 'Txt')
+                if not os.path.exists(text_dir):
+                    os.makedirs(text_dir)
+                #box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations_' + string_data + '.txt')
+                box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations.txt')
 
-                    #Bounding box di tutte le annotazioni
-                    '''
+                #Bounding box di tutte le annotazioni
 
-                    if os.path.exists(box_text_annotation_filename):
-                        f_annotation = open(box_text_annotation_filename, "a")
-                    else:
-                        f_annotation = open(box_text_annotation_filename, "w")
 
-                    path_annotation = os.path.join(path_annotation, args.seq_name)
-                    print("path annotation : " + path_annotation)
-                    path_annotation = path_annotation + "/" + '%05d' % int(my_index1) + ".png"
-                    print("path annotation : " + path_annotation)
-                    img_annotation = cv2.imread(path_annotation)
-                    copy_img_annotation = img_annotation.copy()
-                    gray_mask_annotation = cv2.cvtColor(img_annotation, cv2.COLOR_RGB2GRAY)
-                    thresh_annotation = cv2.threshold(gray_mask_annotation, soglia, 255, cv2.THRESH_BINARY)[1]
-                    contours_annotation = cv2.findContours(thresh_annotation, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-                    contours_annotation = contours_annotation[0] if len(contours_annotation) == 2 else contours_annotation[1]
-                    boxes = []
-                    for cntr in contours_annotation:
-                        x, y, w, h = cv2.boundingRect(cntr)
-                        #print("Bounding Box annotation {}".format(my_index1))
-                        #print("x,y,w,h:", x, y, w, h)
-                        boxes.append([x,y,w,h])
-                        #print("Boxes :", boxes)
-                    if len(boxes) != 0 :
-                        for j in boxes:
-                            cv2.rectangle(copy_img_annotation,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                            f_annotation.write(str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-                            #print("stringa che salvo nel file txt: [" + str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3]) + " ]")
+                if os.path.exists(box_text_annotation_filename):
+                    f_annotation = open(box_text_annotation_filename, "a")
+                else:
+                    f_annotation = open(box_text_annotation_filename, "w")
 
-                    save_dir_bba = os.path.join(save_dir_res, "Bounding_box_annotations")
-                    if not os.path.exists(save_dir_bba):
-                        os.makedirs(save_dir_bba)
-                    cv2.imwrite(os.path.join(save_dir_bba, 'BoundingBox_annotation_{}.png'.format(my_index)), copy_img_annotation)
-                    f_annotation.close()
+                path_annotation = os.path.join(path_annotation, args.seq_name)
+                print("path annotation : " + path_annotation)
+                path_annotation = path_annotation + "/" + '%05d' % int(my_index1) + ".png"
+                print("path annotation : " + path_annotation)
+                img_annotation = cv2.imread(path_annotation)
+                copy_img_annotation = img_annotation.copy()
+                gray_mask_annotation = cv2.cvtColor(img_annotation, cv2.COLOR_RGB2GRAY)
+                thresh_annotation = cv2.threshold(gray_mask_annotation, soglia, 255, cv2.THRESH_BINARY)[1]
+                contours_annotation = cv2.findContours(thresh_annotation, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                contours_annotation = contours_annotation[0] if len(contours_annotation) == 2 else contours_annotation[1]
+                boxes = []
+                for cntr in contours_annotation:
+                    x, y, w, h = cv2.boundingRect(cntr)
+                    #print("Bounding Box annotation {}".format(my_index1))
+                    #print("x,y,w,h:", x, y, w, h)
+                    boxes.append([x,y,w,h])
+                    #print("Boxes :", boxes)
+                if len(boxes) != 0 :
+                    for j in boxes:
+                        cv2.rectangle(copy_img_annotation,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                        f_annotation.write(str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                        #print("stringa che salvo nel file txt: [" + str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3]) + " ]")
 
-                    '''
+                save_dir_bba = os.path.join(save_dir_res, "Bounding_box_annotations")
+                if not os.path.exists(save_dir_bba):
+                    os.makedirs(save_dir_bba)
+                cv2.imwrite(os.path.join(save_dir_bba, 'BoundingBox_annotation_{}.png'.format(my_index)), copy_img_annotation)
+                f_annotation.close()
 
-                    #draw BoundingBox on mask and on original img
 
-                    img_mask = cv2.imread(seg_filename)
-                    img_original = cv2.imread(filename_target)
-                    #img_original = cv2.cvtColor(img_mask, cv2.COLOR_BGR2RGB)
-                    img_original = cv2.resize(img_original, (original_shape[1], original_shape[0]))
-                    result_mask = img_mask.copy()
-                    result_original = img_original.copy()
-                    #result_mask_full = img_mask.copy()
-                    #result_original_full = img_original.copy()
-                    gray_mask = cv2.cvtColor(img_mask, cv2.COLOR_RGB2GRAY)
-                    thresh = cv2.threshold(gray_mask, soglia, 255, cv2.THRESH_BINARY)[1]
-                    contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-                    contours = contours[0] if len(contours) == 2 else contours[1]
 
-                    best_rect = [0,0,0,0,0]      # [x,y,w,h,area]
-                    boxes = []
+                #draw BoundingBox on mask and on original img
 
-                    for cntr in contours:
-                        x, y, w, h = cv2.boundingRect(cntr)
-                        #print("Bounding Box img {}".format(my_index1))
-                        #print("x,y,w,h:", x, y, w, h)
-                        boxes.append([x,y,w,h,w*h])
-                        #print("Boxes :", boxes)
+                img_mask = cv2.imread(seg_filename)
+                img_original = cv2.imread(filename_target)
+                #img_original = cv2.cvtColor(img_mask, cv2.COLOR_BGR2RGB)
+                img_original = cv2.resize(img_original, (original_shape[1], original_shape[0]))
+                result_mask = img_mask.copy()
+                result_original = img_original.copy()
+                #result_mask_full = img_mask.copy()
+                #result_original_full = img_original.copy()
+                gray_mask = cv2.cvtColor(img_mask, cv2.COLOR_RGB2GRAY)
+                thresh = cv2.threshold(gray_mask, soglia, 255, cv2.THRESH_BINARY)[1]
+                contours = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                contours = contours[0] if len(contours) == 2 else contours[1]
 
-                    # File txt for save bbox detected
+                best_rect = [0,0,0,0,0]      # [x,y,w,h,area]
+                boxes = []
 
-                    #text_dir = os.path.join(save_dir_res, 'Txt')
-                    #if not os.path.exists(text_dir):
-                    #    os.makedirs(text_dir)
+                for cntr in contours:
+                    x, y, w, h = cv2.boundingRect(cntr)
+                    #print("Bounding Box img {}".format(my_index1))
+                    #print("x,y,w,h:", x, y, w, h)
+                    boxes.append([x,y,w,h,w*h])
+                    #print("Boxes :", boxes)
 
-                    box_text_filename = os.path.join(text_dir, 'boxes.txt')
-                    if os.path.exists(box_text_filename):
-                        f = open(box_text_filename, "a")
-                    else:
-                        f = open(box_text_filename, "w")
+                # File txt for save bbox detected
 
-                    if len(boxes) != 0 :
-                        best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
-                        print("Boxes :", boxes)
-                        print("MAX :" , best_x, best_y, best_w, best_h, best_area)
-                        best_rect = [best_x,best_y,best_w,best_h,best_area]
-                        for j in boxes:
-                            if j != best_rect:
-                                print(j)
-                                if j[0]>best_x and j[0]<best_x+best_w and j[0]+j[2]>best_x and j[0]+j[2]<best_x+best_w and j[1]>best_y and j[1]<best_y+best_h and j[1]+j[3]>best_y and j[1]+j[3]<best_y+best_h:
-                                    print("bbox compresa")
-                                else:
-                                    cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
-                                    cv2.rectangle(result_original,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                                    f.write(str(my_index) + ",0," + str(j[0]) + "," + str(j[1]) + "," + str(j[2]) + "," + str(j[3]) + "\n")
+                #text_dir = os.path.join(save_dir_res, 'Txt')
+                #if not os.path.exists(text_dir):
+                #    os.makedirs(text_dir)
+
+                box_text_filename = os.path.join(text_dir, 'boxes.txt')
+                if os.path.exists(box_text_filename):
+                    f = open(box_text_filename, "a")
+                else:
+                    f = open(box_text_filename, "w")
+
+                if len(boxes) != 0 :
+                    best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
+                    print("Boxes :", boxes)
+                    print("MAX :" , best_x, best_y, best_w, best_h, best_area)
+                    best_rect = [best_x,best_y,best_w,best_h,best_area]
+                    for j in boxes:
+                        if j != best_rect:
+                            print(j)
+                            if j[0]>best_x and j[0]<best_x+best_w and j[0]+j[2]>best_x and j[0]+j[2]<best_x+best_w and j[1]>best_y and j[1]<best_y+best_h and j[1]+j[3]>best_y and j[1]+j[3]<best_y+best_h:
+                                print("bbox compresa")
                             else:
-                                # best box
-                                cv2.rectangle(result_mask, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
-                                cv2.rectangle(result_original, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                                #cv2.rectangle(result_mask_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
-                                #cv2.rectangle(result_original_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                                f.write(str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-                                #print("stringa che salvo nel file txt: [" + str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"]")
+                                cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                                cv2.rectangle(result_original,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                                f.write(str(my_index) + ",0," + str(j[0]) + "," + str(j[1]) + "," + str(j[2]) + "," + str(j[3]) + "\n")
+                        else:
+                            # best box
+                            cv2.rectangle(result_mask, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                            cv2.rectangle(result_original, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                            #cv2.rectangle(result_mask_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                            #cv2.rectangle(result_original_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                            f.write(str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                            #print("stringa che salvo nel file txt: [" + str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"]")
 
-                        if my_index==0:
-                            #save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
-                            save_dir_bb = os.path.join(save_dir_res, "Bounding_box")
-                            #save_dir_mf = os.path.join(save_dir_res, "Bounding_mask_full")
-                            save_dir_m = os.path.join(save_dir_res, "Bounding_mask")
-                            #if not os.path.exists(save_dir_bbf):
-                            #    os.makedirs(save_dir_bbf)
-                            if not os.path.exists(save_dir_bb):
-                                os.makedirs(save_dir_bb)
-                            #if not os.path.exists(save_dir_mf):
-                            #    os.makedirs(save_dir_mf)
-                            if not os.path.exists(save_dir_m):
-                                os.makedirs(save_dir_m)
+                    if my_index==0:
+                        #save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
+                        save_dir_bb = os.path.join(save_dir_res, "Bounding_box")
+                        #save_dir_mf = os.path.join(save_dir_res, "Bounding_mask_full")
+                        save_dir_m = os.path.join(save_dir_res, "Bounding_mask")
+                        #if not os.path.exists(save_dir_bbf):
+                        #    os.makedirs(save_dir_bbf)
+                        if not os.path.exists(save_dir_bb):
+                            os.makedirs(save_dir_bb)
+                        #if not os.path.exists(save_dir_mf):
+                        #    os.makedirs(save_dir_mf)
+                        if not os.path.exists(save_dir_m):
+                            os.makedirs(save_dir_m)
 
-                        # save resulting image
-                        cv2.imwrite(os.path.join(save_dir_m, 'BoundingBox_mask_{}.png'.format(my_index1)), result_mask)
-                        cv2.imwrite(os.path.join(save_dir_bb, 'BoundingBox_img_{}.png'.format(my_index1)), cv2.cvtColor(result_original, cv2.COLOR_RGB2BGR))
-                        #cv2.imwrite(os.path.join(save_dir_mf, 'BoundingBox_mask_full_{}.png'.format(my_index1)), result_mask_full)
-                        #cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
+                    # save resulting image
+                    cv2.imwrite(os.path.join(save_dir_m, 'BoundingBox_mask_{}.png'.format(my_index1)), result_mask)
+                    cv2.imwrite(os.path.join(save_dir_bb, 'BoundingBox_img_{}.png'.format(my_index1)), cv2.cvtColor(result_original, cv2.COLOR_RGB2BGR))
+                    #cv2.imwrite(os.path.join(save_dir_mf, 'BoundingBox_mask_full_{}.png'.format(my_index1)), result_mask_full)
+                    #cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
 
-                    f.close()
+                f.close()
 
 
             else:
@@ -491,7 +497,10 @@ def main():
 
     if args.step == '2':
 
-        f_val_seq = open("./val_seqs1.txt", "r")
+        if args.dataset == 'davis' or args.dataset == 'davis_yoda':
+            f_val_seq = open("./val_seqs1.txt", "r")
+        else:
+            f_val_seq = open("./val_seqs2.txt", "r")
         img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
         print(img_sequencies_name)
         acc = mm.MOTAccumulator(auto_id=True)
