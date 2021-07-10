@@ -262,6 +262,7 @@ def main():
             PIL_img_from_numpy.save(filename_target)
 
             # my_index è l'indice nella seq_name
+            print("old_temp: " , old_temp)
             if old_temp==args.seq_name:
                 my_index = my_index+1
             else:
