@@ -84,7 +84,7 @@ def configure_dataset_model(args):
         args.ignore_label = 255     #The index of the label to ignore during the training
         #args.input_size = '473,473' #Comma-separated string with height and width of images
         #args.input_size = '1280,720'  # Comma-separated string with height and width of images
-        args.input_size = '600,600'
+        args.input_size = '640,360'
         args.num_classes = 2      #Number of classes to predict (including background) ****
         args.img_mean = np.array((104.00698793,116.66876762,122.67891434), dtype=np.float32)       # saving model file and log record during the process of training
         args.restore_from = './co_attention.pth' #resnet50-19c8e357.pth''/home/xiankai/PSPNet_PyTorch/snapshots/davis/psp_davis_0.pth' #
@@ -175,7 +175,7 @@ def main():
 
     if args.dataset == 'imagenet':  #for imagenet
         #db_test = db.PairwiseImg(train=False, inputRes=(473, 473), db_root_dir=args.data_dir, transform=None,seq_name=None, sample_range=args.sample_range)
-        db_test = db.PairwiseImg(train=False, inputRes=(600,600), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range)
+        db_test = db.PairwiseImg(train=False, inputRes=(640,360), db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range)
         #db_test = db.PairwiseImg(train=False, inputRes=None, db_root_dir=args.data_dir,  transform=None, seq_name = None, sample_range = args.sample_range) #db_root_dir() --> '/path/to/DAVIS-2016' train path
         testloader = data.DataLoader(db_test, batch_size=1, shuffle=False, num_workers=0)
         #voc_colorize = VOCColorize()
