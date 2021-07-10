@@ -210,6 +210,7 @@ def main():
     img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
     print(img_sequencies_name)
     cont = -1
+    args.seq_name="0"
 
     if args.step == '1':
         #'''
@@ -221,7 +222,7 @@ def main():
 
             #print(batch)
 
-            args.seq_name=temp[0]
+            #args.seq_name=temp[0]
 
 
             # Creo lista di seq name
