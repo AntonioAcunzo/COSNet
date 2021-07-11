@@ -439,7 +439,7 @@ def main():
                         x, y, w, h = cv2.boundingRect(cntr)
                         #print("Bounding Box annotation {}".format(my_index1))
                         #print("x,y,w,h:", x, y, w, h)
-                        boxes.append([x,y,w,h])
+                        boxes.append([x,y,w,h,w*h])
                     if len(boxes) != 0 :
                         best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
                         print("Boxes :", boxes)
