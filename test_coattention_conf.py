@@ -58,6 +58,7 @@ def get_arguments():
     parser.add_argument("--tresh", default=127)
     parser.add_argument("--step", default=1)
     parser.add_argument("--mode", default='normal')
+    parser.add_argument("--type", default='1')
     
     return parser.parse_args()
 
@@ -211,6 +212,7 @@ def main():
         my_index = -1
     img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
     print(img_sequencies_name)
+    f_val_seq.close()
     cont = 0
     args.seq_name="0"
 
@@ -598,10 +600,23 @@ def main():
 
     if args.step == '2':
 
+        if args.dataset == 'davis' or args.dataset == 'davis_yoda':
+            f_val_seq = open("./val_seqs1.txt", "r")
+            my_index = 0
+        else:
+            f_val_seq = open("./val_seqs2.txt", "r")
+            my_index = -1
+        img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
+        print(img_sequencies_name)
+        f_val_seq.close()
+
 
         acc = mm.MOTAccumulator(auto_id=True)
         # Avvio tracker
-        path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
+        if args.dataset == 'davis' or args.dataset == 'davis_yoda':
+            path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
+        else:
+            path_original_img = os.path.join(args.data_dir, 'Data/VID/val')
         print("Avvio tracker su " + path_original_img)
         path_boxes_txt = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia))
         box_tracker.main(img_sequencies_name, path_original_img, path_boxes_txt)
@@ -610,21 +625,47 @@ def main():
         my_index = 0
         old_temp = ''
 
+
         print("INIZIO SECONDO STEP")
         # STEP 2, aggiorno frame per frame l'accumulatore
         for index, batch in enumerate(testloader):
 
             temp = batch['seq_name']
-            args.seq_name = temp[0]
-            if old_temp == args.seq_name:
-                my_index = my_index + 1
-            else:
-                my_index = 0
+            #args.seq_name = temp[0]
+
+            if index == 0 and args.data_dir == '/mnt/ILSVRC2017_VID/ILSVRC':
+                args.seq_name = img_sequencies_name[0]
+
+            if (args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
+                args.seq_name = temp[0]
+                print("old_temp: " , old_temp)
+                if old_temp==args.seq_name:
+                    my_index = my_index+1
+                else:
+                    my_index = 0
+
+            if (args.data_dir == '/mnt/ILSVRC2017_VID/ILSVRC'):
+                path_original_img = os.path.join(args.data_dir, 'Data/VID/val')
+                path_original_img = path_original_img + "/" + args.seq_name
+                end = len([name for name in os.listdir(path_original_img) if os.path.isfile(os.path.join(path_original_img, name))])
+                print("num img :", end)
+                print("old_temp: ", old_temp)
+                if my_index == end :
+                    my_index = 0
+                    cont = cont+1
+                    args.seq_name = img_sequencies_name[cont]
+                else:
+                    my_index = my_index + 1
+
+            print("my_index : ",my_index)
+            print("cont : ",cont)
+            print("seq name : ",args.seq_name)
 
             if my_index==0:
                 print("Primo frame della sequenza " , args.seq_name)
                 save_dir_res = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia), args.seq_name)
                 text_dir = os.path.join(save_dir_res, 'Txt')
+                save_dir_res_final =  text_dir
                 if args.mode == 'good':
                     box_text_filename = os.path.join(text_dir, 'boxes_good.txt')
                 else:
@@ -639,8 +680,25 @@ def main():
                 all_annotations = [x.strip() for x in f_annotation.readlines()]
                 all_annotations = [x.split(',') for x in all_annotations]
 
+                first = all_annotations[0]
+                old = first[0]
+                old_area = first[3]*first[4]
+                c = 0
                 for i in all_annotations:
-                    i.remove(i[0])
+                    if i[0] == old & c!=0:
+                        #non è il primo elemento
+                        area = i[3] * i[4]
+                        if area > old_area:
+                            all_annotations.remove(all_annotations.index(i)-1)
+                        else:
+                            all_annotations.remove(i)
+                            print("Rimosso :")
+                            print(i)
+                    old = i[0]
+                    c=1
+                print("frame video secondo all_annotations modificato :", len(all_annotations))
+
+                #i.remove(i[0])
 
                 all_boxes = [x.strip() for x in f.readlines()]
                 all_boxes = [x.split(',') for x in all_boxes]
@@ -726,14 +784,20 @@ def main():
 
 
         if args.mode == 'good':
-            results_filename = os.path.join(text_dir, 'results_good_'+ str(img_sequencies_name.__len__()) + '-' + str(string_data) + '.txt')
+            if args.type == '1':
+                results_filename = os.path.join(save_dir_res_final,'results_good_' + str(img_sequencies_name.__len__()) + '-' + str(string_data) + '.txt')
+            else:
+                results_filename = os.path.join(text_dir, 'results_good_'+ str(img_sequencies_name.__len__()) + '-' + str(string_data) + '.txt')
         else:
-            results_filename = os.path.join(text_dir, 'results_'+ str(img_sequencies_name.__len__())+ '-' + str(string_data) + '.txt')
+            if args.type == '1':
+                results_filename = os.path.join(save_dir_res_final,'results_good_' + str(img_sequencies_name.__len__()) + '-' + str(string_data) + '.txt')
+            else:
+                results_filename = os.path.join(text_dir, 'results_'+ str(img_sequencies_name.__len__())+ '-' + str(string_data) + '.txt')
 
         f_results = open(results_filename,'w')
 
-        f_results.write("\n ACC EVENTS \n")
-        f_results.write(str(acc.events))
+        #f_results.write("\n ACC EVENTS \n")
+        #f_results.write(str(acc.events))
         f_results.write("\n ACC MOT EVENTS \n")
         f_results.write(str(acc.mot_events))
 
@@ -743,7 +807,7 @@ def main():
         mh = mm.metrics.create()
         summary = mh.compute(acc, metrics=['num_frames', 'mota', 'motp'], name='acc')
         print(summary)
-        f_results.write("\n ACC SUMMARY \n")
+        f_results.write("\n ACC SUMMARY 1\n")
         f_results.write(str(summary))
 
         summary = mh.compute_many(
@@ -751,9 +815,10 @@ def main():
             metrics=['num_frames', 'mota', 'motp'],
             names=['full', 'part'])
         print(summary)
-        f_results.write("\n ACC SUMMARY \n")
+        f_results.write("\n ACC SUMMARY 2\n")
         f_results.write(str(summary))
 
+        '''
         strsummary = mm.io.render_summary(
             summary,
             formatters={'mota': '{:.2%}'.format},
@@ -762,6 +827,7 @@ def main():
         print(strsummary)
         f_results.write("\n ACC SUMMARY \n")
         f_results.write(str(summary))
+        
 
         summary = mh.compute_many(
             [acc, acc.events.loc[0:1]],
@@ -776,6 +842,7 @@ def main():
         print(strsummary)
         f_results.write("\n ACC SUMMARY \n")
         f_results.write(str(summary))
+        '''
 
         summary = mh.compute_many(
             [acc, acc.events.loc[0:1]],
@@ -790,7 +857,7 @@ def main():
             namemap=mm.io.motchallenge_metric_names
         )
         print(strsummary)
-        f_results.write("\n ACC SUMMARY \n")
+        f_results.write("\n ACC SUMMARY FINAL\n")
         f_results.write(str(strsummary))
     
     #'''
