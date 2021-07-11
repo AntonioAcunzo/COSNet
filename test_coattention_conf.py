@@ -208,7 +208,7 @@ def main():
         my_index = 0
     else:
         f_val_seq = open("./val_seqs2.txt", "r")
-        my_index = 299
+        my_index = -1
     img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
     print(img_sequencies_name)
     f_val_seq.close()
