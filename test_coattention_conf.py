@@ -567,19 +567,18 @@ def main():
                             f.write(str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
                             #print("stringa che salvo nel file txt: [" + str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"]")
 
-                    if my_index==0:
-                        #save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
-                        save_dir_bb = os.path.join(save_dir_res, "Bounding_box")
-                        #save_dir_mf = os.path.join(save_dir_res, "Bounding_mask_full")
-                        save_dir_m = os.path.join(save_dir_res, "Bounding_mask")
-                        #if not os.path.exists(save_dir_bbf):
-                        #    os.makedirs(save_dir_bbf)
-                        if not os.path.exists(save_dir_bb):
-                            os.makedirs(save_dir_bb)
-                        #if not os.path.exists(save_dir_mf):
-                        #    os.makedirs(save_dir_mf)
-                        if not os.path.exists(save_dir_m):
-                            os.makedirs(save_dir_m)
+                    #save_dir_bbf = os.path.join(save_dir_res, "Bounding_box_full")
+                    save_dir_bb = os.path.join(save_dir_res, "Bounding_box")
+                    #save_dir_mf = os.path.join(save_dir_res, "Bounding_mask_full")
+                    save_dir_m = os.path.join(save_dir_res, "Bounding_mask")
+                    #if not os.path.exists(save_dir_bbf):
+                    #    os.makedirs(save_dir_bbf)
+                    if not os.path.exists(save_dir_bb):
+                        os.makedirs(save_dir_bb)
+                    #if not os.path.exists(save_dir_mf):
+                    #    os.makedirs(save_dir_mf)
+                    if not os.path.exists(save_dir_m):
+                        os.makedirs(save_dir_m)
 
                     # save resulting image
                     cv2.imwrite(os.path.join(save_dir_m, 'BoundingBox_mask_{}.png'.format(my_index1)), result_mask)
