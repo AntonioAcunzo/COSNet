@@ -205,8 +205,10 @@ def main():
 
     if args.dataset == 'davis' or args.dataset == 'davis_yoda':
         f_val_seq = open("./val_seqs1.txt", "r")
+        my_index = 0
     else:
         f_val_seq = open("./val_seqs2.txt", "r")
+        my_index = -1
     img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
     print(img_sequencies_name)
     cont = 0
@@ -216,7 +218,7 @@ def main():
         #'''
         for index, batch in enumerate(testloader):
             print("----------------------------------------------------------------------------------------------------------------------")
-            print("processed index: ", '%d processed'%(index))
+            print("processed index: ", '%d/%d processed'%(index,len(testloader)))
             target = batch['target']
             temp = batch['seq_name']
 
@@ -278,6 +280,7 @@ def main():
                 path_original_img = os.path.join(args.data_dir, 'Data/VID/val')
                 path_original_img = path_original_img + "/" + args.seq_name
                 end = len([name for name in os.listdir(path_original_img) if os.path.isfile(os.path.join(path_original_img, name))])
+                print("num img :", end)
                 print("old_temp: ", old_temp)
                 my_index = my_index+1
                 if my_index == end :
