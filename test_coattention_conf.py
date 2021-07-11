@@ -425,25 +425,6 @@ def main():
                     boxes = []
                     path_annotation = path_annotation + "/" + '%05d' % int(my_index1) + ".png"
 
-                    '''
-                    
-                    for j in boxes:
-                        if j != best_rect:
-                            print(j)
-                            if j[0]>best_x and j[0]<best_x+best_w and j[0]+j[2]>best_x and j[0]+j[2]<best_x+best_w and j[1]>best_y and j[1]<best_y+best_h and j[1]+j[3]>best_y and j[1]+j[3]<best_y+best_h:
-                                print("bbox compresa")
-                            else:
-                                cv2.rectangle(copy_img_annotation,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                                f_annotation.write(str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-                        else:
-                            # best box
-                            cv2.rectangle(result_mask, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
-                            cv2.rectangle(result_original, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                            #cv2.rectangle(result_mask_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
-                            #cv2.rectangle(result_original_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                            f.write(str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-                            #print("stringa che salvo nel file txt: [" + str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"]")
-                    '''
 
                     #path_annotation = filename_target
                     print("path annotation : " + path_annotation)
@@ -471,13 +452,17 @@ def main():
                                     2] < best_x + best_w and j[1] > best_y and j[1] < best_y + best_h and j[1] + j[
                                     3] > best_y and j[1] + j[3] < best_y + best_h:
                                     print("bbox compresa")
-                                else:
-                                    cv2.rectangle(copy_img_annotation, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]),(255, 0, 0), 2)
-                                    f_annotation.write(str(my_index) + "," + str(j[0]) + "," + str(j[1]) + "," + str(j[2]) + "," + str(j[3]) + "\n")
+                                #else:
+                                #    cv2.rectangle(copy_img_annotation, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]),(255, 0, 0), 2)
+                                #    f_annotation.write(str(my_index) + "," + str(j[0]) + "," + str(j[1]) + "," + str(j[2]) + "," + str(j[3]) + "\n")
                             else:
                                 # best box
                                 cv2.rectangle(copy_img_annotation, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]),(255, 0, 0), 2)
                                 f_annotation.write(str(my_index) + "," + str(j[0]) + "," + str(j[1]) + "," + str(j[2]) + "," + str(j[3]) + "\n")
+                    else:
+                        print("scrivo in annotazione 0,0,0,0")
+                        f_annotation.write(str(my_index) + ",0,0,0,0" + "\n")
+
 
                     save_dir_bba = os.path.join(save_dir_res, "Bounding_box_annotations")
                     if not os.path.exists(save_dir_bba):
@@ -555,12 +540,12 @@ def main():
                             if j[0]>best_x and j[0]<best_x+best_w and j[0]+j[2]>best_x and j[0]+j[2]<best_x+best_w and j[1]>best_y and j[1]<best_y+best_h and j[1]+j[3]>best_y and j[1]+j[3]<best_y+best_h:
                                 print("bbox compresa")
                             else:
-                                cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                                #cv2.rectangle(result_mask,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
                                 cv2.rectangle(result_original,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                                 f.write(str(my_index) + ",0," + str(j[0]) + "," + str(j[1]) + "," + str(j[2]) + "," + str(j[3]) + "\n")
                         else:
                             # best box
-                            cv2.rectangle(result_mask, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                            #cv2.rectangle(result_mask, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
                             cv2.rectangle(result_original, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
                             #cv2.rectangle(result_mask_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
                             #cv2.rectangle(result_original_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
@@ -581,7 +566,7 @@ def main():
                         os.makedirs(save_dir_m)
 
                     # save resulting image
-                    cv2.imwrite(os.path.join(save_dir_m, 'BoundingBox_mask_{}.png'.format(my_index1)), result_mask)
+                    #cv2.imwrite(os.path.join(save_dir_m, 'BoundingBox_mask_{}.png'.format(my_index1)), result_mask)
                     cv2.imwrite(os.path.join(save_dir_bb, 'BoundingBox_img_{}.png'.format(my_index1)), cv2.cvtColor(result_original, cv2.COLOR_RGB2BGR))
                     #cv2.imwrite(os.path.join(save_dir_mf, 'BoundingBox_mask_full_{}.png'.format(my_index1)), result_mask_full)
                     #cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
