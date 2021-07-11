@@ -282,7 +282,7 @@ def main():
                 end = len([name for name in os.listdir(path_original_img) if os.path.isfile(os.path.join(path_original_img, name))])
                 print("num img :", end)
                 print("old_temp: ", old_temp)
-                my_index = my_index+1
+                #my_index = my_index+1
                 if my_index == end :
                     my_index = 0
                     cont = cont+1
