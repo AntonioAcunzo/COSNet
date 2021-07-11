@@ -435,15 +435,24 @@ def main():
                 else:
                     path_annotation = path_annotation + "/" + '%06d' % int(my_index1) + ".xml"
                     root = ET.parse(path_annotation).getroot()
-                    childs = root[4]
-                    child = childs[2]
-                    xmax = child[0].text
-                    xmin = child[1].text
-                    ymax = child[2].text
-                    ymin = child[3].text
+                    l = []
+                    for t in root:
+                        l.append(t.tag)
+                    if not l.__contains__("object"):
+                        xmax = 0
+                        xmin = 0
+                        ymax = 0
+                        ymin = 0
+                    else:
+                        childs = root[4]
+                        child = childs[2]
+                        xmax = child[0].text
+                        xmin = child[1].text
+                        ymax = child[2].text
+                        ymin = child[3].text
                     f_annotation.write(str(my_index) + "," + str(xmin) + "," + str(ymin) + "," + str(int(xmax)-int(xmin)) + "," + str(int(ymax)-int(ymin)) + "\n")
 
-                '''
+
 
                 #draw BoundingBox on mask and on original img
 
@@ -526,7 +535,7 @@ def main():
                     #cv2.imwrite(os.path.join(save_dir_bbf, 'BoundingBox_img_full_{}.png'.format(my_index1)), cv2.cvtColor(result_original_full, cv2.COLOR_RGB2BGR))
 
                 f.close()
-                '''
+
 
 
             else:
@@ -621,36 +630,37 @@ def main():
             print("ipotesi nel frame " + str(my_index) + " : ", hypotheses)
 
             objs = all_annotations[my_index]
-            #print(objs)
-            objs = np.array(objs)
-            #print(objs.shape)
-            # aggiungere asse objs
-            objs = np.expand_dims(objs, 0)
-            #print(objs.shape)
-            # objs.shape - ---> (4,)
-            # objs.shape - ---> (1, 4)
-            for a in box_in_frame:
-                #print(a)
-                hyps.append(a)
-            print(hyps)
-            hyps = np.array(hyps)
-            #hyps = np.expand_dims(hyps, 0)
-            print("Compute IOU")
-            print("Objects : ", objs)
-            print("Num hypothesis :" , hypotheses)
-            print("Hypothesis : ", hyps)
+            if not objs == "0,0,0,0" :
+                #print(objs)
+                objs = np.array(objs)
+                #print(objs.shape)
+                # aggiungere asse objs
+                objs = np.expand_dims(objs, 0)
+                #print(objs.shape)
+                # objs.shape - ---> (4,)
+                # objs.shape - ---> (1, 4)
+                for a in box_in_frame:
+                    #print(a)
+                    hyps.append(a)
+                print(hyps)
+                hyps = np.array(hyps)
+                #hyps = np.expand_dims(hyps, 0)
+                print("Compute IOU")
+                print("Objects : ", objs)
+                print("Num hypothesis :" , hypotheses)
+                print("Hypothesis : ", hyps)
 
-            distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
-            print(distances)
-            print("---------------------------")
+                distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
+                print(distances)
+                print("---------------------------")
 
-            acc.update(
-                [1],  # Ground truth objects in this frame
-                hypotheses,  # Detector hypotheses in this frame
-                [
-                    distances,  # Distances from object 1 to hypotheses 1, 2, 3
-                ]
-            )
+                acc.update(
+                    [1],  # Ground truth objects in this frame
+                    hypotheses,  # Detector hypotheses in this frame
+                    [
+                        distances,  # Distances from object 1 to hypotheses 1, 2, 3
+                    ]
+                )
 
 
             old_temp = args.seq_name
