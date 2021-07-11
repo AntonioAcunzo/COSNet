@@ -196,7 +196,6 @@ def main():
             os.makedirs(args.vis_save_dir)
 
     print("======> test set size:", len(testloader))
-    my_index = 0
     old_temp=''
 
     img_sequencies_name = []
@@ -209,7 +208,8 @@ def main():
         my_index = 0
     else:
         f_val_seq = open("./val_seqs2.txt", "r")
-        my_index = -1
+        #my_index = -1
+        my_index = 298
     img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
     print(img_sequencies_name)
     f_val_seq.close()
@@ -228,7 +228,7 @@ def main():
 
             #args.seq_name=temp[0]
 
-            if index==0 and args.data_dir == '/mnt/ILSVRC2017_VID/ILSVRC':
+            if index==0  and args.data_dir == '/mnt/ILSVRC2017_VID/ILSVRC':
                 args.seq_name=img_sequencies_name[0]
 
 
@@ -283,8 +283,8 @@ def main():
                 path_original_img = path_original_img + "/" + args.seq_name
                 end = len([name for name in os.listdir(path_original_img) if os.path.isfile(os.path.join(path_original_img, name))])
                 print("num img :", end)
+                print("my_index : ",my_index)
                 print("old_temp: ", old_temp)
-                #my_index = my_index+1
                 if my_index == end :
                     my_index = 0
                     cont = cont+1
