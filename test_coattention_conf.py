@@ -209,7 +209,7 @@ def main():
         f_val_seq = open("./val_seqs2.txt", "r")
     img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
     print(img_sequencies_name)
-    cont = -1
+    cont = 0
     args.seq_name="0"
 
     if args.step == '1':
@@ -223,6 +223,9 @@ def main():
             #print(batch)
 
             #args.seq_name=temp[0]
+
+            if index==0 and args.data_dir == '/mnt/ILSVRC2017_VID/ILSVRC':
+                args.seq_name=img_sequencies_name[0]
 
 
             # Creo lista di seq name
@@ -262,15 +265,27 @@ def main():
             filename_target = os.path.join(path_save_img, 'target_denormalized.png')
             PIL_img_from_numpy.save(filename_target)
 
+            if (args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
+                args.seq_name = temp[0]
+                # my_index è l'indice nella seq_name
+                print("old_temp: " , old_temp)
+                if old_temp==args.seq_name:
+                    my_index = my_index+1
+                else:
+                    my_index = 0
 
-            # my_index è l'indice nella seq_name
-            print("old_temp: " , old_temp)
-            if old_temp==args.seq_name:
+            if (args.data_dir == '/mnt/ILSVRC2017_VID/ILSVRC'):
+                path_original_img = os.path.join(args.data_dir, 'Data/VID/val')
+                path_original_img = path_original_img + "/" + args.seq_name
+                end = len([name for name in os.listdir(path_original_img) if os.path.isfile(os.path.join(path_original_img, name))])
+                print("old_temp: ", old_temp)
                 my_index = my_index+1
-            else:
-                my_index = 0
-                cont = cont+1
-                args.seq_name = img_sequencies_name[cont]
+                if my_index == end :
+                    my_index = 0
+                    cont = cont+1
+                    args.seq_name = img_sequencies_name[cont]
+                else:
+                    my_index = my_index + 1
 
             print("my_index : ",my_index)
             print("cont : ",cont)
