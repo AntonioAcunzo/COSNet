@@ -421,7 +421,29 @@ def main():
                 path_annotation = os.path.join(path_annotation, args.seq_name)
                 print("path annotation : " + path_annotation)
                 if args.dataset == 'davis' or args.dataset == 'davis_yoda':
+                    best_rect = [0, 0, 0, 0, 0]  # [x,y,w,h,area]
+                    boxes = []
                     path_annotation = path_annotation + "/" + '%05d' % int(my_index1) + ".png"
+
+                    '''
+                    
+                    for j in boxes:
+                        if j != best_rect:
+                            print(j)
+                            if j[0]>best_x and j[0]<best_x+best_w and j[0]+j[2]>best_x and j[0]+j[2]<best_x+best_w and j[1]>best_y and j[1]<best_y+best_h and j[1]+j[3]>best_y and j[1]+j[3]<best_y+best_h:
+                                print("bbox compresa")
+                            else:
+                                cv2.rectangle(copy_img_annotation,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                                f_annotation.write(str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                        else:
+                            # best box
+                            cv2.rectangle(result_mask, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                            cv2.rectangle(result_original, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                            #cv2.rectangle(result_mask_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (0, 0, 255), 2)
+                            #cv2.rectangle(result_original_full, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
+                            f.write(str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
+                            #print("stringa che salvo nel file txt: [" + str(my_index)+",0,"+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"]")
+                    '''
 
                     #path_annotation = filename_target
                     print("path annotation : " + path_annotation)
@@ -437,12 +459,25 @@ def main():
                         #print("Bounding Box annotation {}".format(my_index1))
                         #print("x,y,w,h:", x, y, w, h)
                         boxes.append([x,y,w,h])
-                        #print("Boxes :", boxes)
                     if len(boxes) != 0 :
+                        best_x, best_y, best_w, best_h, best_area = max(boxes, key=lambda item: item[4])
+                        print("Boxes :", boxes)
+                        print("MAX :", best_x, best_y, best_w, best_h, best_area)
+                        best_rect = [best_x, best_y, best_w, best_h, best_area]
                         for j in boxes:
-                            cv2.rectangle(copy_img_annotation,(j[0], j[1]), (j[0] + j[2], j[1] + j[3]), (255, 0, 0), 2)
-                            f_annotation.write(str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3])+"\n")
-                            #print("stringa che salvo nel file txt: [" + str(my_index)+","+str(j[0])+","+str(j[1])+","+str(j[2])+","+str(j[3]) + " ]")
+                            if j != best_rect:
+                                print(j)
+                                if j[0] > best_x and j[0] < best_x + best_w and j[0] + j[2] > best_x and j[0] + j[
+                                    2] < best_x + best_w and j[1] > best_y and j[1] < best_y + best_h and j[1] + j[
+                                    3] > best_y and j[1] + j[3] < best_y + best_h:
+                                    print("bbox compresa")
+                                else:
+                                    cv2.rectangle(copy_img_annotation, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]),(255, 0, 0), 2)
+                                    f_annotation.write(str(my_index) + "," + str(j[0]) + "," + str(j[1]) + "," + str(j[2]) + "," + str(j[3]) + "\n")
+                            else:
+                                # best box
+                                cv2.rectangle(copy_img_annotation, (j[0], j[1]), (j[0] + j[2], j[1] + j[3]),(255, 0, 0), 2)
+                                f_annotation.write(str(my_index) + "," + str(j[0]) + "," + str(j[1]) + "," + str(j[2]) + "," + str(j[3]) + "\n")
 
                     save_dir_bba = os.path.join(save_dir_res, "Bounding_box_annotations")
                     if not os.path.exists(save_dir_bba):
