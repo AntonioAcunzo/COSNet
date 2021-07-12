@@ -609,7 +609,7 @@ def main():
         #else:
         print("Avvio tracker su " + path_original_img)
         path_boxes_txt = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia))
-        box_tracker.main(img_sequencies_name, path_original_img, path_boxes_txt,int(args.importance))
+        box_tracker.main(img_sequencies_name, path_original_img, path_boxes_txt,int(args.importance),args.dataset)
 
         # Ho ottenuto tutte le bbox da prendere in considerzione per tutte le img
         my_index = 0
