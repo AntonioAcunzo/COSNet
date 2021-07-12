@@ -710,7 +710,7 @@ def main():
 
                 for i in remove:
                     all_annotations.remove(i)
-                print(all_annotations)
+                #print(all_annotations)
                 print("frame video secondo all_annotations modificato :", len(all_annotations))
 
                 #i.remove(i[0])
