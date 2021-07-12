@@ -199,7 +199,7 @@ def main():
 
 '''
 
-def main(img_sequences_name,path_original_img,path_boxes_txt):
+def main(img_sequences_name,path_original_img,path_boxes_txt,importance):
     for x in img_sequences_name:
         print(x)
         path_boxes_txt1 = os.path.join(path_boxes_txt, x)
@@ -259,7 +259,6 @@ def main(img_sequences_name,path_original_img,path_boxes_txt):
         # get good boxes
         #img_seq_name = "blackswan"
         print(path_boxes_txt1 + '/boxes_good.txt')
-        importance = 5
         f_good = open(path_boxes_txt1 + '/boxes_good_'+ str(importance) +'.txt', 'w')
 
         list_tracks = []
@@ -291,7 +290,6 @@ def main(img_sequences_name,path_original_img,path_boxes_txt):
             print("track_length : " + str(j.track_length))
         '''
 
-    return importance
 
 
 

@@ -59,6 +59,7 @@ def get_arguments():
     parser.add_argument("--step", default=1)
     parser.add_argument("--mode", default='normal')
     parser.add_argument("--type", default='1')
+    parser.add_argument("--importance", default=5)
     
     return parser.parse_args()
 
@@ -608,7 +609,7 @@ def main():
         #else:
         print("Avvio tracker su " + path_original_img)
         path_boxes_txt = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia))
-        importance = box_tracker.main(img_sequencies_name, path_original_img, path_boxes_txt)
+        box_tracker.main(img_sequencies_name, path_original_img, path_boxes_txt,importance)
 
         # Ho ottenuto tutte le bbox da prendere in considerzione per tutte le img
         my_index = 0
@@ -673,13 +674,13 @@ def main():
 
                 if args.mode == 'good':
                     if args.type == '1':
-                        results_filename = os.path.join(save_dir_res_final, 'results_good_'+ str(importance) +'.txt')
+                        results_filename = os.path.join(save_dir_res_final, 'results_good_'+ str(args.importance) +'.txt')
                     else:
                         results_filename = os.path.join(text_dir, 'results_good_' + str(
                             img_sequencies_name.__len__()) + '-' + str(string_data) + '.txt')
                 else:
                     if args.type == '1':
-                        results_filename = os.path.join(save_dir_res_final, 'results_good_'+ str(importance) +'.txt')
+                        results_filename = os.path.join(save_dir_res_final, 'results_good_'+ str(args.importance) +'.txt')
                     else:
                         results_filename = os.path.join(text_dir,
                                                         'results_' + str(img_sequencies_name.__len__()) + '-' + str(
