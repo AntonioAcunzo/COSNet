@@ -665,7 +665,7 @@ def main():
             print("my_index : ", my_index)
             print("seq name : ", args.seq_name)
 
-            if index!=0 and old_temp!=args.seq_name:
+            if index!=0 and old_temp!=args.seq_name and args.type=='1':
                 print("Salvo file txt risultati")
                 text_dir = os.path.join(path_boxes_txt, 'TEST')
                 print(text_dir)
