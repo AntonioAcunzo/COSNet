@@ -754,6 +754,9 @@ def main():
                 #print(box_in_frame[j])
                 hypotheses.append(j+1)
 
+            if len(box_in_frame)==0:
+                hypotheses.append(1)
+
             print("ipotesi nel frame " + str(my_index) + " : ", hypotheses)
 
             objs = all_annotations[my_index]
