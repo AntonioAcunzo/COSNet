@@ -729,17 +729,20 @@ def main():
                 print(mota)
                 print(motp)
 
-                rcll_array.append(rcll)
-                mota_array.append(mota)
-                motp_array.append(motp)
+                if rcll != 'nan':
+                    rcll_array.append(rcll)
+                if mota != 'nan':
+                    mota_array.append(mota)
+                if motp != 'nan':
+                    motp_array.append(motp)
 
 
                 f_results.close()
 
             if old_temp == 'end':
-                mean_rcll = sum(rcll_array)/img_sequencies_name.__len__()
-                mean_mota = sum(mota_array)/img_sequencies_name.__len__()
-                mean_motp = sum(motp_array)/img_sequencies_name.__len__()
+                mean_rcll = round(sum(rcll_array)/rcll_array.__len__(),1)
+                mean_mota = round(sum(mota_array)/mota_array.__len__(),1)
+                mean_motp = round(sum(motp_array)/motp_array.__len__(),3)
                 results_filename = os.path.join(text_dir,'mean_' + str(args.importance) + '.txt')
                 f_mean = open(results_filename, 'w')
                 f_mean.write("RCLL = " + str(mean_rcll) + "\n")
