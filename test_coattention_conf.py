@@ -674,7 +674,7 @@ def main():
 
                 if args.mode == 'good':
                     if args.type == '1':
-                        results_filename = os.path.join(save_dir_res_final, 'results_good_'+ str(args.importance) +'.txt')
+                        results_filename = os.path.join(text_dir, 'results_good_' + old_temp + "_"+ str(args.importance) +'.txt')
                     else:
                         results_filename = os.path.join(text_dir, 'results_good_' + str(
                             img_sequencies_name.__len__()) + '-' + str(string_data) + '.txt')
