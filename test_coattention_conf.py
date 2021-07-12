@@ -677,13 +677,6 @@ def main():
                         results_filename = os.path.join(text_dir, 'results_good_' + old_temp + "_"+ str(args.importance) +'.txt')
                     else:
                         results_filename = os.path.join(text_dir, 'results_good_' + old_temp + "_"+ str(args.importance) +'.txt')
-                else:
-                    if args.type == '1':
-                        results_filename = os.path.join(text_dir, 'results_good_'+ str(args.importance) +'.txt')
-                    else:
-                        results_filename = os.path.join(text_dir,
-                                                        'results_' + str(img_sequencies_name.__len__()) + '-' + str(
-                                                            string_data) + '.txt')
 
                 f_results = open(results_filename, 'w')
 

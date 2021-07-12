@@ -199,7 +199,7 @@ def main():
 
 '''
 
-def main(img_sequences_name,path_original_img,path_boxes_txt,importance):
+def main(img_sequences_name,path_original_img,path_boxes_txt,importance,dataset):
     for x in img_sequences_name:
         print(x)
         path_boxes_txt1 = os.path.join(path_boxes_txt, x)
@@ -208,7 +208,10 @@ def main(img_sequences_name,path_original_img,path_boxes_txt,importance):
         print("path boxes txt1 : ", path_boxes_txt1)
         path_boxes_txt2 = os.path.join(path_boxes_txt1, "boxes.txt")
         print("path boxes txt2 : ", path_boxes_txt2)
-        path_original_img1 = path_original_img+ "/" + x + "/%5d.jpg"
+        if dataset == 'imagenet':
+            path_original_img1 = path_original_img+ "/" + x + "/%6d.JPEG"
+        else:
+            path_original_img1 = path_original_img + "/" + x + "/%5d.jpg"
         print(path_original_img1)
         cap = cv2.VideoCapture(path_original_img1)
         f_tracker = open(path_boxes_txt2, 'r')
