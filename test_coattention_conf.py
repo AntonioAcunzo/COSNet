@@ -715,7 +715,7 @@ def main():
                 f_results.write("\n ACC SUMMARY FINAL\n")
                 f_results.write(str(strsummary))
 
-                M = strsummary.to_numpy()
+                M = summary.to_numpy()
                 overall = M[2]
                 rcll = overall[3]
                 mota = overall[13]
