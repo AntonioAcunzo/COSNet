@@ -706,6 +706,8 @@ def main():
                             remove.append(i)
                             print("Da rimuovere :")
                             print(i)
+                    else:
+                        old_element = i
                     c=1
 
                 for i in remove:
