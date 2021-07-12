@@ -770,7 +770,7 @@ def main():
                 # objs.shape - ---> (4,)
                 # objs.shape - ---> (1, 4)
                 if box_in_frame.__len__() == 0:
-                    box_in_frame.append('0,0,0,0')
+                    box_in_frame.append(['0','0','0','0'])
                 for a in box_in_frame:
                     #print(a)
                     hyps.append(a)
