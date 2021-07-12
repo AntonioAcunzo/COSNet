@@ -686,7 +686,7 @@ def main():
                 old_area = int(first[3])*int(first[4])
                 c = 0
                 for i in all_annotations:
-                    if i[0] == old & c!=0:
+                    if int(i[0]) == int(old) and c!=0:
                         #non è il primo elemento
                         area = int(i[3]) * int(i[4])
                         if area > old_area:
