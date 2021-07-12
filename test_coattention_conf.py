@@ -590,12 +590,12 @@ def main():
         else:
             f_val_seq = open("./val_seqs2.txt", "r")
             my_index = -1
+
         img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
         print(img_sequencies_name)
         f_val_seq.close()
 
-
-        acc = mm.MOTAccumulator(auto_id=True)
+        #acc = mm.MOTAccumulator(auto_id=True)
         # Avvio tracker
         if args.dataset == 'davis' or args.dataset == 'davis_yoda':
             path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
@@ -629,6 +629,7 @@ def main():
                     my_index = 0
 
             if (args.data_dir == '/mnt/ILSVRC2017_VID/ILSVRC'):
+                '''
                 path_original_img = os.path.join(args.data_dir, 'Data/VID/val')
                 path_original_img = path_original_img + "/" + args.seq_name
                 end = len([name for name in os.listdir(path_original_img) if os.path.isfile(os.path.join(path_original_img, name))])
@@ -640,13 +641,28 @@ def main():
                     args.seq_name = img_sequencies_name[cont]
                 else:
                     my_index = my_index + 1
+                '''
 
-            print("my_index : ",my_index)
-            print("cont : ",cont)
-            print("seq name : ",args.seq_name)
+                path_original_img = os.path.join(args.data_dir, 'Data/VID/val')
+                path_original_img = path_original_img + "/" + args.seq_name
+                end = len([name for name in os.listdir(path_original_img) if
+                           os.path.isfile(os.path.join(path_original_img, name))])
+                print("num img :", end)
+                print("my_index : ", my_index)
+                print("old_temp: ", old_temp)
+                my_index = my_index + 1
+                if my_index == end:
+                    my_index = 0
+                    cont = cont + 1
+                    args.seq_name = img_sequencies_name[cont]
+
+            print("my_index : ", my_index)
+            print("cont : ", cont)
+            print("seq name : ", args.seq_name)
 
             if my_index==0:
                 print("Primo frame della sequenza " , args.seq_name)
+                acc = mm.MOTAccumulator(auto_id=True)
                 save_dir_res = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia), args.seq_name)
                 text_dir = os.path.join(save_dir_res, 'Txt')
                 save_dir_res_final =  text_dir
@@ -771,12 +787,12 @@ def main():
 
         if args.mode == 'good':
             if args.type == '1':
-                results_filename = os.path.join(save_dir_res_final,'results_good_' + str(img_sequencies_name.__len__()) + '-' + str(string_data) + '.txt')
+                results_filename = os.path.join(save_dir_res_final,'results_good.txt')
             else:
                 results_filename = os.path.join(text_dir, 'results_good_'+ str(img_sequencies_name.__len__()) + '-' + str(string_data) + '.txt')
         else:
             if args.type == '1':
-                results_filename = os.path.join(save_dir_res_final,'results_good_' + str(img_sequencies_name.__len__()) + '-' + str(string_data) + '.txt')
+                results_filename = os.path.join(save_dir_res_final,'results_good.txt')
             else:
                 results_filename = os.path.join(text_dir, 'results_'+ str(img_sequencies_name.__len__())+ '-' + str(string_data) + '.txt')
 
@@ -845,6 +861,8 @@ def main():
         print(strsummary)
         f_results.write("\n ACC SUMMARY FINAL\n")
         f_results.write(str(strsummary))
+
+        f_results.close()
     
     #'''
 
