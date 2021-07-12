@@ -887,6 +887,87 @@ def main():
 
             old_temp = args.seq_name
 
+        if args.type == '2':
+            print("Salvo file txt risultati")
+            text_dir = os.path.join(path_boxes_txt, 'TEST')
+            print(text_dir)
+            if not os.path.exists(text_dir):
+                os.makedirs(text_dir)
+
+            if args.mode == 'good':
+                    results_filename = os.path.join(text_dir, 'results_good_elementi'+ str(img_sequencies_name.__len__()) + '_' + str(args.importance) + '-' + str(string_data) + '.txt')
+            else:
+                    results_filename = os.path.join(text_dir,
+                                                    'results_' + str(img_sequencies_name.__len__()) + '-' + str(
+                                                        string_data) + '.txt')
+
+            f_results = open(results_filename, 'w')
+
+            # f_results.write("\n ACC EVENTS \n")
+            # f_results.write(str(acc.events))
+            f_results.write("\n ACC MOT EVENTS \n")
+            f_results.write(str(acc.mot_events))
+
+            print(acc.events)
+            print(acc.mot_events)
+
+            mh = mm.metrics.create()
+            summary = mh.compute(acc, metrics=['num_frames', 'mota', 'motp'], name='acc')
+            print(summary)
+            f_results.write("\n ACC SUMMARY 1\n")
+            f_results.write(str(summary))
+
+            summary = mh.compute_many(
+                [acc, acc.events.loc[0:1]],
+                metrics=['num_frames', 'mota', 'motp'],
+                names=['full', 'part'])
+            print(summary)
+            f_results.write("\n ACC SUMMARY 2\n")
+            f_results.write(str(summary))
+
+            '''
+            strsummary = mm.io.render_summary(
+                summary,
+                formatters={'mota': '{:.2%}'.format},
+                namemap={'mota': 'MOTA', 'motp': 'MOTP'}
+            )
+            print(strsummary)
+            f_results.write("\n ACC SUMMARY \n")
+            f_results.write(str(summary))
+    
+    
+            summary = mh.compute_many(
+                [acc, acc.events.loc[0:1]],
+                metrics=mm.metrics.motchallenge_metrics,
+                names=['full', 'part'])
+    
+            strsummary = mm.io.render_summary(
+                summary,
+                formatters=mh.formatters,
+                namemap=mm.io.motchallenge_metric_names
+            )
+            print(strsummary)
+            f_results.write("\n ACC SUMMARY \n")
+            f_results.write(str(summary))
+            '''
+
+            summary = mh.compute_many(
+                [acc, acc.events.loc[0:1]],
+                metrics=mm.metrics.motchallenge_metrics,
+                names=['full', 'part'],
+                generate_overall=True
+            )
+
+            strsummary = mm.io.render_summary(
+                summary,
+                formatters=mh.formatters,
+                namemap=mm.io.motchallenge_metric_names
+            )
+            print(strsummary)
+            f_results.write("\n ACC SUMMARY FINAL\n")
+            f_results.write(str(strsummary))
+
+            f_results.close()
 
     
     #'''
