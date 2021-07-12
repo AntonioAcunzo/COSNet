@@ -738,8 +738,8 @@ def main():
 
             if old_temp == 'end':
                 mean_rcll = sum(rcll_array)/img_sequencies_name.__len__()
-                mean_mota = sum(rcll_array)/img_sequencies_name.__len__()
-                mean_motp = sum(rcll_array)/img_sequencies_name.__len__()
+                mean_mota = sum(mota_array)/img_sequencies_name.__len__()
+                mean_motp = sum(motp_array)/img_sequencies_name.__len__()
                 results_filename = os.path.join(text_dir,'mean_' + str(args.importance) + '.txt')
                 f_mean = open(results_filename, 'w')
                 f_mean.write("RCLL = " + str(mean_rcll) + "\n")
