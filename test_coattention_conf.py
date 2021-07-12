@@ -692,8 +692,6 @@ def main():
                 remove = []
                 for i in all_annotations:
                     old = old_element[0]
-                    #print("Modifica file annotations")
-                    #print("old=i:" ,old , " = ", i[0])
                     if int(i[0]) == int(old) and c!=0:
                         #non è il primo elemento
                         area = int(i[3]) * int(i[4])
@@ -715,7 +713,8 @@ def main():
                 #print(all_annotations)
                 print("frame video secondo all_annotations modificato :", len(all_annotations))
 
-                #i.remove(i[0])
+                for i in all_annotations:
+                    i.remove(i[0])
 
                 all_boxes = [x.strip() for x in f.readlines()]
                 all_boxes = [x.split(',') for x in all_boxes]
