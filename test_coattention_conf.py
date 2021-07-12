@@ -715,7 +715,7 @@ def main():
                 f_results.write("\n ACC SUMMARY FINAL\n")
                 f_results.write(str(strsummary))
 
-                M = summary.as_matrix()
+                M = summary.to_numpy()
                 for i in M:
                     print(i)
 
