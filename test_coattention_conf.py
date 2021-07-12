@@ -689,16 +689,18 @@ def main():
                 old_area = int(first[3])*int(first[4])
                 c = 0
                 for i in all_annotations:
+                    print("Modifica file annotations")
                     if int(i[0]) == int(old) and c!=0:
                         #non è il primo elemento
                         area = int(i[3]) * int(i[4])
                         if area > old_area:
                             all_annotations.remove(all_annotations.index(i)-1)
+                            old = i[0]
                         else:
                             all_annotations.remove(i)
                             print("Rimosso :")
                             print(i)
-                    old = i[0]
+
                     c=1
                 print("frame video secondo all_annotations modificato :", len(all_annotations))
 
