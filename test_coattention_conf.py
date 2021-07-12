@@ -685,24 +685,27 @@ def main():
                 all_annotations = [x.strip() for x in f_annotation.readlines()]
                 all_annotations = [x.split(',') for x in all_annotations]
 
-                first = all_annotations[0]
-                old = first[0]
-                old_area = int(first[3])*int(first[4])
+                old_element = all_annotations[0]
+                old = old_element[0]
+                old_area = int(old_element[3])*int(old_element[4])
                 c = 0
+                remove = []
                 for i in all_annotations:
+                    old = old_element[0]
                     #print("Modifica file annotations")
-                    print("old:" ,old , " = ", i[0])
+                    print("old=i:" ,old , " = ", i[0])
                     if int(i[0]) == int(old) and c!=0:
                         #non è il primo elemento
                         area = int(i[3]) * int(i[4])
                         if area > old_area:
-                            all_annotations.remove(all_annotations.index(i)-1)
-                            old = i[0]
+                            remove.append(old_element)
+                            print("Da rimuovere :")
+                            print(old_element)
+                            old_element = i
                         else:
-                            all_annotations.remove(i)
-                            print("Rimosso :")
+                            remove.append(i)
+                            print("Da rimuovere :")
                             print(i)
-
                     c=1
                 print("frame video secondo all_annotations modificato :", len(all_annotations))
 
