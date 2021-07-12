@@ -658,7 +658,6 @@ def main():
                     args.seq_name = img_sequencies_name[cont]
 
             print("my_index : ", my_index)
-            print("cont : ", cont)
             print("seq name : ", args.seq_name)
 
             if my_index==0:
@@ -684,12 +683,12 @@ def main():
 
                 first = all_annotations[0]
                 old = first[0]
-                old_area = first[3]*first[4]
+                old_area = int(first[3])*int(first[4])
                 c = 0
                 for i in all_annotations:
                     if i[0] == old & c!=0:
                         #non è il primo elemento
-                        area = i[3] * i[4]
+                        area = int(i[3]) * int(i[4])
                         if area > old_area:
                             all_annotations.remove(all_annotations.index(i)-1)
                         else:
