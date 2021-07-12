@@ -609,7 +609,7 @@ def main():
         #else:
         print("Avvio tracker su " + path_original_img)
         path_boxes_txt = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia))
-        box_tracker.main(img_sequencies_name, path_original_img, path_boxes_txt,importance)
+        box_tracker.main(img_sequencies_name, path_original_img, path_boxes_txt,args.importance)
 
         # Ho ottenuto tutte le bbox da prendere in considerzione per tutte le img
         my_index = 0
@@ -762,7 +762,7 @@ def main():
                 text_dir = os.path.join(save_dir_res, 'Txt')
                 save_dir_res_final =  text_dir
                 if args.mode == 'good':
-                    box_text_filename = os.path.join(text_dir, 'boxes_good.txt')
+                    box_text_filename = os.path.join(text_dir, 'boxes_good_' + str(args.importance) + '.txt')
                 else:
                     box_text_filename = os.path.join(text_dir, 'boxes.txt')
 
