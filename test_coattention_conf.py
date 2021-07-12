@@ -595,7 +595,8 @@ def main():
         print(img_sequencies_name)
         f_val_seq.close()
 
-        #acc = mm.MOTAccumulator(auto_id=True)
+        if args.type == '2':
+            acc = mm.MOTAccumulator(auto_id=True)
         # Avvio tracker
         if args.dataset == 'davis' or args.dataset == 'davis_yoda':
             path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
@@ -662,7 +663,8 @@ def main():
 
             if my_index==0:
                 print("Primo frame della sequenza " , args.seq_name)
-                acc = mm.MOTAccumulator(auto_id=True)
+                if args.type == '1':
+                    acc = mm.MOTAccumulator(auto_id=True)
                 save_dir_res = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia), args.seq_name)
                 text_dir = os.path.join(save_dir_res, 'Txt')
                 save_dir_res_final =  text_dir
