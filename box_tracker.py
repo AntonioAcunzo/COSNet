@@ -260,7 +260,7 @@ def main(img_sequences_name,path_original_img,path_boxes_txt):
         #img_seq_name = "blackswan"
         print(path_boxes_txt1 + '/boxes_good.txt')
         importance = 5
-        f_good = open(path_boxes_txt1 + '/boxes_good.txt', 'w')
+        f_good = open(path_boxes_txt1 + '/boxes_good_'+ str(importance) +'.txt', 'w')
 
         list_tracks = []
         print("Tracks : " + str(tracker.tracks.__len__()))
@@ -290,6 +290,8 @@ def main(img_sequences_name,path_original_img,path_boxes_txt):
             print("start frame : " + str(j.start_frame))
             print("track_length : " + str(j.track_length))
         '''
+
+    return importance
 
 
 
