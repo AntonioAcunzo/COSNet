@@ -693,7 +693,7 @@ def main():
                 for i in all_annotations:
                     old = old_element[0]
                     #print("Modifica file annotations")
-                    print("old=i:" ,old , " = ", i[0])
+                    #print("old=i:" ,old , " = ", i[0])
                     if int(i[0]) == int(old) and c!=0:
                         #non è il primo elemento
                         area = int(i[3]) * int(i[4])
