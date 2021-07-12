@@ -57,7 +57,7 @@ def get_arguments():
     parser.add_argument("--sample_range", default =5)
     parser.add_argument("--tresh", default=127)
     parser.add_argument("--step", default=1)
-    parser.add_argument("--mode", default='normal')
+    parser.add_argument("--mode", default='good')
     parser.add_argument("--type", default='1')
     parser.add_argument("--importance", default=5)
     
@@ -676,11 +676,10 @@ def main():
                     if args.type == '1':
                         results_filename = os.path.join(text_dir, 'results_good_' + old_temp + "_"+ str(args.importance) +'.txt')
                     else:
-                        results_filename = os.path.join(text_dir, 'results_good_' + str(
-                            img_sequencies_name.__len__()) + '-' + str(string_data) + '.txt')
+                        results_filename = os.path.join(text_dir, 'results_good_' + old_temp + "_"+ str(args.importance) +'.txt')
                 else:
                     if args.type == '1':
-                        results_filename = os.path.join(save_dir_res_final, 'results_good_'+ str(args.importance) +'.txt')
+                        results_filename = os.path.join(text_dir, 'results_good_'+ str(args.importance) +'.txt')
                     else:
                         results_filename = os.path.join(text_dir,
                                                         'results_' + str(img_sequencies_name.__len__()) + '-' + str(
@@ -710,31 +709,6 @@ def main():
                 f_results.write("\n ACC SUMMARY 2\n")
                 f_results.write(str(summary))
 
-                '''
-                strsummary = mm.io.render_summary(
-                    summary,
-                    formatters={'mota': '{:.2%}'.format},
-                    namemap={'mota': 'MOTA', 'motp': 'MOTP'}
-                )
-                print(strsummary)
-                f_results.write("\n ACC SUMMARY \n")
-                f_results.write(str(summary))
-
-
-                summary = mh.compute_many(
-                    [acc, acc.events.loc[0:1]],
-                    metrics=mm.metrics.motchallenge_metrics,
-                    names=['full', 'part'])
-
-                strsummary = mm.io.render_summary(
-                    summary,
-                    formatters=mh.formatters,
-                    namemap=mm.io.motchallenge_metric_names
-                )
-                print(strsummary)
-                f_results.write("\n ACC SUMMARY \n")
-                f_results.write(str(summary))
-                '''
 
                 summary = mh.compute_many(
                     [acc, acc.events.loc[0:1]],
