@@ -677,27 +677,26 @@ def main():
 
                 f_results = open(results_filename, 'w')
 
-                # f_results.write("\n ACC EVENTS \n")
-                # f_results.write(str(acc.events))
-                f_results.write("\n ACC MOT EVENTS \n")
-                f_results.write(str(acc.mot_events))
 
-                print(acc.events)
-                print(acc.mot_events)
+                #f_results.write("\n ACC MOT EVENTS \n")
+                #f_results.write(str(acc.mot_events))
+
+                #print(acc.events)
+                #print(acc.mot_events)
 
                 mh = mm.metrics.create()
                 summary = mh.compute(acc, metrics=['num_frames', 'mota', 'motp'], name='acc')
-                print(summary)
-                f_results.write("\n ACC SUMMARY 1\n")
-                f_results.write(str(summary))
+                #print(summary)
+                #f_results.write("\n ACC SUMMARY 1\n")
+                #f_results.write(str(summary))
 
                 summary = mh.compute_many(
                     [acc, acc.events.loc[0:1]],
                     metrics=['num_frames', 'mota', 'motp'],
                     names=['full', 'part'])
-                print(summary)
-                f_results.write("\n ACC SUMMARY 2\n")
-                f_results.write(str(summary))
+                #print(summary)
+                #f_results.write("\n ACC SUMMARY 2\n")
+                #f_results.write(str(summary))
 
 
                 summary = mh.compute_many(
@@ -715,6 +714,10 @@ def main():
                 print(strsummary)
                 f_results.write("\n ACC SUMMARY FINAL\n")
                 f_results.write(str(strsummary))
+
+                M = strsummary.as_matrix()
+                for i in M:
+                    print(i)
 
                 f_results.close()
 
@@ -772,12 +775,8 @@ def main():
 
                 all_boxes = [x.strip() for x in f.readlines()]
                 all_boxes = [x.split(',') for x in all_boxes]
-                #value_correct = int(all_boxes[0][0])
-                #print(value_correct)
-
 
                 f.close()
-
                 f_annotation.close()
 
             hypotheses = []
