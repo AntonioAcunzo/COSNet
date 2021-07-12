@@ -742,9 +742,9 @@ def main():
                 mean_motp = sum(rcll_array)/img_sequencies_name.__len__()
                 results_filename = os.path.join(text_dir,'mean_' + str(args.importance) + '.txt')
                 f_mean = open(results_filename, 'w')
-                f_results.write("RCLL = " + str(mean_rcll) + "\n")
-                f_results.write("MOTA = " + str(mean_mota) + "\n")
-                f_results.write("MOTP = " + str(mean_motp) + "\n")
+                f_mean.write("RCLL = " + str(mean_rcll) + "\n")
+                f_mean.write("MOTA = " + str(mean_mota) + "\n")
+                f_mean.write("MOTP = " + str(mean_motp) + "\n")
                 break
 
             if my_index==0:
