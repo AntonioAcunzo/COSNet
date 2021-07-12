@@ -717,9 +717,9 @@ def main():
 
                 M = summary.to_numpy()
                 overall = M[2]
-                rcll = overall[3]
-                mota = overall[13]
-                motp = overall[14]
+                rcll = round(overall[3]*100,2)
+                mota = round(overall[13]*100,2)
+                motp = round(overall[14])
 
                 print(rcll)
                 print(mota)
