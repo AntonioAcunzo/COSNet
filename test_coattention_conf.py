@@ -722,7 +722,7 @@ def main():
                 f_results.close()
 
             if my_index==0:
-                print("Primo frame della sequenza " , args.seq_name)
+                #print("Primo frame della sequenza " , args.seq_name)
                 if args.type == '1':
                     acc = mm.MOTAccumulator(auto_id=True)
                 save_dir_res = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia), args.seq_name)
@@ -754,12 +754,12 @@ def main():
                         area = int(i[3]) * int(i[4])
                         if area > old_area:
                             remove.append(old_element)
-                            print("Da rimuovere :")
+                            #print("Da rimuovere :")
                             print(old_element)
                             old_element = i
                         else:
                             remove.append(i)
-                            print("Da rimuovere :")
+                            #print("Da rimuovere :")
                             print(i)
                     else:
                         old_element = i
@@ -768,7 +768,7 @@ def main():
                 for i in remove:
                     all_annotations.remove(i)
                 #print(all_annotations)
-                print("frame video secondo all_annotations modificato :", len(all_annotations))
+                #print("frame video secondo all_annotations modificato :", len(all_annotations))
 
                 for i in all_annotations:
                     i.remove(i[0])
@@ -793,15 +793,13 @@ def main():
                     if(i.__len__()==6):
                         box_in_frame.append(i)
 
-            #print(box_in_frame)
 
             for z in box_in_frame:
                 z.remove(z[1])
                 z.remove(z[0])
 
-            #print(box_in_frame)
 
-            print("box nel frame " + str(my_index) + " : ", box_in_frame)
+            #print("box nel frame " + str(my_index) + " : ", box_in_frame)
 
             for j in range(0, len(box_in_frame)):
                 #print(box_in_frame[j])
@@ -830,13 +828,16 @@ def main():
                 print(hyps)
                 hyps = np.array(hyps)
                 #hyps = np.expand_dims(hyps, 0)
+
+                '''
                 print("Compute IOU")
                 print("Objects : ", objs)
                 print("Num hypothesis :" , hypotheses)
                 print("Hypothesis : ", hyps)
+                '''
 
                 distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
-                print(distances)
+                #print(distances)
                 print("---------------------------")
 
                 acc.update(
