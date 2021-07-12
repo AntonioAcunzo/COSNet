@@ -612,6 +612,10 @@ def main():
         #my_index = 0
         old_temp = ''
 
+        rcll_array = []
+        mota_array = []
+        motp_array = []
+
 
         print("INIZIO SECONDO STEP")
         # STEP 2, aggiorno frame per frame l'accumulatore
@@ -717,16 +721,31 @@ def main():
 
                 M = summary.to_numpy()
                 overall = M[2]
-                rcll = round(overall[3]*100,2)
-                mota = round(overall[13]*100,2)
-                motp = round(overall[14])
+                rcll = round(overall[3]*100,1)
+                mota = round(overall[13]*100,1)
+                motp = round(overall[14],3)
 
                 print(rcll)
                 print(mota)
                 print(motp)
 
+                rcll_array.append(rcll)
+                mota_array.append(mota)
+                motp_array.append(motp)
+
 
                 f_results.close()
+
+            if old_temp == 'end':
+                mean_rcll = sum(rcll_array)/img_sequencies_name.__len__()
+                mean_mota = sum(rcll_array)/img_sequencies_name.__len__()
+                mean_motp = sum(rcll_array)/img_sequencies_name.__len__()
+                results_filename = os.path.join(text_dir,'mean_' + str(args.importance) + '.txt')
+                f_mean = open(results_filename, 'w')
+                f_results.write("RCLL = " + mean_rcll + "\n")
+                f_results.write("MOTA = " + mean_mota + "\n")
+                f_results.write("MOTP = " + mean_motp + "\n")
+                break
 
             if my_index==0:
                 #print("Primo frame della sequenza " , args.seq_name)
@@ -857,6 +876,11 @@ def main():
 
 
             old_temp = args.seq_name
+
+            if args.seq_name == img_sequencies_name[-1]:
+                old_temp = 'end'
+
+
 
         if args.type == '2':
             print("Salvo file txt risultati")
