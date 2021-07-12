@@ -604,15 +604,12 @@ def main():
         else:
             path_original_img = os.path.join(args.data_dir, 'Data/VID/val')
 
-        #if os.path.exists(os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia), args.seq_name,'Txt','boxes_good.txt')):
-            #print("Il file boxes good esiste")
-        #else:
         print("Avvio tracker su " + path_original_img)
         path_boxes_txt = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia))
         box_tracker.main(img_sequencies_name, path_original_img, path_boxes_txt,int(args.importance),args.dataset)
 
         # Ho ottenuto tutte le bbox da prendere in considerzione per tutte le img
-        my_index = 0
+        #my_index = 0
         old_temp = ''
 
 
