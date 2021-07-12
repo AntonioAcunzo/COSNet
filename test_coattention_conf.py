@@ -715,9 +715,16 @@ def main():
                 f_results.write("\n ACC SUMMARY FINAL\n")
                 f_results.write(str(strsummary))
 
-                M = summary.to_numpy()
-                for i in M:
-                    print(i)
+                M = strsummary.to_numpy()
+                overall = M[2]
+                rcll = overall[3]
+                mota = overall[13]
+                motp = overall[14]
+
+                print(rcll)
+                print(mota)
+                print(motp)
+
 
                 f_results.close()
 
