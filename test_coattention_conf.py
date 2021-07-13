@@ -606,6 +606,10 @@ def main():
         mota_array = []
         motp_array = []
 
+        list1 = []
+        list2 = []
+        list3 = []
+
 
         print("INIZIO SECONDO STEP")
         # STEP 2, aggiorno frame per frame l'accumulatore
@@ -822,9 +826,10 @@ def main():
                 if not math.isnan(motp):
                     motp_array.append(motp)
 
-                print(rcll_array)
-                print(mota_array)
-                print(motp_array)
+
+                list1.append([img_sequencies_name[i],rcll])
+                list2.append([img_sequencies_name[i],mota ])
+                list3.append([img_sequencies_name[i],motp ])
 
 
                 f_results.close()
@@ -851,6 +856,10 @@ def main():
                 f_mean.write("RCLL = " + str(mean_rcll) + "\n")
                 f_mean.write("MOTA = " + str(mean_mota) + "\n")
                 f_mean.write("MOTP = " + str(mean_motp) + "\n")
+
+                print(list1)
+                print(list2)
+                print(list3)
 
 
     
