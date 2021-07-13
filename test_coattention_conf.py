@@ -810,9 +810,9 @@ def main():
                 mota = round(overall[13]*100,1)
                 motp = round(overall[14],3)
 
-                print(rcll)
-                print(mota)
-                print(motp)
+                print("RCLL :",rcll)
+                print("MOTA :",mota)
+                print("MOTP:",motp)
 
 
                 if not math.isnan(rcll):
@@ -839,6 +839,10 @@ def main():
                 old_temp = 'end'
 
             if old_temp == 'end':
+                if rcll_array.__len__()==0: rcll_array.append(0)
+                if mota_array.__len__() == 0: mota_array.append(0)
+                if motp_array.__len__()==0: motp_array.append(0)
+
                 mean_rcll = round(sum(rcll_array)/rcll_array.__len__(),1)
                 mean_mota = round(sum(mota_array)/mota_array.__len__(),1)
                 mean_motp = round(sum(motp_array)/motp_array.__len__(),3)
