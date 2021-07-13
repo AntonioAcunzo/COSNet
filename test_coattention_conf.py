@@ -654,10 +654,8 @@ def main():
                 acc = mm.MOTAccumulator(auto_id=True)
                 save_dir_res = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia), args.seq_name)
                 text_dir = os.path.join(save_dir_res, 'Txt')
-                if args.mode == 'good':
-                    box_text_filename = os.path.join(text_dir, 'boxes_good_' + str(args.importance) + '.txt')
-                else:
-                    box_text_filename = os.path.join(text_dir, 'boxes.txt')
+
+                box_text_filename = os.path.join(text_dir, 'boxes_good_' + str(args.importance) + '.txt')
 
                 box_text_annotation_filename = os.path.join(text_dir, 'boxes_annotations.txt')
 
@@ -753,8 +751,13 @@ def main():
                     ]
                 )
 
-            path_original_img = os.path.join(args.data_dir, 'JPEGImages/480p')
-            path_original_img = path_original_img + "/" + args.seq_name
+            if (args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
+                path_original_img = os.path.join(args.data_dir, 'JPEGImages/480p')
+                path_original_img = path_original_img + "/" + args.seq_name
+            else:
+                path_original_img = os.path.join(args.data_dir, 'Data/VID/val')
+                path_original_img = path_original_img + "/" + args.seq_name
+
             end = len([name for name in os.listdir(path_original_img) if
                        os.path.isfile(os.path.join(path_original_img, name))])
 
@@ -765,8 +768,8 @@ def main():
                 if not os.path.exists(text_dir):
                     os.makedirs(text_dir)
 
-                if args.mode == 'good':
-                    results_filename = os.path.join(text_dir, 'results_good_' + old_temp + "_"+ str(args.importance) +'.txt')
+
+                results_filename = os.path.join(text_dir, 'results_good_' + old_temp + "_"+ str(args.importance) +'.txt')
 
                 f_results = open(results_filename, 'w')
 
@@ -836,8 +839,13 @@ def main():
 
             old_temp = args.seq_name
 
-            path_original_img = os.path.join(args.data_dir, 'JPEGImages/480p')
-            path_original_img = path_original_img + "/" + args.seq_name
+            if (args.data_dir == '/data/aacunzo/DAVIS-2016' or args.data_dir == '/home/aacunzo/DAVIS-2016'):
+                path_original_img = os.path.join(args.data_dir, 'JPEGImages/480p')
+                path_original_img = path_original_img + "/" + args.seq_name
+            else:
+                path_original_img = os.path.join(args.data_dir, 'Data/VID/val')
+                path_original_img = path_original_img + "/" + args.seq_name
+
             end = len([name for name in os.listdir(path_original_img) if
                        os.path.isfile(os.path.join(path_original_img, name))])
             if args.seq_name == img_sequencies_name[-1] and end-1 == my_index:
