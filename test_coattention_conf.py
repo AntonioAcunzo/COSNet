@@ -725,16 +725,7 @@ def main():
 
                 f_results.close()
 
-            if old_temp == 'end':
-                mean_rcll = round(sum(rcll_array)/rcll_array.__len__(),1)
-                mean_mota = round(sum(mota_array)/mota_array.__len__(),1)
-                mean_motp = round(sum(motp_array)/motp_array.__len__(),3)
-                results_filename = os.path.join(text_dir,'mean_' + str(args.importance) + '.txt')
-                f_mean = open(results_filename, 'w')
-                f_mean.write("RCLL = " + str(mean_rcll) + "\n")
-                f_mean.write("MOTA = " + str(mean_mota) + "\n")
-                f_mean.write("MOTP = " + str(mean_motp) + "\n")
-                break
+
 
             if my_index==0:
                 #print("Primo frame della sequenza " , args.seq_name)
@@ -863,6 +854,16 @@ def main():
                     ]
                 )
 
+            if old_temp == 'end':
+                mean_rcll = round(sum(rcll_array)/rcll_array.__len__(),1)
+                mean_mota = round(sum(mota_array)/mota_array.__len__(),1)
+                mean_motp = round(sum(motp_array)/motp_array.__len__(),3)
+                results_filename = os.path.join(text_dir,'mean_' + str(args.importance) + '.txt')
+                f_mean = open(results_filename, 'w')
+                f_mean.write("RCLL = " + str(mean_rcll) + "\n")
+                f_mean.write("MOTA = " + str(mean_mota) + "\n")
+                f_mean.write("MOTP = " + str(mean_motp) + "\n")
+                #break
 
             old_temp = args.seq_name
 
@@ -870,7 +871,7 @@ def main():
             path_original_img = path_original_img + "/" + args.seq_name
             end = len([name for name in os.listdir(path_original_img) if
                        os.path.isfile(os.path.join(path_original_img, name))])
-            if args.seq_name == img_sequencies_name[-1] and end-1 == my_index:
+            if args.seq_name == img_sequencies_name[-1] and end-2 == my_index:
                 old_temp = 'end'
 
 
