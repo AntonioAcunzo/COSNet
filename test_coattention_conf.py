@@ -816,11 +816,12 @@ def main():
 
 
 
-
+                '''
                 if rcll != nan:
                     rcll_array.append(rcll)
                 if mota != 'nan':
                     mota_array.append(mota)
+                '''
                 if not math.isnan(motp):
                     motp_array.append(motp)
 
