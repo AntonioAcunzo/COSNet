@@ -585,15 +585,9 @@ def main():
     if args.step == '2':
 
         if args.dataset == 'davis' or args.dataset == 'davis_yoda':
-            f_val_seq = open("./val_seqs1.txt", "r")
             my_index = 0
         else:
-            f_val_seq = open("./val_seqs2.txt", "r")
             my_index = -1
-
-        img_sequencies_name = [x.strip() for x in f_val_seq.readlines()]
-        print(img_sequencies_name)
-        f_val_seq.close()
 
         # Avvio tracker
         if args.dataset == 'davis' or args.dataset == 'davis_yoda':
@@ -605,8 +599,6 @@ def main():
         path_boxes_txt = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia))
         box_tracker.main(img_sequencies_name, path_original_img, path_boxes_txt,int(args.importance),args.dataset)
 
-        # Ho ottenuto tutte le bbox da prendere in considerzione per tutte le img
-        #my_index = 0
         old_temp = ''
 
         rcll_array = []
@@ -657,7 +649,6 @@ def main():
                 acc = mm.MOTAccumulator(auto_id=True)
                 save_dir_res = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia), args.seq_name)
                 text_dir = os.path.join(save_dir_res, 'Txt')
-                save_dir_res_final =  text_dir
                 if args.mode == 'good':
                     box_text_filename = os.path.join(text_dir, 'boxes_good_' + str(args.importance) + '.txt')
                 else:
@@ -668,7 +659,6 @@ def main():
                 f = open(box_text_filename, "r")
                 f_annotation = open(box_text_annotation_filename, "r")
 
-                all_annotations = []
                 all_annotations = [x.strip() for x in f_annotation.readlines()]
                 all_annotations = [x.split(',') for x in all_annotations]
 
@@ -684,21 +674,15 @@ def main():
                         area = int(i[3]) * int(i[4])
                         if area > old_area:
                             remove.append(old_element)
-                            #print("Da rimuovere :")
-                            print(old_element)
                             old_element = i
                         else:
                             remove.append(i)
-                            #print("Da rimuovere :")
-                            print(i)
                     else:
                         old_element = i
                     c=1
 
                 for i in remove:
                     all_annotations.remove(i)
-                #print(all_annotations)
-                #print("frame video secondo all_annotations modificato :", len(all_annotations))
 
                 for i in all_annotations:
                     i.remove(i[0])
@@ -716,46 +700,33 @@ def main():
             hyps = []
 
             for i in all_boxes:
-                #if int(i[0])-value_correct == my_index:
                 if int(i[0]) == my_index:
-                    #print("i in all_boxes")
-                    #print(i)
                     if(i.__len__()==6):
                         box_in_frame.append(i)
-
 
             for z in box_in_frame:
                 z.remove(z[1])
                 z.remove(z[0])
 
-
-            #print("box nel frame " + str(my_index) + " : ", box_in_frame)
-
             for j in range(0, len(box_in_frame)):
-                #print(box_in_frame[j])
                 hypotheses.append(j+1)
 
             if len(box_in_frame)==0:
                 hypotheses.append(1)
 
-            print("ipotesi nel frame " + str(my_index) + " : ", hypotheses)
+            #print("ipotesi nel frame " + str(my_index) + " : ", hypotheses)
 
             objs = all_annotations[my_index]
             if not objs == "0,0,0,0" :
-                #print(objs)
                 objs = np.array(objs)
-                #print(objs.shape)
-                # aggiungere asse objs
                 objs = np.expand_dims(objs, 0)
-                #print(objs.shape)
                 # objs.shape - ---> (4,)
                 # objs.shape - ---> (1, 4)
                 if box_in_frame.__len__() == 0:
                     box_in_frame.append(['0','0','0','0'])
                 for a in box_in_frame:
-                    #print(a)
                     hyps.append(a)
-                print(hyps)
+                #print(hyps)
                 hyps = np.array(hyps)
                 #hyps = np.expand_dims(hyps, 0)
 
@@ -767,7 +738,6 @@ def main():
                 '''
 
                 distances = mm.distances.iou_matrix(objs, hyps, max_iou=0.5)
-                #print(distances)
                 print("---------------------------")
 
                 acc.update(
@@ -778,7 +748,12 @@ def main():
                     ]
                 )
 
-            if index!=0 and old_temp!=args.seq_name:
+            path_original_img = os.path.join(args.data_dir, 'JPEGImages/480p')
+            path_original_img = path_original_img + "/" + args.seq_name
+            end = len([name for name in os.listdir(path_original_img) if
+                       os.path.isfile(os.path.join(path_original_img, name))])
+
+            if index!=0 and my_index==end-1:
                 print("Salvo file txt risultati")
                 text_dir = os.path.join(path_boxes_txt, 'TEST')
                 print(text_dir)
@@ -852,6 +827,15 @@ def main():
 
                 f_results.close()
 
+            old_temp = args.seq_name
+
+            path_original_img = os.path.join(args.data_dir, 'JPEGImages/480p')
+            path_original_img = path_original_img + "/" + args.seq_name
+            end = len([name for name in os.listdir(path_original_img) if
+                       os.path.isfile(os.path.join(path_original_img, name))])
+            if args.seq_name == img_sequencies_name[-1] and end-1 == my_index:
+                old_temp = 'end'
+
             if old_temp == 'end':
                 mean_rcll = round(sum(rcll_array)/rcll_array.__len__(),1)
                 mean_mota = round(sum(mota_array)/mota_array.__len__(),1)
@@ -861,16 +845,6 @@ def main():
                 f_mean.write("RCLL = " + str(mean_rcll) + "\n")
                 f_mean.write("MOTA = " + str(mean_mota) + "\n")
                 f_mean.write("MOTP = " + str(mean_motp) + "\n")
-                #break
-
-            old_temp = args.seq_name
-
-            path_original_img = os.path.join(args.data_dir, 'JPEGImages/480p')
-            path_original_img = path_original_img + "/" + args.seq_name
-            end = len([name for name in os.listdir(path_original_img) if
-                       os.path.isfile(os.path.join(path_original_img, name))])
-            if args.seq_name == img_sequencies_name[-1] and end-2 == my_index:
-                old_temp = 'end'
 
 
     
