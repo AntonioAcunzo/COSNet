@@ -58,7 +58,6 @@ def get_arguments():
     parser.add_argument("--tresh", default=200)
     parser.add_argument("--step", default=1)
     parser.add_argument("--mode", default='good')
-    parser.add_argument("--type", default='1')
     parser.add_argument("--importance", default=10)
     
     return parser.parse_args()
@@ -735,8 +734,8 @@ def main():
 
             if my_index==0:
                 #print("Primo frame della sequenza " , args.seq_name)
-                if args.type == '1':
-                    acc = mm.MOTAccumulator(auto_id=True)
+
+                acc = mm.MOTAccumulator(auto_id=True)
                 save_dir_res = os.path.join(args.seg_save_dir, 'Results_{}'.format(soglia), args.seq_name)
                 text_dir = os.path.join(save_dir_res, 'Txt')
                 save_dir_res_final =  text_dir
@@ -867,7 +866,7 @@ def main():
             path_original_img = path_original_img + "/" + args.seq_name
             end = len([name for name in os.listdir(path_original_img) if
                        os.path.isfile(os.path.join(path_original_img, name))])
-            if args.seq_name == img_sequencies_name[-1] and end == my_index:
+            if args.seq_name == img_sequencies_name[-1] and end-1 == my_index:
                 old_temp = 'end'
 
 
