@@ -827,9 +827,9 @@ def main():
                     motp_array.append(motp)
 
 
-                list1.append([img_sequencies_name[i],rcll])
-                list2.append([img_sequencies_name[i],mota ])
-                list3.append([img_sequencies_name[i],motp ])
+                list1.append([args.seq_name,rcll])
+                list2.append([args.seq_name,mota ])
+                list3.append([args.seq_name,motp ])
 
 
                 f_results.close()
