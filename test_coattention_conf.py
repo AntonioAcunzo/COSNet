@@ -34,6 +34,7 @@ import box_tracker
 
 import motmetrics as mm
 import xml.etree.ElementTree as ET
+import math
 
 
 
@@ -813,11 +814,14 @@ def main():
                 print(mota)
                 print(motp)
 
-                if rcll != 'nan':
+
+
+
+                if rcll != nan:
                     rcll_array.append(rcll)
                 if mota != 'nan':
                     mota_array.append(mota)
-                if motp != 'nan':
+                if not math.isnan(motp):
                     motp_array.append(motp)
 
                 print(rcll_array)
