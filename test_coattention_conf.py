@@ -815,10 +815,10 @@ def main():
                 print("MOTP:",motp)
 
 
-                if not math.isnan(rcll):
-                    rcll_array.append(rcll)
-                if not math.isnan(mota):
-                    mota_array.append(mota)
+                #if not math.isnan(rcll):
+                rcll_array.append(rcll)
+                #if not math.isnan(mota):
+                mota_array.append(mota)
                 if not math.isnan(motp):
                     motp_array.append(motp)
 
