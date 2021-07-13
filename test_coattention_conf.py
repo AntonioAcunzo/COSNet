@@ -863,7 +863,7 @@ def main():
 
             old_temp = args.seq_name
 
-            path_original_img = os.path.join(args.data_dir, 'JPEGImages/480')
+            path_original_img = os.path.join(args.data_dir, 'JPEGImages/480p')
             path_original_img = path_original_img + "/" + args.seq_name
             end = len([name for name in os.listdir(path_original_img) if
                        os.path.isfile(os.path.join(path_original_img, name))])
