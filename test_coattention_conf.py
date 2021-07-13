@@ -55,11 +55,11 @@ def get_arguments():
     parser.add_argument("--seq_name", default = 'bmx-bumps')
     parser.add_argument("--use_crf", default = 'True')
     parser.add_argument("--sample_range", default =5)
-    parser.add_argument("--tresh", default=127)
+    parser.add_argument("--tresh", default=200)
     parser.add_argument("--step", default=1)
     parser.add_argument("--mode", default='good')
     parser.add_argument("--type", default='1')
-    parser.add_argument("--importance", default=5)
+    parser.add_argument("--importance", default=10)
     
     return parser.parse_args()
 
