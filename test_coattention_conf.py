@@ -596,8 +596,6 @@ def main():
         print(img_sequencies_name)
         f_val_seq.close()
 
-        if args.type == '2':
-            acc = mm.MOTAccumulator(auto_id=True)
         # Avvio tracker
         if args.dataset == 'davis' or args.dataset == 'davis_yoda':
             path_original_img = os.path.join(args.data_dir, "JPEGImages/480p")
@@ -636,19 +634,6 @@ def main():
                     my_index = 0
 
             if (args.data_dir == '/mnt/ILSVRC2017_VID/ILSVRC'):
-                '''
-                path_original_img = os.path.join(args.data_dir, 'Data/VID/val')
-                path_original_img = path_original_img + "/" + args.seq_name
-                end = len([name for name in os.listdir(path_original_img) if os.path.isfile(os.path.join(path_original_img, name))])
-                print("num img :", end)
-                print("old_temp: ", old_temp)
-                if my_index == end :
-                    my_index = 0
-                    cont = cont+1
-                    args.seq_name = img_sequencies_name[cont]
-                else:
-                    my_index = my_index + 1
-                '''
 
                 path_original_img = os.path.join(args.data_dir, 'Data/VID/val')
                 path_original_img = path_original_img + "/" + args.seq_name
@@ -666,7 +651,7 @@ def main():
             print("my_index : ", my_index)
             print("seq name : ", args.seq_name)
 
-            if index!=0 and old_temp!=args.seq_name and args.type=='1':
+            if index!=0 and old_temp!=args.seq_name:
                 print("Salvo file txt risultati")
                 text_dir = os.path.join(path_boxes_txt, 'TEST')
                 print(text_dir)
@@ -674,10 +659,7 @@ def main():
                     os.makedirs(text_dir)
 
                 if args.mode == 'good':
-                    if args.type == '1':
-                        results_filename = os.path.join(text_dir, 'results_good_' + old_temp + "_"+ str(args.importance) +'.txt')
-                    else:
-                        results_filename = os.path.join(text_dir, 'results_good_' + old_temp + "_"+ str(args.importance) +'.txt')
+                    results_filename = os.path.join(text_dir, 'results_good_' + old_temp + "_"+ str(args.importance) +'.txt')
 
                 f_results = open(results_filename, 'w')
 
@@ -734,6 +716,7 @@ def main():
                 if mota != 'nan':
                     mota_array.append(mota)
                 if motp != 'nan':
+                    print("motp nan")
                     motp_array.append(motp)
 
 
@@ -880,92 +863,13 @@ def main():
 
             old_temp = args.seq_name
 
-            if args.seq_name == img_sequencies_name[-1]:
+            path_original_img = os.path.join(args.data_dir, 'JPEGImages/480')
+            path_original_img = path_original_img + "/" + args.seq_name
+            end = len([name for name in os.listdir(path_original_img) if
+                       os.path.isfile(os.path.join(path_original_img, name))])
+            if args.seq_name == img_sequencies_name[-1] and end == my_index:
                 old_temp = 'end'
 
-
-
-        if args.type == '2':
-            print("Salvo file txt risultati")
-            text_dir = os.path.join(path_boxes_txt, 'TEST')
-            print(text_dir)
-            if not os.path.exists(text_dir):
-                os.makedirs(text_dir)
-
-            if args.mode == 'good':
-                    results_filename = os.path.join(text_dir, 'results_good_elementi'+ str(img_sequencies_name.__len__()) + '_' + str(args.importance) + '-' + str(string_data) + '.txt')
-            else:
-                    results_filename = os.path.join(text_dir,
-                                                    'results_' + str(img_sequencies_name.__len__()) + '-' + str(
-                                                        string_data) + '.txt')
-
-            f_results = open(results_filename, 'w')
-
-            # f_results.write("\n ACC EVENTS \n")
-            # f_results.write(str(acc.events))
-            f_results.write("\n ACC MOT EVENTS \n")
-            f_results.write(str(acc.mot_events))
-
-            print(acc.events)
-            print(acc.mot_events)
-
-            mh = mm.metrics.create()
-            summary = mh.compute(acc, metrics=['num_frames', 'mota', 'motp'], name='acc')
-            print(summary)
-            f_results.write("\n ACC SUMMARY 1\n")
-            f_results.write(str(summary))
-
-            summary = mh.compute_many(
-                [acc, acc.events.loc[0:1]],
-                metrics=['num_frames', 'mota', 'motp'],
-                names=['full', 'part'])
-            print(summary)
-            f_results.write("\n ACC SUMMARY 2\n")
-            f_results.write(str(summary))
-
-            '''
-            strsummary = mm.io.render_summary(
-                summary,
-                formatters={'mota': '{:.2%}'.format},
-                namemap={'mota': 'MOTA', 'motp': 'MOTP'}
-            )
-            print(strsummary)
-            f_results.write("\n ACC SUMMARY \n")
-            f_results.write(str(summary))
-    
-    
-            summary = mh.compute_many(
-                [acc, acc.events.loc[0:1]],
-                metrics=mm.metrics.motchallenge_metrics,
-                names=['full', 'part'])
-    
-            strsummary = mm.io.render_summary(
-                summary,
-                formatters=mh.formatters,
-                namemap=mm.io.motchallenge_metric_names
-            )
-            print(strsummary)
-            f_results.write("\n ACC SUMMARY \n")
-            f_results.write(str(summary))
-            '''
-
-            summary = mh.compute_many(
-                [acc, acc.events.loc[0:1]],
-                metrics=mm.metrics.motchallenge_metrics,
-                names=['full', 'part'],
-                generate_overall=True
-            )
-
-            strsummary = mm.io.render_summary(
-                summary,
-                formatters=mh.formatters,
-                namemap=mm.io.motchallenge_metric_names
-            )
-            print(strsummary)
-            f_results.write("\n ACC SUMMARY FINAL\n")
-            f_results.write(str(strsummary))
-
-            f_results.close()
 
     
     #'''
