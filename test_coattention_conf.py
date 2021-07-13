@@ -650,82 +650,6 @@ def main():
             print("my_index : ", my_index)
             print("seq name : ", args.seq_name)
 
-            if index!=0 and old_temp!=args.seq_name:
-                print("Salvo file txt risultati")
-                text_dir = os.path.join(path_boxes_txt, 'TEST')
-                print(text_dir)
-                if not os.path.exists(text_dir):
-                    os.makedirs(text_dir)
-
-                if args.mode == 'good':
-                    results_filename = os.path.join(text_dir, 'results_good_' + old_temp + "_"+ str(args.importance) +'.txt')
-
-                f_results = open(results_filename, 'w')
-
-
-                #f_results.write("\n ACC MOT EVENTS \n")
-                #f_results.write(str(acc.mot_events))
-
-                #print(acc.events)
-                #print(acc.mot_events)
-
-                mh = mm.metrics.create()
-                summary = mh.compute(acc, metrics=['num_frames', 'mota', 'motp'], name='acc')
-                #print(summary)
-                #f_results.write("\n ACC SUMMARY 1\n")
-                #f_results.write(str(summary))
-
-                summary = mh.compute_many(
-                    [acc, acc.events.loc[0:1]],
-                    metrics=['num_frames', 'mota', 'motp'],
-                    names=['full', 'part'])
-                #print(summary)
-                #f_results.write("\n ACC SUMMARY 2\n")
-                #f_results.write(str(summary))
-
-
-                summary = mh.compute_many(
-                    [acc, acc.events.loc[0:1]],
-                    metrics=mm.metrics.motchallenge_metrics,
-                    names=['full', 'part'],
-                    generate_overall=True
-                )
-
-                strsummary = mm.io.render_summary(
-                    summary,
-                    formatters=mh.formatters,
-                    namemap=mm.io.motchallenge_metric_names
-                )
-                print(strsummary)
-                f_results.write("\n ACC SUMMARY FINAL\n")
-                f_results.write(str(strsummary))
-
-                M = summary.to_numpy()
-                overall = M[2]
-                rcll = round(overall[3]*100,1)
-                mota = round(overall[13]*100,1)
-                motp = round(overall[14],3)
-
-                print(rcll)
-                print(mota)
-                print(motp)
-
-                if rcll != 'nan':
-                    rcll_array.append(rcll)
-                if mota != 'nan':
-                    mota_array.append(mota)
-                if motp != 'nan':
-                    print("motp nan")
-                    motp_array.append(motp)
-
-                print(rcll_array)
-                print(motp_array)
-                print(motp_array)
-
-
-                f_results.close()
-
-
 
             if my_index==0:
                 #print("Primo frame della sequenza " , args.seq_name)
@@ -853,6 +777,80 @@ def main():
                         distances,  # Distances from object 1 to hypotheses 1, 2, 3
                     ]
                 )
+
+            if index!=0 and old_temp!=args.seq_name:
+                print("Salvo file txt risultati")
+                text_dir = os.path.join(path_boxes_txt, 'TEST')
+                print(text_dir)
+                if not os.path.exists(text_dir):
+                    os.makedirs(text_dir)
+
+                if args.mode == 'good':
+                    results_filename = os.path.join(text_dir, 'results_good_' + old_temp + "_"+ str(args.importance) +'.txt')
+
+                f_results = open(results_filename, 'w')
+
+
+                #f_results.write("\n ACC MOT EVENTS \n")
+                #f_results.write(str(acc.mot_events))
+
+                #print(acc.events)
+                #print(acc.mot_events)
+
+                mh = mm.metrics.create()
+                summary = mh.compute(acc, metrics=['num_frames', 'mota', 'motp'], name='acc')
+                #print(summary)
+                #f_results.write("\n ACC SUMMARY 1\n")
+                #f_results.write(str(summary))
+
+                summary = mh.compute_many(
+                    [acc, acc.events.loc[0:1]],
+                    metrics=['num_frames', 'mota', 'motp'],
+                    names=['full', 'part'])
+                #print(summary)
+                #f_results.write("\n ACC SUMMARY 2\n")
+                #f_results.write(str(summary))
+
+
+                summary = mh.compute_many(
+                    [acc, acc.events.loc[0:1]],
+                    metrics=mm.metrics.motchallenge_metrics,
+                    names=['full', 'part'],
+                    generate_overall=True
+                )
+
+                strsummary = mm.io.render_summary(
+                    summary,
+                    formatters=mh.formatters,
+                    namemap=mm.io.motchallenge_metric_names
+                )
+                print(strsummary)
+                f_results.write("\n ACC SUMMARY FINAL\n")
+                f_results.write(str(strsummary))
+
+                M = summary.to_numpy()
+                overall = M[2]
+                rcll = round(overall[3]*100,1)
+                mota = round(overall[13]*100,1)
+                motp = round(overall[14],3)
+
+                print(rcll)
+                print(mota)
+                print(motp)
+
+                if rcll != 'nan':
+                    rcll_array.append(rcll)
+                if mota != 'nan':
+                    mota_array.append(mota)
+                if motp != 'nan':
+                    motp_array.append(motp)
+
+                print(rcll_array)
+                print(motp_array)
+                print(motp_array)
+
+
+                f_results.close()
 
             if old_temp == 'end':
                 mean_rcll = round(sum(rcll_array)/rcll_array.__len__(),1)
