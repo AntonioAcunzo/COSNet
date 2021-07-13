@@ -718,6 +718,10 @@ def main():
                     print("motp nan")
                     motp_array.append(motp)
 
+                print(rcll_array)
+                print(motp_array)
+                print(motp_array)
+
 
                 f_results.close()
 
