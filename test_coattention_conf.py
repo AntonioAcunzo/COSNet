@@ -815,13 +815,10 @@ def main():
                 print(motp)
 
 
-
-                '''
-                if rcll != nan:
+                if not math.isnan(rcll):
                     rcll_array.append(rcll)
-                if mota != 'nan':
+                if not math.isnan(mota):
                     mota_array.append(mota)
-                '''
                 if not math.isnan(motp):
                     motp_array.append(motp)
 
